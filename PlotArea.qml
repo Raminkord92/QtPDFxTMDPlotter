@@ -34,26 +34,26 @@ ChartView {
         axisY: axisY
 
         // Update plot when model changes
-        Connections {
-            target: dragDropModel
-            function onRowsInserted() {
-                updatePlot()
-            }
-            function onRowsRemoved() {
-                updatePlot()
-            }
-        }
+        // Connections {
+        //     target: dragDropModel
+        //     function onRowsInserted() {
+        //         updatePlot()
+        //     }
+        //     function onRowsRemoved() {
+        //         updatePlot()
+        //     }
+        // }
     }
 
     // Function to update the plot
     function updatePlot() {
-        lineSeries.clear()
-        for (var i = 0; i < dragDropModel.rowCount(); ++i) {
-            var item = dragDropModel.get(i)
-            if (item && item.properties) {
-                lineSeries.append(item.properties.x, item.properties.y || 0)
-            }
-        }
+        // lineSeries.clear()
+        // for (var i = 0; i < dragDropModel.rowCount(); ++i) {
+        //     var item = dragDropModel.get(i)
+        //     if (item && item.properties) {
+        //         lineSeries.append(item.properties.x, item.properties.y || 0)
+        //     }
+        // }
     }
 
     Component.onCompleted: {

@@ -1,11 +1,12 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import QtQuick.Layouts
 
 Dialog {
     property Item objectRow
     id: cPDFDialog
-    title: "Add cPDF Object"
+    title: "PDF Plot Object"
     width: 300
     height: 400
     modal: true
@@ -20,6 +21,31 @@ Dialog {
     Column {
         spacing: 10
         width: parent.width
+
+        RowLayout
+        {
+            ButtonGroup {
+                id: pdfTypeBtnGroup
+                onCheckedButtonChanged: {
+                    if (checkedButton) {
+                        console.log("Checked button text is ", checkedButton.text);
+                    }
+                }
+            }
+            spacing: 10
+            RadioButton {
+                text: "cPDF"
+                checked: true  // Initial selection
+                ButtonGroup.group: pdfTypeBtnGroup  // Assign to group
+            }
+
+            // Second RadioButton
+            RadioButton {
+                text: "TMD"
+                ButtonGroup.group: pdfTypeBtnGroup // Assign to the same ButtonGroup
+            }
+        }
+
 
         ComboBox {
             id: cpdfSetCombo
@@ -50,7 +76,7 @@ Dialog {
             var cpdf = Qt.createQmlObject(`
                 import QtQuick
                 import QtQuick.Controls.Material
-                CPDFObject {
+                PDFObject {
                     pdfSet: "${cpdfSetCombo.currentText}"
                     properties: ({
                         x: ${cpdfXField.text},

@@ -9,174 +9,220 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 600
+    minimumWidth: 600
+    minimumHeight: 400
     title: "PDF & TMD Plotter"
-    Material.theme: Material.Dark
-    // Material.accent: Material.Blue
-    // Material.primary: Material.BlueGrey
 
-    // This property tracks the current tab index.
+    // Theme configuration
+    Material.theme: Material.System
+    Material.primary: Material.BlueGrey
+    Material.accent: Material.Blue
+    Material.background: Material.color(Material.Grey, Material.Shade50)
+
+    // Shared properties
+    property color buttonHoverColor: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
     property int currentTabIndex: 0
 
-    // A model to store each tab’s title (one element per tab).
+    FontLoader {
+        id: fontAwesome
+        source: "qrc:/fonts/fonts/otfs/Font Awesome 6 Free-Solid-900.otf"
+    }
+
     ListModel {
         id: tabModel
         ListElement { title: "Page 1" }
     }
 
-    // The page component – this reproduces your original layout.
-    Component {
-        id: pageContent
-        Rectangle {
-            anchors.fill: parent
-            color: Material.background
-            Row {
-                anchors.fill: parent
-                spacing: 10
+    // Configuration Dialog
+    Dialog {
+        id: configDialog
+        title: "Settings"
+        anchors.centerIn: parent
+        standardButtons: Dialog.Close
 
-                // Left side with your TopSection and draggable items.
-                Rectangle {
-                    id: leftSide
-                    width: parent.width / 2
-                    height: parent.height
-                    color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.05)
-                    radius: 8
-                    border.color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
-                    border.width: 1
-                    TopSection {
-                        id: topSection
-                        leftSidRef: leftSide
-                    }
-                }
-
-                // Right side with your PlotArea.
-                PlotArea {
-                    width: parent.width / 2
-                    height: parent.height
-                }
+        ColumnLayout {
+            spacing: 15
+            Label { text: "Plot Settings"; font.bold: true }
+            // Add your configuration controls here
+            Switch { text: "Auto-refresh"; checked: true }
+            ComboBox {
+                model: ["Linear Scale", "Logarithmic Scale"]
+                currentIndex: 0
             }
         }
     }
 
+    // Main UI
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
 
-        // This RowLayout contains the TabBar and an "Add Tab" button.
         RowLayout {
             spacing: 10
             Layout.fillWidth: true
 
+            // Tab Bar
             TabBar {
                 id: tabBar
                 currentIndex: root.currentTabIndex
+                Layout.fillWidth: true
 
-                // Create one TabButton per tab in the model.
                 Repeater {
                     model: tabModel
                     delegate: TabButton {
-                        id: tabButton
-                        width:100
-                        spacing: 5
-                        padding: 5
-                        property var prentRoot : root;
-                        // When renameField is visible, hide the TabButton’s text.
-                        text: renameField.visible ? "" : model.title
-                        property string prevText: ""
-                        // When a tab is clicked normally, update the currentTabIndex.
-                        onClicked: {
-                            root.currentTabIndex = index;
-                        }
-                        ColumnLayout
-                        {
-                            anchors.fill: parent
-                            spacing: 5
-                        // Add a TextField for renaming the tab title.
-                            TextField {
-                                id: renameField
-                                visible: false
-                                width: parent.width
-                                Layout.maximumWidth: 60
-                                Layout.alignment: Qt.AlignLeft
-                                text: model.title
-                                focus: true
-                                selectByMouse: true
-                                // Custom background to remove focus highlight
-                                background: Rectangle {
-                                    color: "transparent" // No background color
-                                    border.color: "transparent" // No border
-                                    radius: 0 // Optional: Remove rounded corners if any
-                                }
-                                onAccepted: {
-                                    // Update the tab title in the model.
-                                    tabModel.setProperty(index, "title", text);
-                                    visible = false; // Hide the TextField after renaming.
-                                }
+                        width: 100
+                        padding: 8
 
-                                Keys.onEscapePressed: {
-                                    visible = false; // Cancel renaming if Escape is pressed.
-                                    model.title = tabButton.prevText;
-                                }
-                            }
+                        contentItem: Text {
+                            text: model.title
+                            elide: Text.ElideRight
+                            horizontalAlignment: Text.AlignLeft
+                            color: Material.foreground
+                        }
+
+                        ToolTip.visible: hovered && (textMetrics.width > width)
+                        ToolTip.text: model.title
+                        TextMetrics { id: textMetrics; text: model.title }
+
+                        background: Rectangle {
+                            color: parent.hovered ? buttonHoverColor : "transparent"
+                            radius: 4
+                        }
+
+                        RowLayout {
+                            anchors.right: parent.right
+                            spacing: 2
+
                             ToolButton {
-                                id: closeButton
-                                text: "x"
-                                Layout.maximumWidth: 30
+                                text: "\uf00d"
+                                font.family: fontAwesome.name
+                                font.pixelSize: 12
+                                onClicked: removeTab(index)
 
-                                font.pixelSize: 10
-                                padding: 2
-                                visible: !renameField.visible
-                                Layout.alignment: Qt.AlignRight // Align the close button to the right
-                                onClicked: {
-                                    var indexToRemove = index;
-                                    tabModel.remove(indexToRemove);
-
-                                    // Update the current tab index if necessary.
-                                    if (indexToRemove === tabButton.prentRoot.currentTabIndex) {
-                                        tabButton.prentRoot.currentTabIndex = Math.max(0, indexToRemove - 1);
-                                        console.log("current tab index ", tabButton.prentRoot.currentTabIndex)
-                                    } else if (indexToRemove < tabButton.prentRoot.currentTabIndex) {
-                                        tabButton.prentRoot.currentTabIndex--;
-                                    }
-
+                                background: Rectangle {
+                                    color: parent.hovered ? Qt.darker(buttonHoverColor, 1.2) : "transparent"
+                                    radius: 4
                                 }
                             }
                         }
+
+                        // Right-click MouseArea
                         MouseArea {
                             anchors.fill: parent
                             acceptedButtons: Qt.RightButton
                             onClicked: {
-                                renameField.Layout.maximumWidth = 100
-                                tabButton.prevText = model.title
-                                // No need to clear model.title now; let the TextField handle the editing.
-                                renameField.text = model.title
-                                // Show the TextField for renaming when right-clicked.
-                                renameField.visible = true;
-                                renameField.forceActiveFocus();
+                                if (mouse.button === Qt.RightButton) {
+                                    contextMenu.popup()
+                                }
+                            }
+                        }
+
+                        // Context Menu
+                        Menu {
+                            id: contextMenu
+                            topPadding: 4
+                            bottomPadding: 4
+
+                            Material.theme: Material.System
+                            Material.primary: Material.BlueGrey
+                            Material.accent: Material.Blue
+
+                            delegate: MenuItem {
+                                Material.theme: Material.System
+                                Material.foreground: enabled ? Material.primaryTextColor : Material.hintTextColor
+                                implicitWidth: 50
+                                implicitHeight: 13
+                                height: 13
+                                font.pixelSize: 12
+                                padding: 8
+                            }
+
+                            MenuItem {
+                                text: "Edit Title"
+                                font.pixelSize: 12
+                                onTriggered: editDialog.open()
+                            }
+                        }
+
+                        // Edit Dialog
+                        Dialog {
+                            id: editDialog
+                            anchors.centerIn: Overlay.overlay
+                            title: "Edit Tab Title"
+                            width: 300
+                            modal: true
+                            Material.theme: Material.System
+                            Material.primary: Material.BlueGrey
+                            Material.accent: Material.Blue
+
+                            standardButtons: Dialog.Cancel | Dialog.Ok
+
+                            onAccepted: {
+                                tabModel.setProperty(index, "title", titleInput.text)
+                            }
+
+                            TextField {
+                                id: titleInput
+                                width: parent.width
+                                text: model.title
+                                focus: true
+                                color: Material.foreground
+                                selectedTextColor: Material.accent
+                                placeholderText: "Enter new title..."
+                                Material.accent: Material.Blue
+                                Material.foreground: Material.primaryTextColor
+                                font.pixelSize: 14
                             }
                         }
                     }
                 }
             }
 
-            // Button to add a new tab.
+            // Add Tab Button
             Button {
-                text: "+"
-                onClicked: {
-                    var newIndex = tabModel.count + 1;
-                    tabModel.append({"title": "Page " + newIndex});
-                    // Set the new tab as current.
-                    root.currentTabIndex = tabModel.count - 1;
+                text: "\uf067"
+                font.family: fontAwesome.name
+                font.pixelSize: 14
+                padding: 8
+                onClicked: addNewTab()
+
+                background: Rectangle {
+                    color: parent.hovered ? buttonHoverColor : "transparent"
+                    radius: 4
+                }
+            }
+
+            // Separator
+            Rectangle {
+                implicitWidth: 1
+                height: parent.height * 0.6
+                color: Material.dividerColor
+                opacity: 0.5
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            // Config Button
+            Button {
+                text: "\uf013"
+                font.family: fontAwesome.name
+                font.pixelSize: 14
+                padding: 8
+                onClicked: configDialog.open()
+
+                background: Rectangle {
+                    color: parent.hovered ? buttonHoverColor : "transparent"
+                    radius: 4
                 }
             }
         }
 
-        // The container that holds the page instances.
-        // A Repeater creates one Loader per tab; only the current tab’s Loader is visible.
+        // Page Content
         Item {
             id: pagesContainer
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             Repeater {
                 model: tabModel
                 Loader {
@@ -188,11 +234,58 @@ ApplicationWindow {
         }
     }
 
-    // Optionally, if you need to use a reference to the leftSide from the initial page:
-    Component.onCompleted: {
-        console.log("main loaded")
-        // Note: 'leftSide' is defined within the pageContent component.
-        // If needed, you can expose it via signals or context properties.
-        // GlobalContext.leftSideRef = leftSide
+    // Page Component
+    Component {
+        id: pageContent
+        Rectangle {
+            anchors.fill: parent
+            color: Material.background
+
+            SplitView {
+                anchors.fill: parent
+                handle: Rectangle {
+                    implicitWidth: 4
+                    color: Material.accentColor
+                    opacity: 0.5
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.SizeHorCursor
+                    }
+                }
+
+                Rectangle {
+                    id: leftSide
+                    SplitView.minimumWidth: 100
+                    SplitView.preferredWidth: parent.width * 0.4
+                    color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.05)
+                    radius: 8
+                    border { color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1); width: 1 }
+
+                    TopSection { leftSidRef: leftSide }
+                }
+
+                PlotArea {
+                    SplitView.minimumWidth: 100
+                    SplitView.fillWidth: true
+                }
+            }
+        }
     }
+
+    // Functions
+    function addNewTab() {
+        tabModel.append({"title": `Page ${tabModel.count + 1}`})
+        root.currentTabIndex = tabModel.count - 1
+    }
+
+    function removeTab(index) {
+        tabModel.remove(index)
+        if (index === root.currentTabIndex) {
+            root.currentTabIndex = Math.max(0, index - 1)
+        } else if (index < root.currentTabIndex) {
+            root.currentTabIndex--
+        }
+    }
+
+    Component.onCompleted: console.log("Application initialized")
 }

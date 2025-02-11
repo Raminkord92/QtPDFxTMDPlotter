@@ -21,20 +21,21 @@ qt_add_qml_module(appQtPDFxTMDPlotter
     VERSION 1.0
     QML_FILES
         Main.qml
-        SOURCES DragDropModel.h
-        SOURCES DragDropModel.cpp
+        SOURCES
+        SOURCES
         SOURCES PlotModel.h
         SOURCES PlotModel.cpp
         QML_FILES PlotArea.qml
         QML_FILES
-        QML_FILES TMDObject.qml
-        QML_FILES CPDFObject.qml
+        QML_FILES
+        QML_FILES PDFObject.qml
         QML_FILES TopSection.qml
-        QML_FILES TMDDialog.qml
-        QML_FILES CPDFDialog.qml
+        QML_FILES
+        QML_FILES PDFDialog.qml
         QML_FILES GlobalContext.qml
         SOURCES
         RESOURCES resources.qrc
+        SOURCES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

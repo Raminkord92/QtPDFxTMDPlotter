@@ -14,14 +14,8 @@ Rectangle {
     property var leftSidRef : null
     property Item objectRow: null
 
-    property CPDFDialog tmdDialog: CPDFDialog {
-        id: tmdDialog // Assign an ID to the TMDDialog instance
-        objectRow: objectRow
-        leftSidRef : topSection.leftSidRef
-    }
-
-    property CPDFDialog cPDFDialog: CPDFDialog {
-        id: cPDFDialog // Assign an ID to the TMDDialog instance
+    property PDFDialog pdfDialog: PDFDialog {
+        id: pdfDialog
         objectRow: objectRow
         leftSidRef : topSection.leftSidRef
     }
@@ -40,46 +34,8 @@ Rectangle {
             height: 40
             Material.background: Material.primary
             
-            onClicked: addObjectPopup.open()
-
-            Popup {
-                id: addObjectPopup
-                y: plusButton.height + 5
-                width: 150
-                padding: 10
-                background: Rectangle {
-                    color: Material.dialogColor
-                    radius: 8
-                }
-                
-                Column {
-                    spacing: 8
-                    width: parent.width
-                    
-                    Button {
-                        text: "Add TMD"
-                        width: parent.width
-                        Material.background: Material.primary
-                        onClicked: {
-                            tmdDialog.open() // Use the ID to access tmdDialog
-                            addObjectPopup.close()
-                        }
-                    }
-                    
-                    Button {
-                        text: "Add cPDF"
-                        width: parent.width
-                        Material.background: Material.primary
-                        onClicked: {
-                            cPDFDialog.open()
-                            addObjectPopup.close()
-                        }
-                    }
-                }
-            }
+            onClicked: pdfDialog.open()
         }
-
-        // Row for draggable objects
         Row {
             id: objectRow
             height: parent.height

@@ -1,12 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>CPDFDialog.qml</file>
-        <file>CPDFObject.qml</file>
         <file>GlobalContext.qml</file>
         <file>Main.qml</file>
         <file>PlotArea.qml</file>
-        <file>TMDDialog.qml</file>
-        <file>TMDObject.qml</file>
         <file>TopSection.qml</file>
+        <file>PDFDialog.qml</file>
+        <file>PDFObject.qml</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>fonts/otfs/Font Awesome 6 Brands-Regular-400.otf</file>
+        <file>fonts/otfs/Font Awesome 6 Free-Regular-400.otf</file>
+        <file>fonts/otfs/Font Awesome 6 Free-Solid-900.otf</file>
     </qresource>
 </RCC>
