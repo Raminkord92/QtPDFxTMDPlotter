@@ -1,0 +1,11 @@
+module QtPDFxTMDPlotter
+typeinfo appQtPDFxTMDPlotter.qmltypes
+prefer :/qt/qml/QtPDFxTMDPlotter/
+Main 1.0 Main.qml
+PlotArea 1.0 PlotArea.qml
+PDFObject 1.0 PDFObject.qml
+TopSection 1.0 TopSection.qml
+PDFDialog 1.0 PDFDialog.qml
+singleton GlobalContext 1.0 GlobalContext.qml
+SettingDialog 1.0 SettingDialog.qml
+

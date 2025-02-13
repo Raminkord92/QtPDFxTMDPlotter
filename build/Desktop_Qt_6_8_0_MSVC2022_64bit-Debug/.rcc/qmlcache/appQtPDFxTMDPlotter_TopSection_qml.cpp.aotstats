@@ -1,0 +1,84 @@
+[
+    {
+        "moduleFiles": [
+            {
+                "entries": [
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 12,
+                        "durationMicroseconds": 285,
+                        "errorMessage": "Cannot load property r from QQuickMaterialStyle::foreground with type QVariant.",
+                        "functionName": "color",
+                        "line": 10
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 19,
+                        "durationMicroseconds": 142,
+                        "errorMessage": "Cannot load property r from QQuickMaterialStyle::foreground with type QVariant.",
+                        "functionName": "color",
+                        "line": 12
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 20,
+                        "durationMicroseconds": 459,
+                        "errorMessage": "",
+                        "functionName": "objectRow",
+                        "line": 19
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 22,
+                        "durationMicroseconds": 379,
+                        "errorMessage": "",
+                        "functionName": "leftSidRef",
+                        "line": 20
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 23,
+                        "durationMicroseconds": 207,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 24
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 24,
+                        "durationMicroseconds": 434,
+                        "errorMessage": "",
+                        "functionName": "onClicked",
+                        "line": 37
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 34,
+                        "durationMicroseconds": 359,
+                        "errorMessage": "",
+                        "functionName": "background",
+                        "line": 35
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 21,
+                        "durationMicroseconds": 339,
+                        "errorMessage": "",
+                        "functionName": "height",
+                        "line": 41
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 28,
+                        "durationMicroseconds": 474,
+                        "errorMessage": "",
+                        "functionName": "onCompleted",
+                        "line": 45
+                    }
+                ],
+                "filepath": "C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/TopSection.qml"
+            }
+        ],
+        "moduleId": "QtPDFxTMDPlotter(appQtPDFxTMDPlotter)"
+    }
+]

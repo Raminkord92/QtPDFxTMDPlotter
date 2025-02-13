@@ -1,8 +1,9 @@
 #include <QApplication> // Change this line
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-
+#include "PDFSetProvider.h"
 #include "PlotModel.h"
+#include "PDFInfoModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,10 @@ int main(int argc, char *argv[])
     PlotModel plotModel;
     // Expose models to QML
     engine.rootContext()->setContextProperty("plotModel", &plotModel);
+    PDFSetProvider pdfSetProvider;
+    engine.rootContext()->setContextProperty("pdfSetProvider", &pdfSetProvider);
+    qmlRegisterType<PDFInfoModel>("QtPDFxTMDPlotter", 1, 0, "PDFInfoModel");
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

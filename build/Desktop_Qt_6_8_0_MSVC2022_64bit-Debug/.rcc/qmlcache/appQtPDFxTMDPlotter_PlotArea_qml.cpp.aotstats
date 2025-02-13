@@ -1,0 +1,84 @@
+[
+    {
+        "moduleFiles": [
+            {
+                "entries": [
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 29,
+                        "durationMicroseconds": 1159,
+                        "errorMessage": "",
+                        "functionName": "plotModel",
+                        "line": 9
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 5,
+                        "durationMicroseconds": 116,
+                        "errorMessage": "",
+                        "functionName": "updatePlot",
+                        "line": 49
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 14,
+                        "durationMicroseconds": 155,
+                        "errorMessage": "Cannot access value for name plotModel",
+                        "functionName": "min",
+                        "line": 18
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 14,
+                        "durationMicroseconds": 66,
+                        "errorMessage": "Cannot access value for name plotModel",
+                        "functionName": "max",
+                        "line": 19
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 14,
+                        "durationMicroseconds": 62,
+                        "errorMessage": "Cannot access value for name plotModel",
+                        "functionName": "min",
+                        "line": 25
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 14,
+                        "durationMicroseconds": 60,
+                        "errorMessage": "Cannot access value for name plotModel",
+                        "functionName": "max",
+                        "line": 26
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 16,
+                        "durationMicroseconds": 389,
+                        "errorMessage": "",
+                        "functionName": "axisX",
+                        "line": 33
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 16,
+                        "durationMicroseconds": 237,
+                        "errorMessage": "",
+                        "functionName": "axisY",
+                        "line": 34
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 28,
+                        "durationMicroseconds": 281,
+                        "errorMessage": "",
+                        "functionName": "onCompleted",
+                        "line": 59
+                    }
+                ],
+                "filepath": "C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/PlotArea.qml"
+            }
+        ],
+        "moduleId": "QtPDFxTMDPlotter(appQtPDFxTMDPlotter)"
+    }
+]

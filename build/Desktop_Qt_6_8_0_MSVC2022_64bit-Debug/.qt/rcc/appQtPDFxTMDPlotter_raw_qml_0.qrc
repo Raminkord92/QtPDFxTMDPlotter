@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="/qt/qml/QtPDFxTMDPlotter/">
+    <file alias="Main.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/Main.qml</file>
+    <file alias="PlotArea.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PlotArea.qml</file>
+    <file alias="PDFObject.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PDFObject.qml</file>
+    <file alias="TopSection.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/TopSection.qml</file>
+    <file alias="PDFDialog.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PDFDialog.qml</file>
+    <file alias="GlobalContext.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/GlobalContext.qml</file>
+    <file alias="SettingDialog.qml">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/SettingDialog.qml</file>
+    <file alias="resources.qrc">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/resources.qrc</file>
+  </qresource>
+</RCC>
+

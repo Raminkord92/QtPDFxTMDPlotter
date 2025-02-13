@@ -32,25 +32,11 @@ ApplicationWindow {
         id: tabModel
         ListElement { title: "Page 1" }
     }
-
-    // Configuration Dialog
-    Dialog {
-        id: configDialog
-        title: "Settings"
-        anchors.centerIn: parent
-        standardButtons: Dialog.Close
-
-        ColumnLayout {
-            spacing: 15
-            Label { text: "Plot Settings"; font.bold: true }
-            // Add your configuration controls here
-            Switch { text: "Auto-refresh"; checked: true }
-            ComboBox {
-                model: ["Linear Scale", "Logarithmic Scale"]
-                currentIndex: 0
-            }
-        }
+    SettingDialog
+    {
+        id: settingDialog
     }
+
 
     // Main UI
     ColumnLayout {
@@ -64,7 +50,7 @@ ApplicationWindow {
 
             // Tab Bar
             TabBar {
-                id: tabBar
+                id: tabBarConfig
                 currentIndex: root.currentTabIndex
                 Layout.fillWidth: true
 
@@ -208,7 +194,7 @@ ApplicationWindow {
                 font.family: fontAwesome.name
                 font.pixelSize: 14
                 padding: 8
-                onClicked: configDialog.open()
+                onClicked: settingDialog.open()
 
                 background: Rectangle {
                     color: parent.hovered ? buttonHoverColor : "transparent"

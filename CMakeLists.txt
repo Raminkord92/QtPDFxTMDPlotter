@@ -4,7 +4,7 @@ project(QtPDFxTMDPlotter VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2)
 find_package(Qt6 REQUIRED COMPONENTS Charts)
@@ -14,6 +14,8 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(appQtPDFxTMDPlotter
     main.cpp
 )
+
+
 set_source_files_properties(GlobalContext.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 qt_add_qml_module(appQtPDFxTMDPlotter
@@ -36,6 +38,10 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         SOURCES
         RESOURCES resources.qrc
         SOURCES
+        QML_FILES SettingDialog.qml
+        SOURCES PDFSetProvider.h PDFSetProvider.cpp
+        SOURCES PDFInfo.h
+        SOURCES PDFInfoModel.h PDFInfoModel.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -48,6 +54,20 @@ set_target_properties(appQtPDFxTMDPlotter PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+target_include_directories(appQtPDFxTMDPlotter PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib3/PDFxTMDLib-0.2.0-win64/include"
+)
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+target_link_libraries(appQtPDFxTMDPlotter PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib3/PDFxTMDLib-0.2.0-win64/lib/Release/PDFxTMDLibStatic.lib"
+)
+else()
+    target_link_libraries(appQtPDFxTMDPlotter PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib3/PDFxTMDLib-0.2.0-win64/lib/Debug/PDFxTMDLibStatic.lib"
+    )
+endif()
+
 
 target_link_libraries(appQtPDFxTMDPlotter
     PRIVATE Qt6::Quick

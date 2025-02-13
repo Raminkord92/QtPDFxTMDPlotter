@@ -1,0 +1,56 @@
+{
+    "classes": [
+        {
+            "className": "PDFInfoModel",
+            "enums": [
+                {
+                    "isClass": false,
+                    "isFlag": false,
+                    "name": "PDFRoles",
+                    "values": [
+                        "PdfSetNameRole",
+                        "MuMaxRole",
+                        "MuMinRole"
+                    ]
+                }
+            ],
+            "lineNumber": 9,
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "list",
+                            "type": "QVariantList"
+                        }
+                    ],
+                    "index": 0,
+                    "name": "setPDFList",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "index",
+                            "type": "int"
+                        }
+                    ],
+                    "index": 1,
+                    "name": "get",
+                    "returnType": "QVariantMap"
+                }
+            ],
+            "object": true,
+            "qualifiedClassName": "PDFInfoModel",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QAbstractListModel"
+                }
+            ]
+        }
+    ],
+    "inputFile": "PDFInfoModel.h",
+    "outputRevision": 68
+}

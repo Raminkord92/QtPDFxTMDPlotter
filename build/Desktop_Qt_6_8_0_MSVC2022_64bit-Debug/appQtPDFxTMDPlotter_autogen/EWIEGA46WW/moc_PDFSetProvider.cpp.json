@@ -1,0 +1,26 @@
+{
+    "classes": [
+        {
+            "className": "PDFSetProvider",
+            "lineNumber": 20,
+            "methods": [
+                {
+                    "access": "public",
+                    "index": 0,
+                    "name": "getPDFSets",
+                    "returnType": "QList<PDFSetInfo>"
+                }
+            ],
+            "object": true,
+            "qualifiedClassName": "PDFSetProvider",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "PDFSetProvider.h",
+    "outputRevision": 68
+}
