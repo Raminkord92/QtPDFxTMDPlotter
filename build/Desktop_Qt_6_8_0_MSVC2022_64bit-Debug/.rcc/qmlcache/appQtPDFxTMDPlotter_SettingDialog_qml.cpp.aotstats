@@ -6,7 +6,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 12,
-                        "durationMicroseconds": 739,
+                        "durationMicroseconds": 530,
                         "errorMessage": "",
                         "functionName": "width",
                         "line": 11
@@ -14,63 +14,87 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 13,
-                        "durationMicroseconds": 170,
+                        "durationMicroseconds": 162,
                         "errorMessage": "",
                         "functionName": "height",
                         "line": 12
                     },
                     {
                         "codegenSuccessfull": false,
+                        "column": 15,
+                        "durationMicroseconds": 60,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
+                        "functionName": "onOpened",
+                        "line": 27
+                    },
+                    {
+                        "codegenSuccessfull": false,
                         "column": 16,
-                        "durationMicroseconds": 239,
-                        "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::background with type QVariant -> QColor stored as QVariant",
+                        "durationMicroseconds": 278,
+                        "errorMessage": "No matching override found. Candidates:\nFunction expects 1 arguments, but 2 were provided\ntype Color for argument 0 cannot be resolved",
                         "functionName": "color",
-                        "line": 15
+                        "line": 14
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 21,
-                        "durationMicroseconds": 168,
+                        "durationMicroseconds": 170,
                         "errorMessage": "",
                         "functionName": "theme",
-                        "line": 17
+                        "line": 18
                     },
                     {
-                        "codegenSuccessfull": false,
-                        "column": 28,
-                        "durationMicroseconds": 361,
-                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
-                        "functionName": "onCompleted",
-                        "line": 24
+                        "codegenSuccessfull": true,
+                        "column": 22,
+                        "durationMicroseconds": 188,
+                        "errorMessage": "",
+                        "functionName": "accent",
+                        "line": 19
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 23,
-                        "durationMicroseconds": 201,
+                        "durationMicroseconds": 167,
+                        "errorMessage": "",
+                        "functionName": "primary",
+                        "line": 20
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 23,
+                        "durationMicroseconds": 110,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 36
+                        "line": 34
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 28,
-                        "durationMicroseconds": 275,
+                        "durationMicroseconds": 278,
                         "errorMessage": "",
                         "functionName": "onClicked",
-                        "line": 47
+                        "line": 45
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 37,
-                        "durationMicroseconds": 397,
+                        "durationMicroseconds": 401,
                         "errorMessage": "",
                         "functionName": "elevation",
-                        "line": 48
+                        "line": 46
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 130,
+                        "errorMessage": "",
+                        "functionName": "fillWidth",
+                        "line": 47
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 28,
-                        "durationMicroseconds": 247,
+                        "durationMicroseconds": 210,
                         "errorMessage": "",
                         "functionName": "onClicked",
                         "line": 52
@@ -78,106 +102,138 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 37,
-                        "durationMicroseconds": 359,
+                        "durationMicroseconds": 348,
                         "errorMessage": "",
                         "functionName": "elevation",
                         "line": 53
                     },
                     {
-                        "codegenSuccessfull": false,
-                        "column": 24,
-                        "durationMicroseconds": 218,
-                        "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::background with type QVariant -> QColor stored as QVariant",
-                        "functionName": "color",
-                        "line": 63
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 143,
+                        "errorMessage": "",
+                        "functionName": "fillWidth",
+                        "line": 54
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 24,
-                        "durationMicroseconds": 210,
+                        "column": 28,
+                        "durationMicroseconds": 311,
+                        "errorMessage": "",
+                        "functionName": "onClicked",
+                        "line": 62
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 193,
+                        "errorMessage": "",
+                        "functionName": "fillWidth",
+                        "line": 60
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 37,
+                        "durationMicroseconds": 539,
+                        "errorMessage": "",
+                        "functionName": "elevation",
+                        "line": 61
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 20,
+                        "durationMicroseconds": 452,
                         "errorMessage": "",
                         "functionName": "width",
                         "line": 68
                     },
                     {
                         "codegenSuccessfull": false,
-                        "column": 32,
-                        "durationMicroseconds": 92,
-                        "errorMessage": "No matching override found. Candidates:\ntype Color for argument 0 cannot be resolved\nFunction expects 2 arguments, but 1 were provided",
+                        "column": 24,
+                        "durationMicroseconds": 402,
+                        "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::background with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
-                        "line": 81
+                        "line": 71
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 24,
+                        "durationMicroseconds": 279,
+                        "errorMessage": "",
+                        "functionName": "width",
+                        "line": 76
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 35,
+                        "durationMicroseconds": 156,
+                        "errorMessage": "",
+                        "functionName": "centerIn",
+                        "line": 77
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 39,
+                        "durationMicroseconds": 332,
+                        "errorMessage": "",
+                        "functionName": "alignment",
+                        "line": 82
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 32,
+                        "durationMicroseconds": 555,
+                        "errorMessage": "Cannot load property White from QQuickMaterialStyle.",
+                        "functionName": "color",
+                        "line": 92
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 142,
+                        "durationMicroseconds": 159,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
-                        "line": 82
+                        "line": 93
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 43,
-                        "durationMicroseconds": 144,
+                        "durationMicroseconds": 146,
                         "errorMessage": "",
                         "functionName": "alignment",
-                        "line": 83
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 50,
-                        "durationMicroseconds": 135,
-                        "errorMessage": "",
-                        "functionName": "horizontalAlignment",
-                        "line": 95
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 47,
-                        "durationMicroseconds": 287,
-                        "errorMessage": "",
-                        "functionName": "alignment",
-                        "line": 96
+                        "line": 94
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 36,
-                        "durationMicroseconds": 73,
+                        "durationMicroseconds": 50,
                         "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
                         "functionName": "model",
-                        "line": 101
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 220,
-                        "errorMessage": "",
-                        "functionName": "width",
-                        "line": 107
+                        "line": 105
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 47,
-                        "durationMicroseconds": 116,
+                        "durationMicroseconds": 99,
                         "errorMessage": "Cannot access value for name model",
                         "functionName": "text",
-                        "line": 113
+                        "line": 116
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 48,
-                        "durationMicroseconds": 221,
+                        "durationMicroseconds": 228,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::primary with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
-                        "line": 115
+                        "line": 118
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 44,
-                        "durationMicroseconds": 107,
+                        "durationMicroseconds": 68,
                         "errorMessage": "Cannot access value for name highlighted",
                         "functionName": "color",
-                        "line": 120
+                        "line": 123
                     },
                     {
                         "codegenSuccessfull": true,
@@ -185,183 +241,119 @@
                         "durationMicroseconds": 287,
                         "errorMessage": "",
                         "functionName": "visible",
-                        "line": 127
+                        "line": 130
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 47,
-                        "durationMicroseconds": 126,
+                        "durationMicroseconds": 113,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 136
+                        "line": 140
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 44,
-                        "durationMicroseconds": 208,
+                        "durationMicroseconds": 267,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::primary with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
-                        "line": 143
+                        "line": 147
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 55,
-                        "durationMicroseconds": 182,
+                        "durationMicroseconds": 153,
                         "errorMessage": "",
                         "functionName": "alignment",
-                        "line": 142
+                        "line": 146
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 59,
-                        "durationMicroseconds": 102,
+                        "durationMicroseconds": 104,
                         "errorMessage": "",
                         "functionName": "centerIn",
-                        "line": 148
+                        "line": 152
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 47,
-                        "durationMicroseconds": 156,
+                        "durationMicroseconds": 158,
                         "errorMessage": "",
                         "functionName": "text",
-                        "line": 161
+                        "line": 165
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 48,
-                        "durationMicroseconds": 134,
+                        "durationMicroseconds": 137,
                         "errorMessage": "",
                         "functionName": "elide",
-                        "line": 164
+                        "line": 168
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 51,
-                        "durationMicroseconds": 150,
+                        "durationMicroseconds": 369,
                         "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
                         "functionName": "text",
-                        "line": 174
+                        "line": 177
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 51,
+                        "durationMicroseconds": 171,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
+                        "functionName": "text",
+                        "line": 186
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 51,
+                        "durationMicroseconds": 117,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
+                        "functionName": "text",
+                        "line": 196
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 55,
+                        "durationMicroseconds": 147,
+                        "errorMessage": "",
+                        "functionName": "wrapMode",
+                        "line": 200
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 51,
+                        "durationMicroseconds": 131,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
+                        "functionName": "text",
+                        "line": 204
+                    },
+                    {
+                        "codegenSuccessfull": false,
+                        "column": 51,
+                        "durationMicroseconds": 115,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
+                        "functionName": "text",
+                        "line": 212
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 55,
-                        "durationMicroseconds": 487,
+                        "durationMicroseconds": 109,
                         "errorMessage": "Cannot retrieve a non-object type by ID: pdfModel",
                         "functionName": "text",
-                        "line": 183
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 34,
-                        "durationMicroseconds": 366,
-                        "errorMessage": "",
-                        "functionName": "enabled",
-                        "line": 201
+                        "line": 218
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 36,
-                        "durationMicroseconds": 255,
+                        "durationMicroseconds": 242,
                         "errorMessage": "",
                         "functionName": "onClicked",
-                        "line": 202
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 194,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 227
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 38,
-                        "durationMicroseconds": 322,
-                        "errorMessage": "",
-                        "functionName": "enabled",
-                        "line": 231
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 232,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 232
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 34,
-                        "durationMicroseconds": 152,
-                        "errorMessage": "",
-                        "functionName": "visible",
-                        "line": 264
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 192,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 272
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 213,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 276
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 36,
-                        "durationMicroseconds": 374,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 299
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 38,
-                        "durationMicroseconds": 1019,
-                        "errorMessage": "",
-                        "functionName": "onTriggered",
-                        "line": 309
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 200,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 322
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 38,
-                        "durationMicroseconds": 255,
-                        "errorMessage": "",
-                        "functionName": "enabled",
-                        "line": 326
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 40,
-                        "durationMicroseconds": 582,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 327
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 36,
-                        "durationMicroseconds": 196,
-                        "errorMessage": "",
-                        "functionName": "onClicked",
-                        "line": 353
+                        "line": 386
                     }
                 ],
                 "filepath": "C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/SettingDialog.qml"

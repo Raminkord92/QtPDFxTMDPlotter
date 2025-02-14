@@ -6,7 +6,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 29,
-                        "durationMicroseconds": 1159,
+                        "durationMicroseconds": 1322,
                         "errorMessage": "",
                         "functionName": "plotModel",
                         "line": 9
@@ -14,7 +14,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 5,
-                        "durationMicroseconds": 116,
+                        "durationMicroseconds": 137,
                         "errorMessage": "",
                         "functionName": "updatePlot",
                         "line": 49
@@ -22,7 +22,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 14,
-                        "durationMicroseconds": 155,
+                        "durationMicroseconds": 164,
                         "errorMessage": "Cannot access value for name plotModel",
                         "functionName": "min",
                         "line": 18
@@ -30,7 +30,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 14,
-                        "durationMicroseconds": 66,
+                        "durationMicroseconds": 90,
                         "errorMessage": "Cannot access value for name plotModel",
                         "functionName": "max",
                         "line": 19
@@ -38,7 +38,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 14,
-                        "durationMicroseconds": 62,
+                        "durationMicroseconds": 83,
                         "errorMessage": "Cannot access value for name plotModel",
                         "functionName": "min",
                         "line": 25
@@ -46,7 +46,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 14,
-                        "durationMicroseconds": 60,
+                        "durationMicroseconds": 74,
                         "errorMessage": "Cannot access value for name plotModel",
                         "functionName": "max",
                         "line": 26
@@ -54,7 +54,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 16,
-                        "durationMicroseconds": 389,
+                        "durationMicroseconds": 297,
                         "errorMessage": "",
                         "functionName": "axisX",
                         "line": 33
@@ -62,7 +62,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 16,
-                        "durationMicroseconds": 237,
+                        "durationMicroseconds": 232,
                         "errorMessage": "",
                         "functionName": "axisY",
                         "line": 34

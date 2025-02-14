@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
     PlotModel plotModel;
     // Expose models to QML
     engine.rootContext()->setContextProperty("plotModel", &plotModel);
-    PDFSetProvider pdfSetProvider;
-    engine.rootContext()->setContextProperty("pdfSetProvider", &pdfSetProvider);
     qmlRegisterType<PDFInfoModel>("QtPDFxTMDPlotter", 1, 0, "PDFInfoModel");
 
     QObject::connect(

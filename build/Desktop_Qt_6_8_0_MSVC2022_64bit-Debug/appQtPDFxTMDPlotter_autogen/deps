@@ -1096,12 +1096,15 @@ appQtPDFxTMDPlotter_autogen/timestamp: \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PDFSetProvider.h \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PlotModel.cpp \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PlotModel.h \
+	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/Utils.cpp \
+	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/Utils.h \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/.qt/qml_imports/appQtPDFxTMDPlotter_conf.cmake \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/.qtc/package-manager/auto-setup.cmake \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/ConfigWrapper.h \
+	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/EnvUtils.h \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/PartonUtils.h \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/YamlInfoReader.h \
 	C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/fkYAML/node.hpp \

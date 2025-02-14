@@ -151,7 +151,9 @@ C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6
   C:/Qt/6.8.0/msvc2022_64/include/QtQml/qtqmlexports.h \
   C:/Qt/6.8.0/msvc2022_64/include/QtQml/qtqmlglobal.h \
   C:/Qt/6.8.0/msvc2022_64/include/QtQmlIntegration/qqmlintegration.h \
+  C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PDFInfo.h \
   C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/ConfigWrapper.h \
+  C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/EnvUtils.h \
   C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/PartonUtils.h \
   C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/Common/YamlInfoReader.h \
   C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/lib3/PDFxTMDLib-0.2.0-win64/include/PDFxTMDLib/fkYAML/node.hpp

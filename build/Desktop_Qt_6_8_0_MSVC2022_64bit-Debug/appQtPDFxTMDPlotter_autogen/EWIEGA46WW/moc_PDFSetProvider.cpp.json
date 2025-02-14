@@ -2,13 +2,13 @@
     "classes": [
         {
             "className": "PDFSetProvider",
-            "lineNumber": 20,
+            "lineNumber": 29,
             "methods": [
                 {
                     "access": "public",
                     "index": 0,
-                    "name": "getPDFSets",
-                    "returnType": "QList<PDFSetInfo>"
+                    "name": "getPDFSetEnvPaths",
+                    "returnType": "QStringList"
                 }
             ],
             "object": true,

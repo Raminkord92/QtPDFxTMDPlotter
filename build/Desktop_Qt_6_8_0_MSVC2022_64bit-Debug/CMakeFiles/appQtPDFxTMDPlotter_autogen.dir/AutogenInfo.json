@@ -1291,6 +1291,12 @@
 			"MU",
 			"EWIEGA46WW/moc_PlotModel.cpp",
 			null
+		],
+		[
+			"C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/Utils.h",
+			"MU",
+			"EWIEGA46WW/moc_Utils.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -1401,6 +1407,11 @@
 		],
 		[
 			"C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/PlotModel.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/Utils.cpp",
 			"MU",
 			null
 		],

@@ -194,8 +194,11 @@ ApplicationWindow {
                 font.family: fontAwesome.name
                 font.pixelSize: 14
                 padding: 8
-                onClicked: settingDialog.open()
+                onClicked:
+                {
 
+                    settingDialog.open()
+                }
                 background: Rectangle {
                     color: parent.hovered ? buttonHoverColor : "transparent"
                     radius: 4

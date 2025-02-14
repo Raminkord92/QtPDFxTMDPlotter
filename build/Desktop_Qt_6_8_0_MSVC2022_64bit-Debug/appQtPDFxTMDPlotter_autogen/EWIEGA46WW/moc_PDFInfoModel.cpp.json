@@ -9,23 +9,29 @@
                     "name": "PDFRoles",
                     "values": [
                         "PdfSetNameRole",
-                        "MuMaxRole",
-                        "MuMinRole"
+                        "QMaxRole",
+                        "QMinRole",
+                        "XMinRole",
+                        "XMaxRole",
+                        "NumMembersRole",
+                        "FlavorsRole",
+                        "FormatRole",
+                        "OrderQCDRole"
                     ]
                 }
             ],
-            "lineNumber": 9,
+            "lineNumber": 11,
             "methods": [
                 {
                     "access": "public",
-                    "arguments": [
-                        {
-                            "name": "list",
-                            "type": "QVariantList"
-                        }
-                    ],
                     "index": 0,
-                    "name": "setPDFList",
+                    "name": "fillPDFInfoModel",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 1,
+                    "name": "cLearModel",
                     "returnType": "void"
                 },
                 {
@@ -36,7 +42,7 @@
                             "type": "int"
                         }
                     ],
-                    "index": 1,
+                    "index": 2,
                     "name": "get",
                     "returnType": "QVariantMap"
                 }

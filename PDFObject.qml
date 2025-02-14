@@ -9,8 +9,18 @@ Rectangle {
     radius: 15
     color: "lightgreen"
     anchors.centerIn: parent
-    property string pdfSet
+    property string pdfSet : ''
     property var properties
+    PDFDialog
+    {
+        id: pdfDialog
+        qMinValue: properties.muMin
+        qMaxValue: properties.muMax
+        xMinValue: properties.xMin
+        xMaxValue: properties.xMax
+        currentPDFSetName: pdfSet
+        isEditMode: true
+    }
 
     Text {
         id: textElement
@@ -170,11 +180,9 @@ Rectangle {
         }
 
         onDoubleClicked: {
-            console.log("CPDFObject Info:");
-            console.log("pdfSet: " + parent.pdfSet);
-            console.log("x: " + parent.properties.x);
-            console.log("mu: " + parent.properties.mu);
-            plotModel.testCallObject();
+            pdfDialog.setObjectRow(draggableRect);  // Set objectRow to the current PDFObject instance.
+            pdfDialog.isEditMode = true;
+            pdfDialog.open();
         }
 
         onMouseXChanged: updateCursor()

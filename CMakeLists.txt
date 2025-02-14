@@ -40,8 +40,10 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         SOURCES
         QML_FILES SettingDialog.qml
         SOURCES PDFSetProvider.h PDFSetProvider.cpp
-        SOURCES PDFInfo.h
+        SOURCES
         SOURCES PDFInfoModel.h PDFInfoModel.cpp
+        SOURCES PDFInfo.h
+        SOURCES Utils.h Utils.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -1,10 +1,12 @@
 #ifndef PDFINFO_H
 #define PDFINFO_H
-#include <string>
+#include <PDFxTMDLib/Common/PartonUtils.h>
+#include <PDFxTMDLib/Common/YamlInfoReader.h>
+#include <QString>
 
-struct PDFInfo {
-    std::string pdfSetName;
-    double muMax = 100;
-    double muMin = 1;
+struct PDFInfo: PDFxTMD::YamlStandardPDFInfo
+{
+    QString pdfSetName;
 };
+
 #endif // PDFINFO_H

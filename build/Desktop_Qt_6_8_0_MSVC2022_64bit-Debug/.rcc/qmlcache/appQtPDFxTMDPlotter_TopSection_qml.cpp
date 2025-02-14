@@ -661,18 +661,20 @@ extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[] = {
     struct { QV4::ExecutableCompilationUnit *compilationUnit; } c { unit };
     const auto *aotContext = &c;
     Q_UNUSED(aotContext);
-    argTypes[0] = []() { static const auto t = QMetaType::fromName("QQuickItem*"); return t; }();
+    argTypes[0] = QMetaType::fromType<QVariant>();
 }, 
     [](const QQmlPrivate::AOTCompiledContext *aotContext, void **argv) {
 Q_UNUSED(aotContext)
 Q_UNUSED(argv)
 // expression for objectRow at line 19, column 9
-QObject *r2_0;
+QVariant r2_0;
 // generate_LoadQmlContextPropertyLookup
+{
+QObject * retrieved;
 #ifndef QT_NO_DEBUG
 aotContext->setInstructionPointer(2);
 #endif
-while (!aotContext->loadContextIdLookup(22, &r2_0)) {
+while (!aotContext->loadContextIdLookup(22, &retrieved)) {
 #ifdef QT_NO_DEBUG
 aotContext->setInstructionPointer(2);
 #endif
@@ -680,10 +682,12 @@ aotContext->initLoadContextIdLookup(22);
 if (aotContext->engine->hasError()) {
 aotContext->setReturnValueUndefined();
 if (argv[0]) {
-    *static_cast<QObject * *>(argv[0]) = nullptr;
+    *static_cast<QVariant *>(argv[0]) = QVariant();
 }
 return;
 }
+}
+r2_0 = QVariant::fromValue(std::move(retrieved));
 }
 {
 }
@@ -691,7 +695,9 @@ return;
 }
 // generate_Ret
 if (argv[0]) {
-    *static_cast<QObject * *>(argv[0]) = r2_0;
+    if (!r2_0.isValid())
+        aotContext->setReturnValueUndefined();
+    *static_cast<QVariant *>(argv[0]) = std::move(r2_0);
 }
 return;
 }

@@ -6,7 +6,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 38,
-                        "durationMicroseconds": 290,
+                        "durationMicroseconds": 324,
                         "errorMessage": "Cannot load property r from QQuickMaterialStyle::foreground with type QVariant.",
                         "functionName": "buttonHoverColor",
                         "line": 23
@@ -14,10 +14,10 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 5,
-                        "durationMicroseconds": 834,
+                        "durationMicroseconds": 1231,
                         "errorMessage": "QJSValue has no property called title",
                         "functionName": "addNewTab",
-                        "line": 262
+                        "line": 265
                     },
                     {
                         "codegenSuccessfull": false,
@@ -25,12 +25,12 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Functions without type annotations won't be compiled",
                         "functionName": "removeTab",
-                        "line": 267
+                        "line": 270
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 21,
-                        "durationMicroseconds": 473,
+                        "durationMicroseconds": 393,
                         "errorMessage": "",
                         "functionName": "theme",
                         "line": 17
@@ -38,7 +38,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 23,
-                        "durationMicroseconds": 370,
+                        "durationMicroseconds": 292,
                         "errorMessage": "",
                         "functionName": "primary",
                         "line": 18
@@ -46,7 +46,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 22,
-                        "durationMicroseconds": 235,
+                        "durationMicroseconds": 250,
                         "errorMessage": "",
                         "functionName": "accent",
                         "line": 19
@@ -54,7 +54,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 26,
-                        "durationMicroseconds": 101,
+                        "durationMicroseconds": 136,
                         "errorMessage": "No matching override found. Candidates:\nFunction expects 1 arguments, but 2 were provided\ntype Color for argument 0 cannot be resolved",
                         "functionName": "background",
                         "line": 20
@@ -62,7 +62,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 23,
-                        "durationMicroseconds": 163,
+                        "durationMicroseconds": 465,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 43
@@ -70,7 +70,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 31,
-                        "durationMicroseconds": 182,
+                        "durationMicroseconds": 250,
                         "errorMessage": "",
                         "functionName": "currentIndex",
                         "line": 54
@@ -78,7 +78,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 28,
-                        "durationMicroseconds": 153,
+                        "durationMicroseconds": 193,
                         "errorMessage": "",
                         "functionName": "model",
                         "line": 58
@@ -86,7 +86,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 35,
-                        "durationMicroseconds": 112,
+                        "durationMicroseconds": 195,
                         "errorMessage": "Cannot access value for name model",
                         "functionName": "text",
                         "line": 64
@@ -94,7 +94,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 36,
-                        "durationMicroseconds": 154,
+                        "durationMicroseconds": 309,
                         "errorMessage": "",
                         "functionName": "elide",
                         "line": 65
@@ -102,7 +102,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 50,
-                        "durationMicroseconds": 137,
+                        "durationMicroseconds": 272,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 66
@@ -110,7 +110,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 36,
-                        "durationMicroseconds": 266,
+                        "durationMicroseconds": 375,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::foreground with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
                         "line": 67
@@ -118,7 +118,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 42,
-                        "durationMicroseconds": 526,
+                        "durationMicroseconds": 1214,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 70
@@ -126,7 +126,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 39,
-                        "durationMicroseconds": 75,
+                        "durationMicroseconds": 156,
                         "errorMessage": "Cannot access value for name model",
                         "functionName": "text",
                         "line": 71
@@ -134,7 +134,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 62,
-                        "durationMicroseconds": 60,
+                        "durationMicroseconds": 150,
                         "errorMessage": "Cannot access value for name model",
                         "functionName": "text",
                         "line": 72
@@ -142,7 +142,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 36,
-                        "durationMicroseconds": 158,
+                        "durationMicroseconds": 220,
                         "errorMessage": "Cannot load property hovered from (component in C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/Main.qml)::parent with type QQuickItem.",
                         "functionName": "color",
                         "line": 75
@@ -150,7 +150,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 44,
-                        "durationMicroseconds": 262,
+                        "durationMicroseconds": 434,
                         "errorMessage": "",
                         "functionName": "right",
                         "line": 80
@@ -158,7 +158,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 44,
-                        "durationMicroseconds": 579,
+                        "durationMicroseconds": 847,
                         "errorMessage": "Cannot access value for name index",
                         "functionName": "onClicked",
                         "line": 87
@@ -166,7 +166,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 46,
-                        "durationMicroseconds": 78,
+                        "durationMicroseconds": 165,
                         "errorMessage": "Cannot access value for name fontAwesome",
                         "functionName": "family",
                         "line": 85
@@ -174,7 +174,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 44,
-                        "durationMicroseconds": 143,
+                        "durationMicroseconds": 221,
                         "errorMessage": "Cannot load property hovered from (component in C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/Main.qml)::parent with type QQuickItem.",
                         "functionName": "color",
                         "line": 90
@@ -182,7 +182,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 223,
+                        "durationMicroseconds": 332,
                         "errorMessage": "",
                         "functionName": "acceptedButtons",
                         "line": 99
@@ -190,7 +190,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 40,
-                        "durationMicroseconds": 85,
+                        "durationMicroseconds": 109,
                         "errorMessage": "Cannot access value for name mouse",
                         "functionName": "onClicked",
                         "line": 100
@@ -198,7 +198,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 43,
-                        "durationMicroseconds": 119,
+                        "durationMicroseconds": 226,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 98
@@ -206,7 +206,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 45,
-                        "durationMicroseconds": 156,
+                        "durationMicroseconds": 303,
                         "errorMessage": "",
                         "functionName": "theme",
                         "line": 113
@@ -214,7 +214,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 47,
-                        "durationMicroseconds": 191,
+                        "durationMicroseconds": 334,
                         "errorMessage": "",
                         "functionName": "primary",
                         "line": 114
@@ -222,7 +222,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 168,
+                        "durationMicroseconds": 326,
                         "errorMessage": "",
                         "functionName": "accent",
                         "line": 115
@@ -230,7 +230,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 49,
-                        "durationMicroseconds": 177,
+                        "durationMicroseconds": 269,
                         "errorMessage": "",
                         "functionName": "theme",
                         "line": 118
@@ -238,7 +238,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 54,
-                        "durationMicroseconds": 474,
+                        "durationMicroseconds": 1311,
                         "errorMessage": "",
                         "functionName": "foreground",
                         "line": 119
@@ -246,7 +246,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 226,
+                        "durationMicroseconds": 374,
                         "errorMessage": "",
                         "functionName": "onTriggered",
                         "line": 130
@@ -254,7 +254,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 308,
+                        "durationMicroseconds": 538,
                         "errorMessage": "",
                         "functionName": "standardButtons",
                         "line": 145
@@ -262,7 +262,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 41,
-                        "durationMicroseconds": 128,
+                        "durationMicroseconds": 210,
                         "errorMessage": "Cannot access value for name tabModel",
                         "functionName": "onAccepted",
                         "line": 147
@@ -270,7 +270,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 47,
-                        "durationMicroseconds": 317,
+                        "durationMicroseconds": 207,
                         "errorMessage": "Cannot load property overlay from const QMetaObject.",
                         "functionName": "centerIn",
                         "line": 137
@@ -278,7 +278,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 45,
-                        "durationMicroseconds": 291,
+                        "durationMicroseconds": 276,
                         "errorMessage": "",
                         "functionName": "theme",
                         "line": 141
@@ -286,7 +286,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 47,
-                        "durationMicroseconds": 255,
+                        "durationMicroseconds": 511,
                         "errorMessage": "",
                         "functionName": "primary",
                         "line": 142
@@ -294,7 +294,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 215,
+                        "durationMicroseconds": 303,
                         "errorMessage": "",
                         "functionName": "accent",
                         "line": 143
@@ -302,7 +302,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 40,
-                        "durationMicroseconds": 181,
+                        "durationMicroseconds": 301,
                         "errorMessage": "",
                         "functionName": "width",
                         "line": 153
@@ -310,7 +310,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 39,
-                        "durationMicroseconds": 105,
+                        "durationMicroseconds": 144,
                         "errorMessage": "Cannot access value for name model",
                         "functionName": "text",
                         "line": 154
@@ -318,7 +318,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 40,
-                        "durationMicroseconds": 248,
+                        "durationMicroseconds": 418,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::foreground with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
                         "line": 156
@@ -326,7 +326,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 52,
-                        "durationMicroseconds": 218,
+                        "durationMicroseconds": 377,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::accent with type QVariant -> QColor stored as QVariant",
                         "functionName": "selectedTextColor",
                         "line": 157
@@ -334,7 +334,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 50,
-                        "durationMicroseconds": 223,
+                        "durationMicroseconds": 280,
                         "errorMessage": "",
                         "functionName": "accent",
                         "line": 159
@@ -342,7 +342,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 54,
-                        "durationMicroseconds": 507,
+                        "durationMicroseconds": 380,
                         "errorMessage": "",
                         "functionName": "foreground",
                         "line": 160
@@ -350,7 +350,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 28,
-                        "durationMicroseconds": 1136,
+                        "durationMicroseconds": 11704,
                         "errorMessage": "method addNewTab cannot be resolved.",
                         "functionName": "onClicked",
                         "line": 174
@@ -358,7 +358,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 30,
-                        "durationMicroseconds": 211,
+                        "durationMicroseconds": 353,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 171
@@ -366,7 +366,7 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 28,
-                        "durationMicroseconds": 164,
+                        "durationMicroseconds": 258,
                         "errorMessage": "Cannot load property hovered from (component in C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/Main.qml)::parent with type QQuickItem.",
                         "functionName": "color",
                         "line": 177
@@ -374,7 +374,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 25,
-                        "durationMicroseconds": 326,
+                        "durationMicroseconds": 464,
                         "errorMessage": "",
                         "functionName": "height",
                         "line": 185
@@ -382,7 +382,7 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 24,
-                        "durationMicroseconds": 219,
+                        "durationMicroseconds": 312,
                         "errorMessage": "",
                         "functionName": "color",
                         "line": 186
@@ -390,23 +390,23 @@
                     {
                         "codegenSuccessfull": true,
                         "column": 35,
-                        "durationMicroseconds": 157,
+                        "durationMicroseconds": 369,
                         "errorMessage": "",
                         "functionName": "alignment",
                         "line": 188
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 28,
-                        "durationMicroseconds": 243,
+                        "column": 17,
+                        "durationMicroseconds": 449,
                         "errorMessage": "",
                         "functionName": "onClicked",
-                        "line": 197
+                        "line": 198
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 30,
-                        "durationMicroseconds": 181,
+                        "durationMicroseconds": 346,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 194
@@ -414,130 +414,130 @@
                     {
                         "codegenSuccessfull": false,
                         "column": 28,
-                        "durationMicroseconds": 150,
+                        "durationMicroseconds": 302,
                         "errorMessage": "Cannot load property hovered from (component in C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/Main.qml)::parent with type QQuickItem.",
                         "functionName": "color",
-                        "line": 200
+                        "line": 203
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 24,
-                        "durationMicroseconds": 153,
+                        "durationMicroseconds": 281,
                         "errorMessage": "",
                         "functionName": "model",
-                        "line": 213
-                    },
-                    {
-                        "codegenSuccessfull": false,
-                        "column": 30,
-                        "durationMicroseconds": 58,
-                        "errorMessage": "Cannot access value for name index",
-                        "functionName": "visible",
                         "line": 216
                     },
                     {
                         "codegenSuccessfull": false,
+                        "column": 30,
+                        "durationMicroseconds": 164,
+                        "errorMessage": "Cannot access value for name index",
+                        "functionName": "visible",
+                        "line": 219
+                    },
+                    {
+                        "codegenSuccessfull": false,
                         "column": 38,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 116,
                         "errorMessage": "Cannot access value for name pageContent",
                         "functionName": "sourceComponent",
-                        "line": 217
+                        "line": 220
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 35,
-                        "durationMicroseconds": 112,
+                        "durationMicroseconds": 263,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 215
+                        "line": 218
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 20,
-                        "durationMicroseconds": 245,
+                        "durationMicroseconds": 439,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: QQuickMaterialStyle::background with type QVariant -> QColor stored as QVariant",
                         "functionName": "color",
-                        "line": 228
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 27,
-                        "durationMicroseconds": 110,
-                        "errorMessage": "",
-                        "functionName": "fill",
-                        "line": 227
-                    },
-                    {
-                        "codegenSuccessfull": true,
-                        "column": 31,
-                        "durationMicroseconds": 119,
-                        "errorMessage": "",
-                        "functionName": "fill",
                         "line": 231
                     },
                     {
                         "codegenSuccessfull": true,
-                        "column": 28,
+                        "column": 27,
                         "durationMicroseconds": 217,
                         "errorMessage": "",
-                        "functionName": "color",
+                        "functionName": "fill",
+                        "line": 230
+                    },
+                    {
+                        "codegenSuccessfull": true,
+                        "column": 31,
+                        "durationMicroseconds": 249,
+                        "errorMessage": "",
+                        "functionName": "fill",
                         "line": 234
                     },
                     {
                         "codegenSuccessfull": true,
+                        "column": 28,
+                        "durationMicroseconds": 388,
+                        "errorMessage": "",
+                        "functionName": "color",
+                        "line": 237
+                    },
+                    {
+                        "codegenSuccessfull": true,
                         "column": 38,
-                        "durationMicroseconds": 160,
+                        "durationMicroseconds": 331,
                         "errorMessage": "",
                         "functionName": "cursorShape",
-                        "line": 238
+                        "line": 241
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 39,
-                        "durationMicroseconds": 103,
+                        "durationMicroseconds": 264,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 237
+                        "line": 240
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 28,
-                        "durationMicroseconds": 68,
+                        "durationMicroseconds": 141,
                         "errorMessage": "Cannot load property r from QQuickMaterialStyle::foreground with type QVariant.",
                         "functionName": "color",
-                        "line": 246
+                        "line": 249
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 47,
-                        "durationMicroseconds": 270,
+                        "durationMicroseconds": 478,
                         "errorMessage": "",
                         "functionName": "preferredWidth",
-                        "line": 245
+                        "line": 248
                     },
                     {
                         "codegenSuccessfull": false,
                         "column": 37,
-                        "durationMicroseconds": 64,
+                        "durationMicroseconds": 113,
                         "errorMessage": "Cannot load property r from QQuickMaterialStyle::foreground with type QVariant.",
                         "functionName": "color",
-                        "line": 248
+                        "line": 251
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 46,
-                        "durationMicroseconds": 340,
+                        "durationMicroseconds": 213,
                         "errorMessage": "",
                         "functionName": "leftSidRef",
-                        "line": 250
+                        "line": 253
                     },
                     {
                         "codegenSuccessfull": true,
                         "column": 28,
-                        "durationMicroseconds": 333,
+                        "durationMicroseconds": 443,
                         "errorMessage": "",
                         "functionName": "onCompleted",
-                        "line": 276
+                        "line": 279
                     }
                 ],
                 "filepath": "C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Debug/Main.qml"
