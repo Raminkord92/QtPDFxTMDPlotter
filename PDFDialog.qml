@@ -9,8 +9,8 @@ Dialog {
     title: "PDF Plot Object"
     width: 300
     height: 400
-    modal: true
 
+    // Properties
     property double qMinValue: 0.0
     property double qMaxValue: 100.0
     property double xMinValue: 0.0
@@ -18,34 +18,51 @@ Dialog {
     property bool isEditMode: false
     property string currentPDFSetName: ''
     standardButtons: Dialog.Ok | Dialog.Cancel
-    property var leftSidRef: null
-    property var  objectRow
-    onOpened:
-    {
-        pdfModel.fillPDFInfoModel();
+    property var leftSidRef
+    property Item objectRow
 
-        if (!isEditMode)
-        {
+    // Make the dialog movable
+    property point dragStartPoint: Qt.point(0, 0)
+    property bool isDragging: false
+
+    onOpened: {
+        pdfModel.fillPDFInfoModel();
+        if (!isEditMode) {
             console.log("salam Component.onCompleted")
             cpdfSetCombo.currentIndex = 0;
             getQMinValue();
             getQMaxValue();
             getXMinValue();
             getXMaxValue();
-
             xMinField.text = xMinValue;
             xMaxField.text = xMaxValue;
             qMinField.text = qMinValue;
             qMaxField.text = qMaxValue;
             currentPDFSetName = cpdfSetCombo.currentText
         }
-
-
     }
 
     background: Rectangle {
         color: Material.dialogColor
         radius: 8
+
+        // Enable dragging for the dialog
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                cPDFDialog.isDragging = true;
+                cPDFDialog.dragStartPoint = Qt.point(mouse.x, mouse.y);
+            }
+            onPositionChanged: {
+                if (cPDFDialog.isDragging) {
+                    cPDFDialog.x += mouse.x - cPDFDialog.dragStartPoint.x;
+                    cPDFDialog.y += mouse.y - cPDFDialog.dragStartPoint.y;
+                }
+            }
+            onReleased: {
+                cPDFDialog.isDragging = false;
+            }
+        }
     }
 
     PDFInfoModel {
@@ -111,7 +128,6 @@ Dialog {
                         text = xMinValue;
                     } else {
                         xMinValue = num;
-                        // You can add code here to adjust xMaxField's validator if needed.
                     }
                 }
             }
@@ -124,8 +140,7 @@ Dialog {
                 validator: DoubleValidator { }
                 onEditingFinished: {
                     var num = parseFloat(text);
-                    console.log("sasalam xMaxField.text", xMaxField.text)
-                    if (isNaN(num) || num > xMaxValue ||  num < Number(xMinField.text)  ) {
+                    if (isNaN(num) || num > xMaxValue || num < Number(xMinField.text)) {
                         text = xMaxValue;
                     } else {
                         xMaxValue = num;
@@ -154,11 +169,9 @@ Dialog {
                 id: qMaxField
                 placeholderText: "μₘₐₓ"
                 text: qMaxValue
-                validator: DoubleValidator {  }
+                validator: DoubleValidator { }
                 onEditingFinished: {
-                    console.log("ramin")
                     var num = parseFloat(text);
-                    console.log("num " + num + " Number(qMinField.text) " + Number(qMinField.text))
                     if (isNaN(num) || num < Number(qMinField.text) || num > qMaxValue) {
                         text = qMaxValue;
                     } else {
@@ -168,18 +181,17 @@ Dialog {
             }
         }
     }
+
     onAccepted: {
         if (isEditMode && objectRow) {
-            objectRow.pdfSet  = cpdfSetCombo.currentText;
+            objectRow.pdfSet = cpdfSetCombo.currentText;
             objectRow.properties = {
                 xMin: Number(xMinField.text),
                 xMax: Number(xMaxField.text),
                 muMin: Number(qMinField.text),
                 muMax: Number(qMaxField.text)
             };
-        }
-        else if (!isEditMode && objectRow)
-        {
+        } else if (!isEditMode && objectRow) {
             var cpdf = Qt.createQmlObject(`
                 import QtQuick
                 import QtQuick.Controls.Material
@@ -193,37 +205,35 @@ Dialog {
                     })
                 }
             `, leftSidRef);
-        }
-
-        else {
+        } else {
             console.error("objectRow is undefined");
         }
     }
-
 
     function setObjectRow(row) {
         objectRow = row;
     }
 
-    Component.onCompleted: {
-
-    }
+    Component.onCompleted: {}
 
     function getQMinValue() {
         if (cpdfSetCombo.currentIndex < 0) return;
         var QMin = pdfModel.get(cpdfSetCombo.currentIndex).QMin;
         qMinValue = Number(QMin);
     }
+
     function getQMaxValue() {
         if (cpdfSetCombo.currentIndex < 0) return;
         var QMax = pdfModel.get(cpdfSetCombo.currentIndex).QMax;
         qMaxValue = Number(QMax);
     }
+
     function getXMinValue() {
         if (cpdfSetCombo.currentIndex < 0) return;
         var XMin = pdfModel.get(cpdfSetCombo.currentIndex).XMin;
         xMinValue = Number(XMin);
     }
+
     function getXMaxValue() {
         if (cpdfSetCombo.currentIndex < 0) return;
         var XMax = pdfModel.get(cpdfSetCombo.currentIndex).XMax;

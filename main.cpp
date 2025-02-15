@@ -4,12 +4,14 @@
 #include "PDFSetProvider.h"
 #include "PlotModel.h"
 #include "PDFInfoModel.h"
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    app.setWindowIcon(QIcon(":/images/images/PDFxTMD.png"));
 
     // Instantiate models
     PlotModel plotModel;

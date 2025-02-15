@@ -1,7 +1,7 @@
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Controls.Material
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls.Material 2.15
 import QtPDFxTMDPlotter 1.0
 
 ApplicationWindow {
@@ -12,53 +12,52 @@ ApplicationWindow {
     minimumWidth: 600
     minimumHeight: 400
     title: "PDF & TMD Plotter"
-
     // Theme configuration
     Material.theme: Material.System
     Material.primary: Material.BlueGrey
     Material.accent: Material.Blue
     Material.background: Material.color(Material.Grey, Material.Shade50)
 
-    // Shared properties
     property color buttonHoverColor: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
-    property int currentTabIndex: 0
 
     FontLoader {
         id: fontAwesome
         source: "qrc:/fonts/fonts/otfs/Font Awesome 6 Free-Solid-900.otf"
     }
 
+    // Model to drive tabs/pages
     ListModel {
         id: tabModel
         ListElement { title: "Page 1" }
     }
-    SettingDialog
-    {
+
+    SettingDialog {
         id: settingDialog
     }
 
-
-    // Main UI
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
 
+        // Header row with TabBar and buttons
         RowLayout {
             spacing: 10
             Layout.fillWidth: true
 
-            // Tab Bar
             TabBar {
                 id: tabBarConfig
-                currentIndex: root.currentTabIndex
+                currentIndex: swipeView.currentIndex
                 Layout.fillWidth: true
 
                 Repeater {
                     model: tabModel
                     delegate: TabButton {
+                        // Enable hover tracking
+                        hoverEnabled: true
                         width: 100
                         padding: 8
+                        text: model.title
 
                         contentItem: Text {
                             text: model.title
@@ -67,49 +66,47 @@ ApplicationWindow {
                             color: Material.foreground
                         }
 
+                        // Use the built-in "hovered" property (now available because hoverEnabled is true)
                         ToolTip.visible: hovered && (textMetrics.width > width)
                         ToolTip.text: model.title
                         TextMetrics { id: textMetrics; text: model.title }
 
                         background: Rectangle {
-                            color: parent.hovered ? buttonHoverColor : "transparent"
+                            color: hovered ? buttonHoverColor : "transparent"
                             radius: 4
                         }
 
+                        // Remove Tab Button
                         RowLayout {
                             anchors.right: parent.right
                             spacing: 2
-
                             ToolButton {
                                 text: "\uf00d"
                                 font.family: fontAwesome.name
                                 font.pixelSize: 12
                                 onClicked: removeTab(index)
-
                                 background: Rectangle {
-                                    color: parent.hovered ? Qt.darker(buttonHoverColor, 1.2) : "transparent"
+                                    color: hovered ? Qt.darker(buttonHoverColor, 1.2) : "transparent"
                                     radius: 4
                                 }
                             }
                         }
 
-                        // Right-click MouseArea
+                        // Right-click area for editing tab title
                         MouseArea {
                             anchors.fill: parent
                             acceptedButtons: Qt.RightButton
-                            onClicked: {
-                                if (mouse.button === Qt.RightButton) {
+                            hoverEnabled: true
+                            onClicked: function(mouse) {
+                                if (mouse.button === Qt.RightButton)
                                     contextMenu.popup()
-                                }
                             }
                         }
 
-                        // Context Menu
                         Menu {
                             id: contextMenu
                             topPadding: 4
                             bottomPadding: 4
-
                             Material.theme: Material.System
                             Material.primary: Material.BlueGrey
                             Material.accent: Material.Blue
@@ -131,7 +128,7 @@ ApplicationWindow {
                             }
                         }
 
-                        // Edit Dialog
+                        // Edit Dialog for renaming the tab
                         Dialog {
                             id: editDialog
                             anchors.centerIn: Overlay.overlay
@@ -141,7 +138,6 @@ ApplicationWindow {
                             Material.theme: Material.System
                             Material.primary: Material.BlueGrey
                             Material.accent: Material.Blue
-
                             standardButtons: Dialog.Cancel | Dialog.Ok
 
                             onAccepted: {
@@ -161,6 +157,11 @@ ApplicationWindow {
                                 font.pixelSize: 14
                             }
                         }
+
+                        // When the TabButton is clicked, update the SwipeView's current index
+                        onClicked: {
+                            swipeView.currentIndex = index;
+                        }
                     }
                 }
             }
@@ -171,15 +172,15 @@ ApplicationWindow {
                 font.family: fontAwesome.name
                 font.pixelSize: 14
                 padding: 8
+                hoverEnabled: true
                 onClicked: addNewTab()
-
                 background: Rectangle {
                     color: parent.hovered ? buttonHoverColor : "transparent"
                     radius: 4
                 }
             }
 
-            // Separator
+            // Vertical Separator
             Rectangle {
                 implicitWidth: 1
                 height: parent.height * 0.6
@@ -194,11 +195,8 @@ ApplicationWindow {
                 font.family: fontAwesome.name
                 font.pixelSize: 14
                 padding: 8
-                onClicked:
-                {
-
-                    settingDialog.open()
-                }
+                hoverEnabled: true
+                onClicked: settingDialog.open()
                 background: Rectangle {
                     color: parent.hovered ? buttonHoverColor : "transparent"
                     radius: 4
@@ -206,24 +204,26 @@ ApplicationWindow {
             }
         }
 
-        // Page Content
-        Item {
-            id: pagesContainer
+        // Pages container using SwipeView
+        SwipeView {
+            id: swipeView
             Layout.fillWidth: true
             Layout.fillHeight: true
+            currentIndex: 0
 
+            // Dynamically create pages from the model.
+            // Each Loader instantiates the pageContent component.
             Repeater {
                 model: tabModel
-                Loader {
-                    anchors.fill: parent
-                    visible: index === root.currentTabIndex
+                delegate: Loader {
+                    active: true
                     sourceComponent: pageContent
                 }
             }
         }
     }
 
-    // Page Component
+    // Page Content Component: each page has its own SplitView with a leftSide container.
     Component {
         id: pageContent
         Rectangle {
@@ -242,17 +242,21 @@ ApplicationWindow {
                     }
                 }
 
+                // Left Side container
                 Rectangle {
                     id: leftSide
                     SplitView.minimumWidth: 100
                     SplitView.preferredWidth: parent.width * 0.4
                     color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.05)
                     radius: 8
-                    border { color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1); width: 1 }
-
+                    border {
+                        color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
+                        width: 1
+                    }
                     TopSection { leftSidRef: leftSide }
                 }
 
+                // Plot Area container
                 PlotArea {
                     SplitView.minimumWidth: 100
                     SplitView.fillWidth: true
@@ -261,19 +265,16 @@ ApplicationWindow {
         }
     }
 
-    // Functions
+    // Functions to manage tabs
     function addNewTab() {
-        tabModel.append({"title": `Page ${tabModel.count + 1}`})
-        root.currentTabIndex = tabModel.count - 1
+        tabModel.append({"title": "Page " + (tabModel.count + 1)})
+        swipeView.currentIndex = tabModel.count - 1
     }
 
     function removeTab(index) {
         tabModel.remove(index)
-        if (index === root.currentTabIndex) {
-            root.currentTabIndex = Math.max(0, index - 1)
-        } else if (index < root.currentTabIndex) {
-            root.currentTabIndex--
-        }
+        if (swipeView.currentIndex >= tabModel.count)
+            swipeView.currentIndex = tabModel.count - 1
     }
 
     Component.onCompleted: console.log("Application initialized")
