@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/QtPDFxTMDPlotter">
+    <file alias="qmldir">C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/QtPDFxTMDPlotter/qmldir</file>
+  </qresource>
+</RCC>
+

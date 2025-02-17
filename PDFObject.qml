@@ -10,6 +10,7 @@ Rectangle {
     color: "lightgreen"
     anchors.centerIn: parent
     property string pdfSet : ''
+    property string displayText: ''
     property var properties
     PDFDialog
     {
@@ -25,7 +26,7 @@ Rectangle {
     Text {
         id: textElement
         anchors.centerIn: parent
-        text: parent.pdfSet
+        text: displayText
         font.pixelSize: 10
     }
 

@@ -1,0 +1,5 @@
+C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/lib3/ColorPicker/ColorPicker_autogen/include/../EWIEGA46WW/moc_colorPickerBackend.cpp.json
+C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/lib3/ColorPicker/ColorPicker_autogen/include/../EWIEGA46WW/moc_colorhistorymodel.cpp.json
+C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/lib3/ColorPicker/ColorPicker_autogen/include/../EWIEGA46WW/moc_colorwheel.cpp.json
+C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/lib3/ColorPicker/ColorPicker_autogen/include/../EWIEGA46WW/moc_eyedropPreview.cpp.json
+C:/Users/Ramin/Documents/qt/QtPDFxTMDPlotter/QtPDFxTMDPlotter/build/Desktop_Qt_6_8_0_MSVC2022_64bit-Release/lib3/ColorPicker/ColorPicker_autogen/include/../EWIEGA46WW/moc_textfielddoublevalidator.cpp.json

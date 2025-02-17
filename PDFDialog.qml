@@ -8,7 +8,7 @@ Dialog {
     id: cPDFDialog
     title: "PDF Plot Object"
     width: 300
-    height: 400
+    height: 450
 
     // Properties
     property double qMinValue: 0.0
@@ -20,11 +20,12 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
     property var leftSidRef
     property Item objectRow
+    property var partonFlavors;
 
     // Make the dialog movable
     property point dragStartPoint: Qt.point(0, 0)
     property bool isDragging: false
-
+    property alias selectedColor: colorPickerId.currentColor
     onOpened: {
         pdfModel.fillPDFInfoModel();
         if (!isEditMode) {
@@ -39,6 +40,7 @@ Dialog {
             qMinField.text = qMinValue;
             qMaxField.text = qMaxValue;
             currentPDFSetName = cpdfSetCombo.currentText
+            getPartonFlavors();
         }
     }
 
@@ -93,29 +95,33 @@ Dialog {
             }
         }
 
-        ComboBox {
-            id: cpdfSetCombo
-            width: parent.width
-            currentIndex: 0
-            model: pdfModel
-            textRole: "pdfSetName"
-            onCurrentIndexChanged: {
-                getQMinValue();
-                getQMaxValue();
-                getXMinValue();
-                getXMaxValue();
-                xMinField.text = xMinValue;
-                xMaxField.text = xMaxValue;
-                qMinField.text = qMinValue;
-                qMaxField.text = qMaxValue;
-            }
-        }
+
 
         GridLayout {
             columns: 2
             columnSpacing: 15
             rowSpacing: 8
-
+            ComboBox {
+                id: cpdfSetCombo
+                width: parent.width
+                currentIndex: 0
+                model: pdfModel
+                textRole: "pdfSetName"
+                onCurrentIndexChanged: {
+                    getQMinValue();
+                    getQMaxValue();
+                    getXMinValue();
+                    getXMaxValue();
+                    xMinField.text = xMinValue;
+                    xMaxField.text = xMaxValue;
+                    qMinField.text = qMinValue;
+                    qMaxField.text = qMaxValue;
+                }
+            }
+            ComboBox {
+                id: patonFlavorsId
+                model: partonFlavors
+            }
             // xMin TextField with DoubleValidator
             TextField {
                 id: xMinField
@@ -179,6 +185,14 @@ Dialog {
                     }
                 }
             }
+            ColorPickerButton {
+                id: colorPickerId
+            }
+            ComboBox {
+                width: 200
+                currentIndex: 1 // This sets "Apple" as the initially selected item.
+                model: [ "Solid", "Dashed", "Dotted", "Dash Dot" ]
+            }
         }
     }
 
@@ -197,6 +211,8 @@ Dialog {
                 import QtQuick.Controls.Material
                 PDFObject {
                     pdfSet: "${cpdfSetCombo.currentText}"
+                    displayText: "${cpdfSetCombo.currentText} (${patonFlavorsId.currentText})"
+                    color: "${selectedColor}"
                     properties: ({
                         xMin: ${xMinField.text},
                         xMax: ${xMaxField.text},
@@ -238,5 +254,11 @@ Dialog {
         if (cpdfSetCombo.currentIndex < 0) return;
         var XMax = pdfModel.get(cpdfSetCombo.currentIndex).XMax;
         xMaxValue = Number(XMax);
+    }
+    function getPartonFlavors(){
+        if (cpdfSetCombo.currentIndex < 0) return;
+        var flavors = pdfModel.get(cpdfSetCombo.currentIndex).Flavors;
+        partonFlavors = flavors.split(", ")
+        console.log("flavors are " + partonFlavors)
     }
 }

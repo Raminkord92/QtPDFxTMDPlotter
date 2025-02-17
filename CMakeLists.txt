@@ -15,7 +15,6 @@ qt_add_executable(appQtPDFxTMDPlotter
     main.cpp
 )
 
-
 set_source_files_properties(GlobalContext.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 qt_add_qml_module(appQtPDFxTMDPlotter
@@ -44,6 +43,8 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         SOURCES PDFInfoModel.h PDFInfoModel.cpp
         SOURCES PDFInfo.h
         SOURCES Utils.h Utils.cpp
+        QML_FILES ColorPickerButton.qml
+        QML_FILES LineStyleSelector.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -69,7 +70,6 @@ else()
         "${CMAKE_CURRENT_SOURCE_DIR}/lib3/PDFxTMDLib-0.2.0-win64/lib/Debug/PDFxTMDLibStatic.lib"
     )
 endif()
-
 
 target_link_libraries(appQtPDFxTMDPlotter
     PRIVATE Qt6::Quick

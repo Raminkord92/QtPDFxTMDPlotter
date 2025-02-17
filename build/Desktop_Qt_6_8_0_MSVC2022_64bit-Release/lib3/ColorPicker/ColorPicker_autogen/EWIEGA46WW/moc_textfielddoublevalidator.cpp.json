@@ -1,0 +1,24 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "TextFieldDoubleValidator",
+            "lineNumber": 6,
+            "object": true,
+            "qualifiedClassName": "TextFieldDoubleValidator",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QDoubleValidator"
+                }
+            ]
+        }
+    ],
+    "inputFile": "textfielddoublevalidator.h",
+    "outputRevision": 68
+}

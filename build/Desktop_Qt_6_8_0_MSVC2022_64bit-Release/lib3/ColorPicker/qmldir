@@ -1,0 +1,15 @@
+module ColorPicker
+linktarget ColorPickerplugin
+optional plugin ColorPickerplugin
+classname ColorPickerPlugin
+typeinfo ColorPicker.qmltypes
+import QtQuick.Controls.Basic
+depends Origin.Controls
+prefer :/colorpicker/qml/ColorPicker/
+ColorPickerDialog 1.0 ColorPickerDialog.qml
+ColorSampler 1.0 ColorSampler.qml
+ColorHistory 1.0 ColorHistory.qml
+ColorSlider 1.0 ColorSlider.qml
+RGBSlider 1.0 RGBSlider.qml
+HSVSlider 1.0 HSVSlider.qml
+
