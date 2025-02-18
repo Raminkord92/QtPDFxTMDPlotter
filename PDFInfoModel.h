@@ -31,13 +31,14 @@ public:
 signals:
 
 public:
-    int rowCount(const QModelIndex &parent) const;
+     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
     // Q_INVOKABLE  void setPDFList(const QVariantList &list);
     Q_INVOKABLE void fillPDFInfoModel();
     Q_INVOKABLE void cLearModel();
     Q_INVOKABLE QVariantMap get(int index) const;
+    Q_INVOKABLE int pdfCount() const;
 private:
     QVector<PDFInfo> m_pdfList;
     PDFSetProvider m_pdfSetProvider;

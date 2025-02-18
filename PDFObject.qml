@@ -8,10 +8,13 @@ Rectangle {
     height: Math.max(30, textMetrics.height + 10)
     radius: 15
     color: "lightgreen"
+    property int lineStyleIndex: 1
+    property int partonFlavorIndex: 1
     anchors.centerIn: parent
     property string pdfSet : ''
     property string displayText: ''
     property var properties
+    property var partonFlavors_;
     PDFDialog
     {
         id: pdfDialog
@@ -20,7 +23,9 @@ Rectangle {
         xMinValue: properties.xMin
         xMaxValue: properties.xMax
         currentPDFSetName: pdfSet
+        partonFlavors: partonFlavors_
         isEditMode: true
+        currentPartonFlavorIndex: partonFlavorIndex
     }
 
     Text {

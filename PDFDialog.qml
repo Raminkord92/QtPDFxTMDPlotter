@@ -21,14 +21,37 @@ Dialog {
     property var leftSidRef
     property Item objectRow
     property var partonFlavors;
-
+    property string selectedPartonFlavor: ''
     // Make the dialog movable
     property point dragStartPoint: Qt.point(0, 0)
     property bool isDragging: false
     property alias selectedColor: colorPickerId.currentColor
+    property alias lineStyleIndex: lineStyleId.currentIndex
+    property alias currentPartonFlavorIndex: patonFlavorsId.currentIndex
     onOpened: {
         pdfModel.fillPDFInfoModel();
-        if (!isEditMode) {
+
+        if (isEditMode)
+        {
+            selectedColor = objectRow.color;
+            lineStyleIndex = objectRow.lineStyleIndex;
+            currentPartonFlavorIndex: objectRow.partonFlavorIndex;
+            var index = -1;
+            var rowCount_ = pdfModel.pdfCount()
+            for (var i = 0; i < rowCount_; i++) {
+                if (pdfModel.get(i).pdfSetName === objectRow.pdfSet) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index !== -1) {
+                cpdfSetCombo.currentIndex = index; // Set the currentIndex instead of currentText
+            } else {
+                console.warn("PDF set not found in the model:", objectRow.pdfSet);
+            }
+
+        }else {
+            getPartonFlavors();
             console.log("salam Component.onCompleted")
             cpdfSetCombo.currentIndex = 0;
             getQMinValue();
@@ -39,9 +62,9 @@ Dialog {
             xMaxField.text = xMaxValue;
             qMinField.text = qMinValue;
             qMaxField.text = qMaxValue;
-            currentPDFSetName = cpdfSetCombo.currentText
-            getPartonFlavors();
         }
+        currentPDFSetName = cpdfSetCombo.currentText
+
     }
 
     background: Rectangle {
@@ -189,8 +212,8 @@ Dialog {
                 id: colorPickerId
             }
             ComboBox {
+                id: lineStyleId
                 width: 200
-                currentIndex: 1 // This sets "Apple" as the initially selected item.
                 model: [ "Solid", "Dashed", "Dotted", "Dash Dot" ]
             }
         }
@@ -213,6 +236,9 @@ Dialog {
                     pdfSet: "${cpdfSetCombo.currentText}"
                     displayText: "${cpdfSetCombo.currentText} (${patonFlavorsId.currentText})"
                     color: "${selectedColor}"
+                    lineStyleIndex: ${lineStyleId.currentIndex}
+                    partonFlavorIndex: ${currentPartonFlavorIndex}
+                    partonFlavors_: ${JSON.stringify(partonFlavors)}
                     properties: ({
                         xMin: ${xMinField.text},
                         xMax: ${xMaxField.text},

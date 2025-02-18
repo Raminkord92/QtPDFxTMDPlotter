@@ -95,3 +95,8 @@ QVariantMap PDFInfoModel::get(int index) const {
     }
     return result;
 }
+
+int PDFInfoModel::pdfCount() const
+{
+    return m_pdfList.size();
+}
