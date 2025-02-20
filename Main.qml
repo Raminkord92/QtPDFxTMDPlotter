@@ -234,7 +234,7 @@ ApplicationWindow {
                 anchors.fill: parent
                 handle: Rectangle {
                     implicitWidth: 4
-                    color: Material.accentColor
+                    color: Material.DeepOrange
                     opacity: 0.5
                     MouseArea {
                         anchors.fill: parent
@@ -242,7 +242,6 @@ ApplicationWindow {
                     }
                 }
 
-                // Left Side container
                 Rectangle {
                     id: leftSide
                     SplitView.minimumWidth: 100
@@ -253,14 +252,22 @@ ApplicationWindow {
                         color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
                         width: 1
                     }
-                    TopSection { leftSidRef: leftSide }
+                    TopSection { leftSidRef: leftSide; swipeViewMain: swipeView }
                 }
 
-                // Plot Area container
-                PlotArea {
+                Rectangle {
                     SplitView.minimumWidth: 100
                     SplitView.fillWidth: true
+                    color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.05)
+                    radius: 8
+                    anchors.margins: 0
+                    PlotArea {
+                        anchors.fill: parent
+                        anchors.margins: 0
+                    }
                 }
+
+
             }
         }
     }

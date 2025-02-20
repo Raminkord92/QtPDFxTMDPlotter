@@ -13,15 +13,12 @@ Rectangle {
     anchors.centerIn: parent
     property string pdfSet : ''
     property string displayText: ''
-    property var properties
     property var partonFlavors_;
+    property int currentTabIndex;
+    property int plotTypeIndex;
     PDFDialog
     {
         id: pdfDialog
-        qMinValue: properties.muMin
-        qMaxValue: properties.muMax
-        xMinValue: properties.xMin
-        xMaxValue: properties.xMax
         currentPDFSetName: pdfSet
         partonFlavors: partonFlavors_
         isEditMode: true
@@ -244,6 +241,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        console.log("current tab index ", currentTabIndex)
         if (parent) {
             parent.widthChanged.connect(() => {
                 x = Math.min(Math.max(0, x), parent.width - width)

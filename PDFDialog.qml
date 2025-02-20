@@ -7,14 +7,8 @@ import QtPDFxTMDPlotter 1.0
 Dialog {
     id: cPDFDialog
     title: "PDF Plot Object"
-    width: 300
-    height: 450
-
-    // Properties
-    property double qMinValue: 0.0
-    property double qMaxValue: 100.0
-    property double xMinValue: 0.0
-    property double xMaxValue: 1.0
+    width: 500
+    height: 400
     property bool isEditMode: false
     property string currentPDFSetName: ''
     standardButtons: Dialog.Ok | Dialog.Cancel
@@ -28,6 +22,8 @@ Dialog {
     property alias selectedColor: colorPickerId.currentColor
     property alias lineStyleIndex: lineStyleId.currentIndex
     property alias currentPartonFlavorIndex: patonFlavorsId.currentIndex
+    property alias currentPlotTypeIndex: plotTypeId.currentIndex
+    property var swipeViewMainDlg;
     onOpened: {
         pdfModel.fillPDFInfoModel();
 
@@ -54,14 +50,6 @@ Dialog {
             getPartonFlavors();
             console.log("salam Component.onCompleted")
             cpdfSetCombo.currentIndex = 0;
-            getQMinValue();
-            getQMaxValue();
-            getXMinValue();
-            getXMaxValue();
-            xMinField.text = xMinValue;
-            xMaxField.text = xMaxValue;
-            qMinField.text = qMinValue;
-            qMaxField.text = qMaxValue;
         }
         currentPDFSetName = cpdfSetCombo.currentText
 
@@ -121,9 +109,13 @@ Dialog {
 
 
         GridLayout {
-            columns: 2
+            columns: 4
             columnSpacing: 15
             rowSpacing: 8
+            Label {
+                text: "PDF set:"
+            }
+
             ComboBox {
                 id: cpdfSetCombo
                 width: parent.width
@@ -131,90 +123,36 @@ Dialog {
                 model: pdfModel
                 textRole: "pdfSetName"
                 onCurrentIndexChanged: {
-                    getQMinValue();
-                    getQMaxValue();
-                    getXMinValue();
-                    getXMaxValue();
-                    xMinField.text = xMinValue;
-                    xMaxField.text = xMaxValue;
-                    qMinField.text = qMinValue;
-                    qMaxField.text = qMaxValue;
                 }
+            }
+            Label {
+                text: "Parton Flavor:"
             }
             ComboBox {
                 id: patonFlavorsId
                 model: partonFlavors
             }
-            // xMin TextField with DoubleValidator
-            TextField {
-                id: xMinField
-                placeholderText: "xₘᵢₙ"
-                text: xMinValue
-                validator: DoubleValidator { }
-                onEditingFinished: {
-                    var num = parseFloat(text);
-                    if (isNaN(num) || num < xMinValue || num > Number(xMaxField.text)) {
-                        text = xMinValue;
-                    } else {
-                        xMinValue = num;
-                    }
-                }
-            }
-
-            // xMax TextField with DoubleValidator
-            TextField {
-                id: xMaxField
-                placeholderText: "xₘₐₓ"
-                text: xMaxValue
-                validator: DoubleValidator { }
-                onEditingFinished: {
-                    var num = parseFloat(text);
-                    if (isNaN(num) || num > xMaxValue || num < Number(xMinField.text)) {
-                        text = xMaxValue;
-                    } else {
-                        xMaxValue = num;
-                    }
-                }
-            }
-
-            // qMin TextField with DoubleValidator
-            TextField {
-                id: qMinField
-                placeholderText: "μₘᵢₙ"
-                text: qMinValue
-                validator: DoubleValidator { bottom: 0 }
-                onEditingFinished: {
-                    var num = parseFloat(text);
-                    if (isNaN(num) || num < qMinValue || num > Number(qMaxField.text)) {
-                        text = qMinValue;
-                    } else {
-                        qMinValue = num;
-                    }
-                }
-            }
-
-            // qMax TextField with DoubleValidator
-            TextField {
-                id: qMaxField
-                placeholderText: "μₘₐₓ"
-                text: qMaxValue
-                validator: DoubleValidator { }
-                onEditingFinished: {
-                    var num = parseFloat(text);
-                    if (isNaN(num) || num < Number(qMinField.text) || num > qMaxValue) {
-                        text = qMaxValue;
-                    } else {
-                        qMaxValue = num;
-                    }
-                }
+            Label {
+                text: "Plot color:"
             }
             ColorPickerButton {
                 id: colorPickerId
+            }
+            Label {
+                text: "Plot line style:"
             }
             ComboBox {
                 id: lineStyleId
                 width: 200
                 model: [ "Solid", "Dashed", "Dotted", "Dash Dot" ]
+            }
+            Label {
+                text: "Plot type:"
+            }
+            ComboBox {
+                id: plotTypeId
+                width: 200
+                model: [ "x","μ"]// "kₜ",
             }
         }
     }
@@ -222,29 +160,27 @@ Dialog {
     onAccepted: {
         if (isEditMode && objectRow) {
             objectRow.pdfSet = cpdfSetCombo.currentText;
-            objectRow.properties = {
-                xMin: Number(xMinField.text),
-                xMax: Number(xMaxField.text),
-                muMin: Number(qMinField.text),
-                muMax: Number(qMaxField.text)
-            };
+            objectRow.displayText = cpdfSetCombo.currentText +"-" + patonFlavorsId.currentText + "\nplot type: " + plotTypeId.currentText;
+            objectRow.color = selectedColor;
+            objectRow.lineStyleIndex = lineStyleId.currentIndex;
+            objectRow.partonFlavorIndex = currentPartonFlavorIndex;
+            objectRow.partonFlavors_ = partonFlavors;
+            objectRow.currentTabIndex = swipeViewMainDlg.currentIndex;
+            objectRow.plotTypeIndex = currentPlotTypeIndex;
+
         } else if (!isEditMode && objectRow) {
             var cpdf = Qt.createQmlObject(`
                 import QtQuick
                 import QtQuick.Controls.Material
                 PDFObject {
                     pdfSet: "${cpdfSetCombo.currentText}"
-                    displayText: "${cpdfSetCombo.currentText} (${patonFlavorsId.currentText})"
+                    displayText: "${cpdfSetCombo.currentText}-(${patonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}"
                     color: "${selectedColor}"
                     lineStyleIndex: ${lineStyleId.currentIndex}
                     partonFlavorIndex: ${currentPartonFlavorIndex}
                     partonFlavors_: ${JSON.stringify(partonFlavors)}
-                    properties: ({
-                        xMin: ${xMinField.text},
-                        xMax: ${xMaxField.text},
-                        muMin: ${qMinField.text},
-                        muMax: ${qMaxField.text}
-                    })
+                    currentTabIndex: ${swipeViewMainDlg.currentIndex}
+                    plotTypeIndex: ${currentPlotTypeIndex}
                 }
             `, leftSidRef);
         } else {
@@ -258,29 +194,6 @@ Dialog {
 
     Component.onCompleted: {}
 
-    function getQMinValue() {
-        if (cpdfSetCombo.currentIndex < 0) return;
-        var QMin = pdfModel.get(cpdfSetCombo.currentIndex).QMin;
-        qMinValue = Number(QMin);
-    }
-
-    function getQMaxValue() {
-        if (cpdfSetCombo.currentIndex < 0) return;
-        var QMax = pdfModel.get(cpdfSetCombo.currentIndex).QMax;
-        qMaxValue = Number(QMax);
-    }
-
-    function getXMinValue() {
-        if (cpdfSetCombo.currentIndex < 0) return;
-        var XMin = pdfModel.get(cpdfSetCombo.currentIndex).XMin;
-        xMinValue = Number(XMin);
-    }
-
-    function getXMaxValue() {
-        if (cpdfSetCombo.currentIndex < 0) return;
-        var XMax = pdfModel.get(cpdfSetCombo.currentIndex).XMax;
-        xMaxValue = Number(XMax);
-    }
     function getPartonFlavors(){
         if (cpdfSetCombo.currentIndex < 0) return;
         var flavors = pdfModel.get(cpdfSetCombo.currentIndex).Flavors;
