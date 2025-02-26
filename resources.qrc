@@ -5,7 +5,7 @@
         <file>PlotArea.qml</file>
         <file>TopSection.qml</file>
         <file>PDFDialog.qml</file>
-        <file>PDFObject.qml</file>
+        <file>PDFObjectItem.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/otfs/Font Awesome 6 Brands-Regular-400.otf</file>

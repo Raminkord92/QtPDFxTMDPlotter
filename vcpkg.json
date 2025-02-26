@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "qtpdftmdplotter",
+  "version-string": "0.1",
+  "dependencies": [
+    "gsl",
+    "libarchive",
+    "curl"
+  ]
+}
+

@@ -13,11 +13,9 @@ Rectangle {
     border.width: 1
     property var leftSidRef : null
     property var swipeViewMain: null
-    property Item objectRow: null
 
     property PDFDialog pdfDialog: PDFDialog {
         id: pdfDialog
-        objectRow: objectRow
         leftSidRef : topSection.leftSidRef
         swipeViewMainDlg: swipeViewMain
     }
@@ -37,11 +35,6 @@ Rectangle {
             Material.background: Material.primary
             
             onClicked: pdfDialog.open()
-        }
-        Row {
-            id: objectRow
-            height: parent.height
-            spacing: 10
         }
     }
     Component.onCompleted: {

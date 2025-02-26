@@ -5,6 +5,7 @@
 #include "PlotModel.h"
 #include "PDFInfoModel.h"
 #include <QIcon>
+#include "PDFDataProvider.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
     // Expose models to QML
     engine.rootContext()->setContextProperty("plotModel", &plotModel);
     qmlRegisterType<PDFInfoModel>("QtPDFxTMDPlotter", 1, 0, "PDFInfoModel");
-
+    PDFDataProvider::registerTypes();
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

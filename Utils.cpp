@@ -60,5 +60,59 @@ QString ConvertOrderQCDToString(PDFxTMD::OrderQCD orderQCD)
     }
 }
 
+QVector<double> BinGeneratorInLogSpace(double xMin, double xMax, int n)
+{
+    if (xMin <= 0 || xMax <= 0 || n <= 0) {
+        throw std::invalid_argument("xMin, xMax must be greater than 0 and n must be positive.");
+    }
+
+    // Compute the logarithms.
+    double logMin = std::log(xMin);
+    double logMax = std::log(xMax);
+
+    QVector<double> result;
+    result.reserve(n);
+
+    // Compute n evenly spaced points in the logarithmic domain, then exponentiate.
+    for (int i = 0; i < n; ++i) {
+        double t = static_cast<double>(i) / (n - 1);
+        double point = std::exp(logMin + t * (logMax - logMin));
+        result.push_back(point);
+    }
+
+    return result;
+
+}
+
+int ConvertStringToFlavor(const QString &flavor)
+{
+    if (flavor == "up")
+        return PDFxTMD::u;
+    if (flavor == "down")
+        return PDFxTMD::d;
+    if (flavor == "strange")
+        return PDFxTMD::s;
+    if (flavor == "charm")
+        return PDFxTMD::c;
+    if (flavor == "bottom")
+        return PDFxTMD::b;
+    if (flavor == "anti-up")
+        return PDFxTMD::ubar;
+    if (flavor == "anti-down")
+        return PDFxTMD::dbar;
+    if (flavor == "anti-strange")
+        return PDFxTMD::sbar;
+    if (flavor == "anti-charm")
+        return PDFxTMD::cbar;
+    if (flavor == "anti-bottom")
+        return PDFxTMD::bbar;
+    if (flavor == "gluon")
+        return PDFxTMD::g;
+    if (flavor == "photon")
+        return PDFxTMD::photon;
+
+    return -1;
+}
+
 }
 

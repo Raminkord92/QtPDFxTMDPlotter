@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtCharts
 import QtQuick.Layouts
+import QtPDFxTMDPlotter 1.0
 
 Item {
     id: root
@@ -10,6 +11,11 @@ Item {
     height: parent.height
     property bool expandedAxisType: false
     property bool expandedAxisRange: false
+    property var xAxisLinearRef: xAxisLinear
+    property var xAxisLogRef: xAxisLog
+    property var yAxisLinearRef: yAxisLinear
+    property var yAxisLogRef: yAxisLog
+    property var swipeViewMain: null
 
     SplitView {
         anchors.fill: parent
@@ -46,25 +52,41 @@ Item {
                 right: 10
             }
 
-            ValuesAxis { id: xAxisLinear; titleText: xAxisTitle.text; min: 0; max: 10; visible: true; gridVisible: true; labelsFont.pixelSize: 12 }
-            LogValueAxis { id: xAxisLog; titleText: "X Axis (Log)"; labelFormat: "%g"; base: 10; min: 1; max: 10; visible: false; gridVisible: true; labelsFont.pixelSize: 12 }
-            ValuesAxis { id: yAxisLinear; titleText: yAxisTitle.text; min: 0; max: 10; visible: true; gridVisible: true; labelsFont.pixelSize: 12 }
-            LogValueAxis { id: yAxisLog; titleText: "Y Axis (Log)"; labelFormat: "%g"; base: 10; min: 1; max: 10; visible: false; gridVisible: true; labelsFont.pixelSize: 12 }
-
-            LineSeries {
-                id: lineSeries
-                name: "PDF Values"
-                axisX: xAxisLinear
-                axisY: yAxisLinear
-                color: Material.accent
-                width: 2
-                XYPoint { x: 0; y: 0 }
-                XYPoint { x: 1.1; y: 2.1 }
-                XYPoint { x: 1.9; y: 3.3 }
-                XYPoint { x: 2.1; y: 2.1 }
-                XYPoint { x: 2.9; y: 4.9 }
-                XYPoint { x: 3.4; y: 3.0 }
-                XYPoint { x: 4.1; y: 3.3 }
+            ValueAxis {
+                id: xAxisLinear
+                titleText: xAxisTitle.text
+                min: 0
+                max: 10
+                gridVisible: true
+                labelsFont.pixelSize: 12
+            }
+            LogValueAxis {
+                id: xAxisLog
+                titleText: xAxisTitle.text
+                labelFormat: "%g"
+                base: 10
+                min: 1
+                max: 10
+                gridVisible: true
+                labelsFont.pixelSize: 12
+            }
+            ValueAxis {
+                id: yAxisLinear
+                titleText: yAxisTitle.text
+                min: 0
+                max: 10
+                gridVisible: true
+                labelsFont.pixelSize: 12
+            }
+            LogValueAxis {
+                id: yAxisLog
+                titleText: yAxisTitle.text
+                labelFormat: "%g"
+                base: 10
+                min: 1
+                max: 10
+                gridVisible: true
+                labelsFont.pixelSize: 12
             }
         }
 
@@ -137,7 +159,8 @@ Item {
                                 checked: true
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      switchXAxis("Linear")
+                                                      // switchXAxis("Linear")
+                                                      lineSeries.axisX = xAxisLinear
                                                       xMinSpinBox.from = -100
                                                   }
                             }
@@ -145,9 +168,9 @@ Item {
                                 text: "Logarithmic"
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      switchXAxis("Logarithmic")
-                                                      xMinSpinBox.from = 1
-                                                      if (xMinSpinBox.value <= 0) xMinSpinBox.value = 1
+                                                      //switchXAxis("Logarithmic")
+                                                      lineSeries.axisX = xAxisLog
+
                                                   }
                             }
 
@@ -248,16 +271,16 @@ Item {
                             RowLayout {
                                 Slider {
                                     id: xMinSlider
-                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 1 : -100
-                                    to: 100
+                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
+                                    to: 1000
                                     value: xMinSpinBox.value
                                     onValueChanged: xMinSpinBox.value = value
                                 }
                                 SpinBox {
                                     id: xMinSpinBox
-                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 1 : -100
+                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
                                     to: 100
-                                    value: 0
+                                    value: 2
                                     onValueChanged: xMinSlider.value = value
                                 }
                             }
@@ -266,15 +289,15 @@ Item {
                             RowLayout {
                                 Slider {
                                     id: xMaxSlider
-                                    from: -100
-                                    to: 100
+                                    from: 2
+                                    to: 1000
                                     value: xMaxSpinBox.value
                                     onValueChanged: xMaxSpinBox.value = value
                                 }
                                 SpinBox {
                                     id: xMaxSpinBox
-                                    from: -100
-                                    to: 100
+                                    from: 2
+                                    to: 1000
                                     value: 10
                                     onValueChanged: xMaxSlider.value = value
                                 }
@@ -284,16 +307,16 @@ Item {
                             RowLayout {
                                 Slider {
                                     id: yMinSlider
-                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 1 : -100
-                                    to: 100
+                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
+                                    to: 1000
                                     value: yMinSpinBox.value
                                     onValueChanged: yMinSpinBox.value = value
                                 }
                                 SpinBox {
                                     id: yMinSpinBox
-                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 1 : -100
-                                    to: 100
-                                    value: 0
+                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
+                                    to: 1000
+                                    value: 2
                                     onValueChanged: yMinSlider.value = value
                                 }
                             }
@@ -302,15 +325,15 @@ Item {
                             RowLayout {
                                 Slider {
                                     id: yMaxSlider
-                                    from: -100
-                                    to: 100
+                                    from: 2
+                                    to: 1000
                                     value: yMaxSpinBox.value
                                     onValueChanged: yMaxSpinBox.value = value
                                 }
                                 SpinBox {
                                     id: yMaxSpinBox
-                                    from: -100
-                                    to: 100
+                                    from: 2
+                                    to: 1000
                                     value: 10
                                     onValueChanged: yMaxSlider.value = value
                                 }
@@ -335,22 +358,115 @@ Item {
                         }
                     }
                 }
-
-
             }
         }
     }
 
+    // List to keep track of created series
+       property var seriesList: []
+
+       // Connect to PDFDataProvider
+       Connections {
+           target: PDFDataProvider
+           function onPdfDataChanged(tabIndex) {
+               console.log("received signal")
+
+               if (tabIndex === swipeViewMain.currentIndex) {
+                   var data = PDFDataProvider.getPDFData(tabIndex, xMinSpinBox.value, xMaxSpinBox.value)
+
+                   updatePlot(data)
+               }
+           }
+       }
+
+
+       // Function to update the plot with a vector of PDFObjectInfo
+       function updatePlot(infos) {
+           // Clear existing series
+           for (var i = 0; i < seriesList.length; i++) {
+               chartView.removeSeries(seriesList[i])
+           }
+           seriesList = []
+
+           // Create new series for each PDFObjectInfo
+           for (var j = 0; j < infos.length; j++) {
+               var info = infos[j]
+               var series = chartView.createSeries(
+                   ChartView.SeriesTypeLine,           // Series type
+                   info.displayText || "PDF Data " + j, // Name
+                   xAxisLinear,                        // X-axis (default)
+                   yAxisLinear                         // Y-axis (default)
+               )
+
+               // Set series properties
+               series.color = info.color
+               switch (info.lineStyleIndex) {
+                   case PDFDataProvider.Solid: series.style = Qt.SolidLine; break
+                   case PDFDataProvider.Dashed: series.style = Qt.DashLine; break
+                   case PDFDataProvider.Dotted: series.style = Qt.DotLine; break
+                   case PDFDataProvider.DashDot: series.style = Qt.DashDotLine; break
+                   default: series.style = Qt.SolidLine
+               }
+
+               // Update series data
+               updateSeries(series, info)
+               seriesList.push(series)
+           }
+
+           // Adjust axis ranges
+           var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
+           for (var k = 0; k < infos.length; k++) {
+               var xVals = infos[k].xVals
+               var yVals = infos[k].yVals
+               if (xVals.length > 0) {
+                   xMin = Math.min(xMin, Math.min(...xVals))
+                   xMax = Math.max(xMax, Math.max(...xVals))
+                   yMin = Math.min(yMin, Math.min(...yVals))
+                   yMax = Math.max(yMax, Math.max(...yVals))
+               }
+           }
+
+           if (xMin !== Infinity) {
+               if (xAxisGroup.checkedButton.text === "Linear") {
+                   xAxisLinear.min = xMin
+                   xAxisLinear.max = xMax
+               } else {
+                   xAxisLog.min = Math.max(1, xMin)
+                   xAxisLog.max = xMax
+               }
+               if (yAxisGroup.checkedButton.text === "Linear") {
+                   yAxisLinear.min = yMin
+                   yAxisLinear.max = yMax
+               } else {
+                   yAxisLog.min = Math.max(1, yMin)
+                   yAxisLog.max = yMax
+               }
+           }
+       }
+
+       // Function to update an individual series
+       function updateSeries(series, info) {
+           series.clear()
+           var xVals = info.xVals
+           var yVals = info.yVals
+
+           if (xVals.length !== yVals.length) {
+               console.log("Error: xVals and yVals have different lengths for " + info.displayText)
+               return
+           }
+
+           for (var i = 0; i < xVals.length; i++) {
+               series.append(xVals[i], yVals[i])
+           }
+       }
+
     // Helper Functions
     function switchXAxis(scaleType) {
         if (scaleType === "Linear") {
-            lineSeries.axisX = xAxisLinear
-            xAxisLinear.visible = true
-            xAxisLog.visible = false
+            chartView.axisX = xAxisLinear
         } else if (scaleType === "Logarithmic") {
-            lineSeries.axisX = xAxisLog
-            xAxisLog.visible = true
-            xAxisLinear.visible = false
+            chartView.axisX = xAxisLog
+            console.debug("xAxisLinear " + xAxisLinear)
         }
     }
 
@@ -382,10 +498,10 @@ Item {
     }
 
     function resetChart() {
-        xMinSpinBox.value = 0
-        xMaxSpinBox.value = 10
-        yMinSpinBox.value = 0
-        yMaxSpinBox.value = 10
+        xMinSpinBox.value = 1
+        xMaxSpinBox.value = 1000
+        yMinSpinBox.value = 1
+        yMaxSpinBox.value = 1000
         applyChanges()
     }
 }

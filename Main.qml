@@ -264,6 +264,7 @@ ApplicationWindow {
                     PlotArea {
                         anchors.fill: parent
                         anchors.margins: 0
+                        swipeViewMain: swipeView
                     }
                 }
 
