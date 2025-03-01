@@ -45,9 +45,10 @@ QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin
                     break;
                 }
                 if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
-                    yVals_.push_back(cPDF_.pdf(flavor_, bin_, 10));
+                    yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal()));
                 } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-                    double pdfval_ = cPDF_.pdf(flavor_, 0.001, bin_);
+                    qDebug() << "[RAMIN] pdfObjectInfo_->currentXVal() " << pdfObjectInfo_->currentXVal();
+                    double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_);
                     yVals_.push_back(pdfval_);
                 }
             }
@@ -57,6 +58,21 @@ QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin
         }
     }
     return result;
+}
+
+QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
+{
+    if (m_pdfObjectInfos.contains(tabIndex)) {
+        return m_pdfObjectInfos[tabIndex];
+    }
+}
+
+int PDFDataProvider::getPlotTypeOfTab(TabIndex tabIndex)
+{
+    if (m_pdfObjectInfos.contains(tabIndex)) {
+        return m_pdfObjectInfos[tabIndex].size() > 0 ? m_pdfObjectInfos[tabIndex][0]->plotTypeIndex() : -1;
+    }
+    return -1;
 }
 
 // Set PDF data for a specific tab index
@@ -176,5 +192,23 @@ void PDFObjectInfo::setCurrentTabIndex(int value) {
     if (m_currentTabIndex != value) {
         m_currentTabIndex = value;
         emit currentTabIndexChanged();
+    }
+}
+
+void PDFObjectInfo::setCurrentXVal(double xVal)
+{
+    if (m_currentXVal != xVal)
+    {
+        m_currentXVal = xVal;
+        emit currentXValChanged();
+    }
+}
+
+void PDFObjectInfo::setCurrentMuVal(double muVal)
+{
+    if (m_currentMuVal != muVal)
+    {
+        m_currentMuVal = muVal;
+        emit currentMuValChanged();
     }
 }

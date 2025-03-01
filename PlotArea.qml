@@ -16,7 +16,9 @@ Item {
     property var yAxisLinearRef: yAxisLinear
     property var yAxisLogRef: yAxisLog
     property var swipeViewMain: null
-
+    property var m_data
+    property bool isXAxisLog: false;
+    property bool isYAxisLog: false;
     SplitView {
         anchors.fill: parent
         orientation: Qt.Vertical
@@ -39,7 +41,7 @@ Item {
             antialiasing: true
             SplitView.fillHeight: true
 
-            title: "Dynamic Plot"
+            title: plotTitle.text
             titleFont.bold: true
             titleFont.pixelSize: 16
             backgroundColor: Material.backgroundColor
@@ -159,18 +161,16 @@ Item {
                                 checked: true
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      // switchXAxis("Linear")
-                                                      lineSeries.axisX = xAxisLinear
-                                                      xMinSpinBox.from = -100
+                                                      isXAxisLog = false;
+                                                      switchAxis()
                                                   }
                             }
                             RadioButton {
                                 text: "Logarithmic"
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      //switchXAxis("Logarithmic")
-                                                      lineSeries.axisX = xAxisLog
-
+                                                      isXAxisLog = true;
+                                                      switchAxis()
                                                   }
                             }
 
@@ -181,7 +181,8 @@ Item {
                                 checked: true
                                 ButtonGroup.group: yAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      switchYAxis("Linear")
+                                                      isYAxisLog = false;
+                                                      switchAxis()
                                                       yMinSpinBox.from = -100
                                                   }
                             }
@@ -189,7 +190,8 @@ Item {
                                 text: "Logarithmic"
                                 ButtonGroup.group: yAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      switchYAxis("Logarithmic")
+                                                      isYAxisLog = true;
+                                                      switchAxis()
                                                       yMinSpinBox.from = 1
                                                       if (yMinSpinBox.value <= 0) yMinSpinBox.value = 1
                                                   }
@@ -210,6 +212,17 @@ Item {
                                 id: yAxisTitle
                                 placeholderText: "y axis title"
                                 text: "Y"
+                            }
+                            Label
+                            {
+                                text: "Plot title"
+                            }
+                            TextField
+                            {
+                                id: plotTitle
+                                placeholderText: "plot title"
+                                text: "PDF plot"
+
                             }
                         }
                     }
@@ -372,16 +385,16 @@ Item {
                console.log("received signal")
 
                if (tabIndex === swipeViewMain.currentIndex) {
-                   var data = PDFDataProvider.getPDFData(tabIndex, xMinSpinBox.value, xMaxSpinBox.value)
+                   m_data = PDFDataProvider.getPDFData(tabIndex, xMinSpinBox.value, xMaxSpinBox.value)
 
-                   updatePlot(data)
+                   updatePlot(m_data, xAxisLinear, yAxisLinear)
                }
            }
        }
 
 
        // Function to update the plot with a vector of PDFObjectInfo
-       function updatePlot(infos) {
+       function updatePlot(infos, xAxisType, yAxisType) {
            // Clear existing series
            for (var i = 0; i < seriesList.length; i++) {
                chartView.removeSeries(seriesList[i])
@@ -394,8 +407,8 @@ Item {
                var series = chartView.createSeries(
                    ChartView.SeriesTypeLine,           // Series type
                    info.displayText || "PDF Data " + j, // Name
-                   xAxisLinear,                        // X-axis (default)
-                   yAxisLinear                         // Y-axis (default)
+                   xAxisType,                        // X-axis (default)
+                   yAxisType                         // Y-axis (default)
                )
 
                // Set series properties
@@ -461,26 +474,14 @@ Item {
        }
 
     // Helper Functions
-    function switchXAxis(scaleType) {
-        if (scaleType === "Linear") {
-            chartView.axisX = xAxisLinear
-        } else if (scaleType === "Logarithmic") {
-            chartView.axisX = xAxisLog
-            console.debug("xAxisLinear " + xAxisLinear)
-        }
+    function switchAxis(scaleType) {
+        xAxisLinear.visible = !isXAxisLog
+        yAxisLinear.visible = !isYAxisLog
+        xAxisLog.visible = isXAxisLog
+        yAxisLog.visible = isYAxisLog
+        updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
     }
 
-    function switchYAxis(scaleType) {
-        if (scaleType === "Linear") {
-            lineSeries.axisY = yAxisLinear
-            yAxisLinear.visible = true
-            yAxisLog.visible = false
-        } else if (scaleType === "Logarithmic") {
-            lineSeries.axisY = yAxisLog
-            yAxisLog.visible = true
-            yAxisLinear.visible = false
-        }
-    }
 
     function applyChanges() {
         if (xMinSpinBox.value < xMaxSpinBox.value && yMinSpinBox.value < yMaxSpinBox.value) {

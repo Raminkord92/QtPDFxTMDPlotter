@@ -23,7 +23,8 @@ class PDFObjectInfo : public QObject {
     Q_PROPERTY(QVector<double> xVals READ xVals WRITE setXVals NOTIFY xValsChanged)
     Q_PROPERTY(QVector<double> yVals READ yVals WRITE setYVals NOTIFY yValsChanged)
     Q_PROPERTY(int currentTabIndex READ currentTabIndex WRITE setCurrentTabIndex NOTIFY currentTabIndexChanged)
-
+    Q_PROPERTY(double currentXVal READ currentXVal WRITE setCurrentXVal NOTIFY currentXValChanged)
+    Q_PROPERTY(double currentMuVal READ currentMuVal WRITE setCurrentMuVal NOTIFY currentMuValChanged)
 public:
     explicit PDFObjectInfo(QObject *parent = nullptr);
 
@@ -38,6 +39,8 @@ public:
     QVector<double> xVals() const { return m_xVals; }
     QVector<double> yVals() const { return m_yVals; }
     int currentTabIndex() const { return m_currentTabIndex; }
+    double currentXVal() const {return m_currentXVal;}
+    double currentMuVal() const {return m_currentMuVal;}
     PDFxTMD::PartonFlavor FindPartonFlavor();
 
     // Setters
@@ -51,7 +54,8 @@ public:
     void setXVals(const QVector<double> &value);
     void setYVals(const QVector<double> &value);
     void setCurrentTabIndex(int value);
-
+    void setCurrentXVal(double xVal);
+    void setCurrentMuVal(double muVal);
 signals:
     void pdfSetChanged();
     void displayTextChanged();
@@ -63,7 +67,8 @@ signals:
     void xValsChanged();
     void yValsChanged();
     void currentTabIndexChanged();
-
+    void currentXValChanged();
+    void currentMuValChanged();
 private:
     QString m_pdfSet;
     QString m_displayText;
@@ -75,6 +80,8 @@ private:
     QVector<double> m_xVals;
     QVector<double> m_yVals;
     int m_currentTabIndex = 0;
+    double m_currentXVal = 0;
+    double m_currentMuVal = 0;
 };
 
 class PDFDataProvider : public QObject {
@@ -100,6 +107,8 @@ public:
     ~PDFDataProvider();
 
     Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex, double xMin, double xMax);
+    Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex);
+    Q_INVOKABLE int getPlotTypeOfTab(TabIndex tabIndex);
     Q_INVOKABLE void setPDFData(TabIndex tabIndex, PDFObjectInfo *info);
 
     // New methods

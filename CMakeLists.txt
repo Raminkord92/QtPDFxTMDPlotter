@@ -45,6 +45,8 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         PDFDataProvider.h PDFDataProvider.cpp
     RESOURCES
         resources.qrc
+        QML_FILES
+        QML_FILES
 )
 
 set_target_properties(appQtPDFxTMDPlotter PROPERTIES

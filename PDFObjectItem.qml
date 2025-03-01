@@ -9,7 +9,6 @@ Rectangle {
     radius: 15
     color: pdfObjectInfo ? pdfObjectInfo.color : "lightgreen"
     anchors.centerIn: parent
-
     property PDFObjectInfo pdfObjectInfo
 
     Text {

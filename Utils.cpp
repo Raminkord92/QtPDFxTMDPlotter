@@ -58,6 +58,7 @@ QString ConvertOrderQCDToString(PDFxTMD::OrderQCD orderQCD)
     case PDFxTMD::OrderQCD::N3LO:
         return "N3LO";
     }
+    return "Unkown";
 }
 
 QVector<double> BinGeneratorInLogSpace(double xMin, double xMax, int n)
