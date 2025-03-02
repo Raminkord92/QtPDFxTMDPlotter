@@ -24,30 +24,79 @@ PDFDataProvider::~PDFDataProvider() {
     }
 }
 
-// Retrieve PDF data for a given tab index within xMin and xMax range
-QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin, double xMax) {
+// // Retrieve PDF data for a given tab index within xMin and xMax range
+// QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin, double xMax) {
+//     QList<PDFObjectInfo*> result;
+//     if (m_pdfObjectInfos.contains(tabIndex)) {
+//         GenericCPDFFactory cPDFFfactory;
+//         auto bins_ = Utils::BinGeneratorInLogSpace(xMin, xMax, 100);
+//         QList<PDFObjectInfo*> pdfObjectInfos = m_pdfObjectInfos[tabIndex];
+//         for (auto pdfObjectInfo_ : pdfObjectInfos) {
+//             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
+//             auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
+//             QVector<double> xVals_;
+//             xVals_.reserve(bins_.size());
+//             QVector<double> yVals_;
+//             yVals_.reserve(bins_.size());
+//             for (double bin_ : bins_) {
+//                 xVals_.push_back(bin_);
+//                 PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
+//                 if (flavor_ == static_cast<PartonFlavor>(-1)) {
+//                     break;
+//                 }
+//                 if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
+//                     yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal()));
+//                 } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
+//                     qDebug() << "[RAMIN] pdfObjectInfo_->currentXVal() " << pdfObjectInfo_->currentXVal();
+//                     double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_);
+//                     yVals_.push_back(pdfval_);
+//                 }
+//             }
+//             pdfObjectInfo_->setXVals(xVals_);
+//             pdfObjectInfo_->setYVals(yVals_);
+//             result.append(pdfObjectInfo_);
+//         }
+//     }
+//     return result;
+// }
+
+QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
+{
     QList<PDFObjectInfo*> result;
+    QVector<double> xVals_, yVals_;
+
     if (m_pdfObjectInfos.contains(tabIndex)) {
+        int plotType = getPlotTypeOfTab(tabIndex);
         GenericCPDFFactory cPDFFfactory;
-        auto bins_ = Utils::BinGeneratorInLogSpace(xMin, xMax, 100);
-        QList<PDFObjectInfo*> pdfObjectInfos = m_pdfObjectInfos[tabIndex];
-        for (auto pdfObjectInfo_ : pdfObjectInfos) {
+
+        for (auto pdfObjectInfo_ : m_pdfObjectInfos[tabIndex])
+        {
+            PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
+            if (flavor_ == static_cast<PartonFlavor>(-1)) {
+                break;
+            }
+            double xMin_ = 0;
+            double xMax_ = 0;
+            if (plotType == PlotTypeIndex::X)
+            {
+                xMin_ = pdfObjectInfo_->xMin();
+                xMax_ = pdfObjectInfo_->xMax();
+            }
+            else if (plotType == PlotTypeIndex::Mu2)
+            {
+                xMin_ = pdfObjectInfo_->muMin();
+                xMax_ = pdfObjectInfo_->muMax();
+            }
+            auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 100);
             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
             auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
-            QVector<double> xVals_;
             xVals_.reserve(bins_.size());
-            QVector<double> yVals_;
             yVals_.reserve(bins_.size());
             for (double bin_ : bins_) {
                 xVals_.push_back(bin_);
-                PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
-                if (flavor_ == static_cast<PartonFlavor>(-1)) {
-                    break;
-                }
                 if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
                     yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal()));
                 } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-                    qDebug() << "[RAMIN] pdfObjectInfo_->currentXVal() " << pdfObjectInfo_->currentXVal();
                     double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_);
                     yVals_.push_back(pdfval_);
                 }
@@ -58,13 +107,6 @@ QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin
         }
     }
     return result;
-}
-
-QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
-{
-    if (m_pdfObjectInfos.contains(tabIndex)) {
-        return m_pdfObjectInfos[tabIndex];
-    }
 }
 
 int PDFDataProvider::getPlotTypeOfTab(TabIndex tabIndex)
@@ -211,4 +253,28 @@ void PDFObjectInfo::setCurrentMuVal(double muVal)
         m_currentMuVal = muVal;
         emit currentMuValChanged();
     }
+}
+
+void PDFObjectInfo::setXMin(double xMin)
+{
+    m_xMin = xMin;
+    emit currentXMinChanged();
+}
+
+void PDFObjectInfo::setXMax(double xMax)
+{
+    m_xMax = xMax;
+    emit currentXMaxChanged();
+}
+
+void PDFObjectInfo::setMuMin(double muMin)
+{
+    m_muMin = muMin;
+    emit currentMuMinChanged();
+}
+
+void PDFObjectInfo::setMuMax(double muMax)
+{
+    m_muMax = muMax;
+    emit currentMuMaxChanged();
 }

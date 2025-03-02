@@ -54,11 +54,11 @@ Item {
                 right: 10
             }
 
-            ValueAxis {
+            ValuesAxis {
                 id: xAxisLinear
                 titleText: xAxisTitle.text
-                min: 0
-                max: 10
+                min: Number(xMinField.text)
+                max: Number(xMaxField.text)
                 gridVisible: true
                 labelsFont.pixelSize: 12
             }
@@ -67,16 +67,16 @@ Item {
                 titleText: xAxisTitle.text
                 labelFormat: "%g"
                 base: 10
-                min: 1
-                max: 10
+                min: Number(xMinField.text)
+                max: Number(xMaxField.text)
                 gridVisible: true
                 labelsFont.pixelSize: 12
             }
-            ValueAxis {
+            ValuesAxis {
                 id: yAxisLinear
                 titleText: yAxisTitle.text
-                min: 0
-                max: 10
+                min: Number(yMinField.text)
+                max: Number(yMaxField.text)
                 gridVisible: true
                 labelsFont.pixelSize: 12
             }
@@ -85,8 +85,8 @@ Item {
                 titleText: yAxisTitle.text
                 labelFormat: "%g"
                 base: 10
-                min: 1
-                max: 10
+                min: Number(yMinField.text)
+                max: Number(yMaxField.text)
                 gridVisible: true
                 labelsFont.pixelSize: 12
             }
@@ -183,7 +183,6 @@ Item {
                                 onCheckedChanged: if (checked) {
                                                       isYAxisLog = false;
                                                       switchAxis()
-                                                      yMinSpinBox.from = -100
                                                   }
                             }
                             RadioButton {
@@ -192,7 +191,6 @@ Item {
                                 onCheckedChanged: if (checked) {
                                                       isYAxisLog = true;
                                                       switchAxis()
-                                                      yMinSpinBox.from = 1
                                                       if (yMinSpinBox.value <= 0) yMinSpinBox.value = 1
                                                   }
                             }
@@ -275,98 +273,50 @@ Item {
                         // Add a Behavior for smooth opacity transition
                         opacity: expandedAxisRange ? 1 : 0
                         GridLayout {
-                            columns: 2
+                            columns: 4
                             rowSpacing: 10
                             columnSpacing: 10
                             Layout.alignment: Qt.AlignHCenter
 
                             Label { text: "X Min:" }
-                            RowLayout {
-                                Slider {
-                                    id: xMinSlider
-                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
-                                    to: 1000
-                                    value: xMinSpinBox.value
-                                    onValueChanged: xMinSpinBox.value = value
-                                }
-                                SpinBox {
-                                    id: xMinSpinBox
-                                    from: xAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
-                                    to: 100
-                                    value: 2
-                                    onValueChanged: xMinSlider.value = value
+                            TextField
+                            {
+                                id: xMinField
+                                placeholderText: "X Min"
+                                validator: DoubleValidator { }
+                                onEditingFinished: {
+
                                 }
                             }
 
                             Label { text: "X Max:" }
-                            RowLayout {
-                                Slider {
-                                    id: xMaxSlider
-                                    from: 2
-                                    to: 1000
-                                    value: xMaxSpinBox.value
-                                    onValueChanged: xMaxSpinBox.value = value
-                                }
-                                SpinBox {
-                                    id: xMaxSpinBox
-                                    from: 2
-                                    to: 1000
-                                    value: 10
-                                    onValueChanged: xMaxSlider.value = value
+                            TextField
+                            {
+                                id: xMaxField
+                                placeholderText: "X Max"
+                                validator: DoubleValidator { }
+                                onEditingFinished: {
+
                                 }
                             }
 
                             Label { text: "Y Min:" }
-                            RowLayout {
-                                Slider {
-                                    id: yMinSlider
-                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
-                                    to: 1000
-                                    value: yMinSpinBox.value
-                                    onValueChanged: yMinSpinBox.value = value
-                                }
-                                SpinBox {
-                                    id: yMinSpinBox
-                                    from: yAxisGroup.checkedButton.text === "Logarithmic" ? 2 : 2
-                                    to: 1000
-                                    value: 2
-                                    onValueChanged: yMinSlider.value = value
+                            TextField
+                            {
+                                id: yMinField
+                                placeholderText: "Y Min"
+                                validator: DoubleValidator { }
+                                onEditingFinished: {
+
                                 }
                             }
 
                             Label { text: "Y Max:" }
-                            RowLayout {
-                                Slider {
-                                    id: yMaxSlider
-                                    from: 2
-                                    to: 1000
-                                    value: yMaxSpinBox.value
-                                    onValueChanged: yMaxSpinBox.value = value
-                                }
-                                SpinBox {
-                                    id: yMaxSpinBox
-                                    from: 2
-                                    to: 1000
-                                    value: 10
-                                    onValueChanged: yMaxSlider.value = value
-                                }
-                            }
-                        }
-                        // Control Buttons
-                        RowLayout {
-                            spacing: 20
-                            Layout.alignment: Qt.AlignHCenter
-
-                            Button {
-                                text: "Apply Changes"
-                                Material.background: Material.accent
-                                onClicked: applyChanges()
-                            }
-
-                            Button {
-                                text: "Reset"
-                                Material.background: Material.Grey
-                                onClicked: resetChart()
+                            TextField
+                            {
+                                id: yMaxField
+                                placeholderText: "Y Max"
+                                validator: DoubleValidator { }
                             }
                         }
                     }
@@ -385,8 +335,7 @@ Item {
                console.log("received signal")
 
                if (tabIndex === swipeViewMain.currentIndex) {
-                   m_data = PDFDataProvider.getPDFData(tabIndex, xMinSpinBox.value, xMaxSpinBox.value)
-
+                   m_data = PDFDataProvider.getPDFData(tabIndex)
                    updatePlot(m_data, xAxisLinear, yAxisLinear)
                }
            }
@@ -441,18 +390,26 @@ Item {
 
            if (xMin !== Infinity) {
                if (xAxisGroup.checkedButton.text === "Linear") {
-                   xAxisLinear.min = xMin
-                   xAxisLinear.max = xMax
+                   xMinField.text = xMin
+                   xMaxField.text = xMax
+                   // xAxisLinear.min = xMin
+                   // xAxisLinear.max = xMax
                } else {
-                   xAxisLog.min = Math.max(1, xMin)
-                   xAxisLog.max = xMax
+                   xMinField.text = Math.max(1, xMin)
+                   xMaxField.text = xMax
+                   // xAxisLog.min = Math.max(1, xMin)
+                   // xAxisLog.max = xMax
                }
                if (yAxisGroup.checkedButton.text === "Linear") {
-                   yAxisLinear.min = yMin
-                   yAxisLinear.max = yMax
+                   yMinField.text = yMin
+                   yMaxField.text = yMax
+                   // yAxisLinear.min = yMin
+                   // yAxisLinear.max = yMax
                } else {
-                   yAxisLog.min = Math.max(1, yMin)
-                   yAxisLog.max = yMax
+                   yMinField.text = Math.max(1, yMin)
+                   yMaxField.text = yMax
+                   // yAxisLog.min = Math.max(1, yMin)
+                   // yAxisLog.max = yMax
                }
            }
        }

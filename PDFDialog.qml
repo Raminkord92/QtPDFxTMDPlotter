@@ -9,7 +9,7 @@ Dialog {
     id: cPDFDialog
     title: "PDF Plot Object"
     width: 450
-    height: 400
+    height: 340
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     // Dialog state properties
@@ -40,7 +40,6 @@ Dialog {
     // Dragging properties
     property point dragStartPoint: Qt.point(0, 0)
     property bool isDragging: false
-    Material.background: Material.dialogColor // Set Material background color
     onOpened: {
         initializeUI()
     }
@@ -78,8 +77,8 @@ Dialog {
             id: tabBar
             width: parent.width
             TabButton { text: "PDF Settings" }
+            TabButton { text: "Plot kinematics" }
             TabButton { text: "Plot Appearance" }
-            TabButton { text: "Advanced Options" }
         }
 
         StackLayout {
@@ -129,6 +128,16 @@ Dialog {
                             updateDisplayText()
                         }
                     }
+                }
+            }
+
+            // Plot Appearance Tab
+            ColumnLayout {
+                spacing: 10
+                GridLayout {
+                    columns: 4
+                    columnSpacing: 7
+                    rowSpacing: 7
                     Label { text: "Plot type:" }
                     ComboBox {
                         id: plotTypeId
@@ -195,11 +204,101 @@ Dialog {
                         validator: DoubleValidator { }
                         onTextChanged: ktValue = parseFloat(text) || 0.0
                     }
+                    Label
+                    {
+                        text: "xₘᵢₙ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
 
+                    }
+
+                    // xMin TextField with DoubleValidator
+                    TextField {
+                        id: xMinField
+                        placeholderText: "xₘᵢₙ"
+                        text: xMinValue
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
+
+                        validator: DoubleValidator { }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num < xMinValue || num > Number(xMaxField.text)) {
+                                text = xMinValue;
+                            } else {
+                                xMinValue = num;
+                            }
+                        }
+                    }
+
+                    // xMax TextField with DoubleValidator
+                    Label
+                    {
+                        text: "xₘₐₓ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
+                    }
+
+                    TextField {
+                        id: xMaxField
+                        placeholderText: "xₘₐₓ"
+                        text: xMaxValue
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
+                        validator: DoubleValidator { }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num > xMaxValue || num < Number(xMinField.text)) {
+                                text = xMaxValue;
+                            } else {
+                                xMaxValue = num;
+                            }
+                        }
+                    }
+                    Label
+                    {
+                        text: "μₘᵢₙ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+
+                    }
+                    // qMin TextField with DoubleValidator
+                    TextField {
+                        id: qMinField
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+                        placeholderText: "μₘᵢₙ"
+                        text: qMinValue
+                        validator: DoubleValidator { bottom: 0 }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num < qMinValue || num > Number(qMaxField.text)) {
+                                text = qMinValue;
+                            } else {
+                                qMinValue = num;
+                            }
+                        }
+                    }
+                    Label
+                    {
+                        text: "μₘₐₓ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+
+                    }
+                    // qMax TextField with DoubleValidator
+                    TextField {
+                        id: qMaxField
+                        placeholderText: "μₘₐₓ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+                        text: qMaxValue
+                        validator: DoubleValidator { }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num < Number(qMinField.text) || num > qMaxValue) {
+                                text = qMaxValue;
+                            } else {
+                                qMaxValue = num;
+                            }
+                        }
+                    }
                 }
             }
 
-            // Plot Appearance Tab
+            // Advanced Options Tab
             ColumnLayout {
                 spacing: 10
 
@@ -225,16 +324,7 @@ Dialog {
                             selectedLineStyleIndex = currentIndex
                         }
                     }
-
-
                 }
-            }
-
-            // Advanced Options Tab
-            ColumnLayout {
-                spacing: 10
-                Label { text: "Advanced options will be added here." }
-                // Add future fields here
             }
         }
     }
@@ -307,8 +397,6 @@ Dialog {
             selectedXValue = getRandomNumber(xMinValue, xMaxValue)
             selectedMuValue = getRandomNumber(qMinValue, qMaxValue)
         }
-
-
     }
 
     // Update an existing PDF object with user selections
@@ -324,6 +412,10 @@ Dialog {
             objectRow.currentTabIndex = selectedTabIndex
             objectRow.currentMuVal = selectedMuValue;
             objectRow.currentXVal = selectedXValue;
+            objectRow.xMin = Number(xMinField);
+            objectRow.xMax = Number(xMaxField);
+            objectRow.muMin = Number(qMinField);
+            objectRow.muMax = Number(qMaxField);
             PDFDataProvider.notifyDataChanged(selectedTabIndex)
         }
 
@@ -369,6 +461,10 @@ Dialog {
             info.currentTabIndex = selectedTabIndex
             info.currentXVal = selectedXValue
             info.currentMuVal = selectedMuValue;
+            info.xMin = Number(xMinField.text);
+            info.xMax = Number(xMaxField.text);
+            info.muMin = Number(qMinField.text);
+            info.muMax = Number(qMaxField.text);
             PDFDataProvider.setPDFData(selectedTabIndex, info)
 
             var component = Qt.createComponent("qrc:/PDFObjectItem.qml")

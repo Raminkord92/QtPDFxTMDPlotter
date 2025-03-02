@@ -25,6 +25,10 @@ class PDFObjectInfo : public QObject {
     Q_PROPERTY(int currentTabIndex READ currentTabIndex WRITE setCurrentTabIndex NOTIFY currentTabIndexChanged)
     Q_PROPERTY(double currentXVal READ currentXVal WRITE setCurrentXVal NOTIFY currentXValChanged)
     Q_PROPERTY(double currentMuVal READ currentMuVal WRITE setCurrentMuVal NOTIFY currentMuValChanged)
+    Q_PROPERTY(double xMin READ xMin WRITE setXMin NOTIFY currentXMinChanged)
+    Q_PROPERTY(double xMax READ xMax WRITE setXMax NOTIFY currentXMaxChanged)
+    Q_PROPERTY(double muMin READ muMin WRITE setMuMin NOTIFY currentMuMinChanged)
+    Q_PROPERTY(double muMax READ muMax WRITE setMuMax NOTIFY currentMuMaxChanged)
 public:
     explicit PDFObjectInfo(QObject *parent = nullptr);
 
@@ -41,6 +45,10 @@ public:
     int currentTabIndex() const { return m_currentTabIndex; }
     double currentXVal() const {return m_currentXVal;}
     double currentMuVal() const {return m_currentMuVal;}
+    double muMin() const {return m_muMin;}
+    double muMax() const {return m_muMax;}
+    double xMin() const {return m_xMin;}
+    double xMax() const {return m_xMax;}
     PDFxTMD::PartonFlavor FindPartonFlavor();
 
     // Setters
@@ -56,6 +64,10 @@ public:
     void setCurrentTabIndex(int value);
     void setCurrentXVal(double xVal);
     void setCurrentMuVal(double muVal);
+    void setXMin(double xMin);
+    void setXMax(double xMax);
+    void setMuMin(double muMin);
+    void setMuMax(double muMax);
 signals:
     void pdfSetChanged();
     void displayTextChanged();
@@ -69,6 +81,10 @@ signals:
     void currentTabIndexChanged();
     void currentXValChanged();
     void currentMuValChanged();
+    void currentXMinChanged();
+    void currentXMaxChanged();
+    void currentMuMinChanged();
+    void currentMuMaxChanged();
 private:
     QString m_pdfSet;
     QString m_displayText;
@@ -82,6 +98,10 @@ private:
     int m_currentTabIndex = 0;
     double m_currentXVal = 0;
     double m_currentMuVal = 0;
+    double m_muMin = 0;
+    double m_muMax = 0;
+    double m_xMin = 0.1;
+    double m_xMax = 0.1;
 };
 
 class PDFDataProvider : public QObject {
@@ -106,7 +126,7 @@ public:
     explicit PDFDataProvider(QObject *parent = nullptr);
     ~PDFDataProvider();
 
-    Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex, double xMin, double xMax);
+    // Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex, double xMin, double xMax);
     Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex);
     Q_INVOKABLE int getPlotTypeOfTab(TabIndex tabIndex);
     Q_INVOKABLE void setPDFData(TabIndex tabIndex, PDFObjectInfo *info);
