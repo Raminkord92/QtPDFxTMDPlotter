@@ -116,6 +116,14 @@ Dialog {
                             selectedPdfSet = currentText
                             getPartonFlavors()
                             updateDisplayText()
+                            getQMinValue();
+                            getQMaxValue();
+                            getXMinValue();
+                            getXMaxValue();
+                            xMinField.text = xMinValue;
+                            xMaxField.text = xMaxValue;
+                            qMinField.text = qMinValue;
+                            qMaxField.text = qMaxValue;
                         }
                     }
 
@@ -217,7 +225,6 @@ Dialog {
                         placeholderText: "xₘᵢₙ"
                         text: xMinValue
                         visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
-
                         validator: DoubleValidator { }
                         onEditingFinished: {
                             var num = parseFloat(text);
@@ -369,8 +376,15 @@ Dialog {
             }
             cpdfSetCombo.currentIndex = index !== -1 ? index : 0
             getPartonFlavors()
-            partonFlavorsId.currentIndex = selectedPartonFlavorIndex < partonFlavors.length ?
-                                           selectedPartonFlavorIndex : 0
+            partonFlavorsId.currentIndex = selectedPartonFlavorIndex < partonFlavors.length ? selectedPartonFlavorIndex : 0
+            console.log("qMinField " + qMinField);
+            console.log("qMaxField " + qMaxField);
+            console.log("xMinField " + xMinField);
+            console.log("xMaxField " + xMaxField);
+            qMinField.text = objectRow.muMin
+            qMaxField.text = objectRow.muMax
+            xMinField.text = objectRow.xMin
+            xMaxField.text = objectRow.xMax
         } else {
             selectedPdfSet = pdfModel.get(0).pdfSetName || ""
             selectedColor = getRandomMaterialColor()
@@ -388,14 +402,15 @@ Dialog {
         }
         currentPDFSetName = cpdfSetCombo.currentText
         updateDisplayText()
-        getQMinValue();
-        getQMaxValue();
-        getXMinValue();
-        getXMaxValue();
         if (!isEditMode)
         {
+            getQMinValue();
+            getQMaxValue();
+            getXMinValue();
+            getXMaxValue();
             selectedXValue = getRandomNumber(xMinValue, xMaxValue)
             selectedMuValue = getRandomNumber(qMinValue, qMaxValue)
+
         }
     }
 
@@ -412,11 +427,14 @@ Dialog {
             objectRow.currentTabIndex = selectedTabIndex
             objectRow.currentMuVal = selectedMuValue;
             objectRow.currentXVal = selectedXValue;
-            objectRow.xMin = Number(xMinField);
-            objectRow.xMax = Number(xMaxField);
-            objectRow.muMin = Number(qMinField);
-            objectRow.muMax = Number(qMaxField);
+            objectRow.xMin = Number(xMinField.text);
+            objectRow.xMax = Number(xMaxField.text);
+            objectRow.muMin = Number(qMinField.text);
+            objectRow.muMax = Number(qMaxField.text);
+            console.log("objectRow.muMin " + objectRow.muMin + " objectRow.muMax " + objectRow.muMax)
             PDFDataProvider.notifyDataChanged(selectedTabIndex)
+            // PDFDataProvider.setPDFData(selectedTabIndex, objectRow)
+
         }
 
     }

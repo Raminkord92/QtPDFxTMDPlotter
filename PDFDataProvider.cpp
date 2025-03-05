@@ -86,6 +86,7 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
             {
                 xMin_ = pdfObjectInfo_->muMin();
                 xMax_ = pdfObjectInfo_->muMax();
+                qDebug() << "plotType mu2 " << xMin_<< "--" << xMax_;
             }
             auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 100);
             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();

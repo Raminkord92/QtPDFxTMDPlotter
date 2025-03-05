@@ -191,7 +191,6 @@ Item {
                                 onCheckedChanged: if (checked) {
                                                       isYAxisLog = true;
                                                       switchAxis()
-                                                      if (yMinSpinBox.value <= 0) yMinSpinBox.value = 1
                                                   }
                             }
 
@@ -296,7 +295,12 @@ Item {
                                 placeholderText: "X Max"
                                 validator: DoubleValidator { }
                                 onEditingFinished: {
-
+                                    var num = parseFloat(text);
+                                    if (isNaN(num) || num < Number(xMinField.text)) {
+                                        text = xMax;
+                                    } else {
+                                        xMax = num;
+                                    }
                                 }
                             }
 
@@ -317,6 +321,16 @@ Item {
                                 id: yMaxField
                                 placeholderText: "Y Max"
                                 validator: DoubleValidator { }
+                                onEditingFinished: {
+                                    var num = parseFloat(text);
+                                    if (isNaN(num) || num < Number(yMinField.text)) {
+                                        console.log(" num " + num + " " +Number(yMinField.text) )
+                                        text = yMax;
+                                    } else {
+                                        yMax = num;
+                                        console.log(" yMax " + yMax + " " + num )
+                                    }
+                                }
                             }
                         }
                     }
@@ -390,30 +404,38 @@ Item {
 
            if (xMin !== Infinity) {
                if (xAxisGroup.checkedButton.text === "Linear") {
-                   xMinField.text = xMin
-                   xMaxField.text = xMax
+                   xMinField.text = formatNumber(xMin)
+                   xMaxField.text = formatNumber(xMax)
                    // xAxisLinear.min = xMin
                    // xAxisLinear.max = xMax
                } else {
-                   xMinField.text = Math.max(1, xMin)
-                   xMaxField.text = xMax
+                   xMinField.text =  formatNumber( Math.max(1e-7, xMin))
+                   xMaxField.text = formatNumber( xMax)
                    // xAxisLog.min = Math.max(1, xMin)
                    // xAxisLog.max = xMax
                }
                if (yAxisGroup.checkedButton.text === "Linear") {
-                   yMinField.text = yMin
-                   yMaxField.text = yMax
+                   yMinField.text = formatNumber(yMin)
+                   yMaxField.text = formatNumber(yMax)
                    // yAxisLinear.min = yMin
                    // yAxisLinear.max = yMax
                } else {
-                   yMinField.text = Math.max(1, yMin)
-                   yMaxField.text = yMax
+                   yMinField.text = formatNumber(Math.max(1e-7, yMin))
+                   yMaxField.text =  formatNumber(yMax)
                    // yAxisLog.min = Math.max(1, yMin)
                    // yAxisLog.max = yMax
                }
            }
        }
+       function formatNumber(value) {
+           var num = Number(value);
 
+           if (Math.abs(num) < 1e-4 || Math.abs(num) >= 1e6) {
+               return num.toExponential(4); // Scientific notation
+           } else {
+               return num.toFixed(4); // Fixed decimal places
+           }
+       }
        // Function to update an individual series
        function updateSeries(series, info) {
            series.clear()
@@ -437,30 +459,6 @@ Item {
         xAxisLog.visible = isXAxisLog
         yAxisLog.visible = isYAxisLog
         updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
-    }
-
-
-    function applyChanges() {
-        if (xMinSpinBox.value < xMaxSpinBox.value && yMinSpinBox.value < yMaxSpinBox.value) {
-            xAxisLinear.min = xMinSpinBox.value
-            xAxisLinear.max = xMaxSpinBox.value
-            yAxisLinear.min = yMinSpinBox.value
-            yAxisLinear.max = yMaxSpinBox.value
-            xAxisLog.min = Math.max(1, xMinSpinBox.value)
-            xAxisLog.max = xMaxSpinBox.value
-            yAxisLog.min = Math.max(1, yMinSpinBox.value)
-            yAxisLog.max = yMaxSpinBox.value
-        } else {
-            console.log("Invalid range: minimum must be less than maximum.")
-        }
-    }
-
-    function resetChart() {
-        xMinSpinBox.value = 1
-        xMaxSpinBox.value = 1000
-        yMinSpinBox.value = 1
-        yMaxSpinBox.value = 1000
-        applyChanges()
     }
 }
 
