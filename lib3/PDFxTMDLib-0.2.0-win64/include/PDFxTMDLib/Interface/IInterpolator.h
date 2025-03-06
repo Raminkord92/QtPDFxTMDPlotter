@@ -18,6 +18,10 @@ class IInterpolator : public CRTPBase<Derived>
     {
         return this->derived().interpolate(args...);
     }
+    const IReader<Reader>* getReader() const
+    {
+        return this->derived().getReader();
+    }
 };
 template <typename Reader, typename Derived>
 class IcPDFInterpolator : public IInterpolator<Derived, Reader, PartonFlavor, X_T, MU_T>

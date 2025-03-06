@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 
 # Find Qt6 packages (vcpkg provides these)
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2 Charts)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2 Charts network )
 find_package(GSL REQUIRED)
 find_package(LibArchive REQUIRED)
 find_package(CURL REQUIRED)
@@ -47,6 +47,7 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         resources.qrc
         QML_FILES
         QML_FILES
+        SOURCES DownloadManager.h DownloadManager.cpp
 )
 
 set_target_properties(appQtPDFxTMDPlotter PROPERTIES

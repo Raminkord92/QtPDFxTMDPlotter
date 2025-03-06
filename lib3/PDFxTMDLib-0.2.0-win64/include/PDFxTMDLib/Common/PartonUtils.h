@@ -50,11 +50,11 @@ enum PartonFlavor
     bbar = -5,
     cbar = -4,
     sbar = -3,
-    ubar = -2,
     dbar = -1,
+    ubar = -2,
     gNS = 0, // non-standard g
-    d = 1,
     u = 2,
+    d = 1,
     s = 3,
     c = 4,
     b = 5,
@@ -82,4 +82,7 @@ std::pair<std::optional<std::string>, ErrorType> StandardInfoFilePath(
     const std::string &pdfSetName);
 std::pair<std::optional<std::string>, ErrorType> StandardPDFSetPath(const std::string &pdfSetName,
                                                                     int set);
+//taken from the lhapdf
+size_t indexbelow(double value, const std::vector<double> &knots);
+
 } // namespace PDFxTMD

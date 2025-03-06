@@ -26,6 +26,12 @@ QVariant PDFInfoModel::data(const QModelIndex &index, int role) const
         return info.XMax;
     else if (role == XMinRole)
         return info.XMin;
+    else if (role == KtMinRole)
+        return info.KtMin;
+    else if (role == KtMaxRole)
+        return info.KtMax;
+    else if (role == PDFSetType)
+        return info.pdfSetType;
     else if (role == FormatRole)
         return QString::fromStdString(info.Format);
     else if (role == FlavorsRole)
@@ -46,25 +52,11 @@ QHash<int, QByteArray> PDFInfoModel::roleNames() const
     roles[FormatRole] = "Format";
     roles[FlavorsRole] = "Flavors";
     roles[OrderQCDRole] = "OrderQCD";
+    roles[KtMinRole] = "KtMin";
+    roles[KtMaxRole] = "KtMax";
+    roles[PDFSetType] = "PDFSetType";
     return roles;
 }
-
-// void PDFInfoModel::setPDFList(const QVariantList &list)
-// {
-//     QVector<PDFInfo> newList;
-//     for (const QVariant &item : list) {
-//         QVariantMap map = item.toMap();
-//         PDFInfo info;
-//         info.pdfSetName = map.value("pdfSetName").toString();
-//         info.QMax = map.value("QMax").toDouble();
-//         info.QMin = map.value("QMin").toDouble();
-//         newList.push_back(info);
-//     }
-//     // Now update your internal model.
-//     beginResetModel();
-//     m_pdfList = newList;
-//     endResetModel();
-// }
 
 void PDFInfoModel::fillPDFInfoModel()
 {
@@ -92,6 +84,9 @@ QVariantMap PDFInfoModel::get(int index) const {
         result["Format"] = data(modelIndex, FormatRole);
         result["Flavors"] = data(modelIndex, FlavorsRole);
         result["OrderQCD"] = data(modelIndex, OrderQCDRole);
+        result["KtMin"] = data(modelIndex, KtMinRole);
+        result["KtMax"] = data(modelIndex, KtMaxRole);
+        result["PDFSetType"] = data(modelIndex, PDFSetType);
     }
     return result;
 }
@@ -99,4 +94,14 @@ QVariantMap PDFInfoModel::get(int index) const {
 int PDFInfoModel::pdfCount() const
 {
     return m_pdfList.size();
+}
+
+bool PDFInfoModel::pdfSetAlreadyExists(const QString &pdfSetName)
+{
+    foreach(auto pdfSet , m_pdfList)
+    {
+        if (pdfSet.pdfSetName.toLower() == pdfSetName.toLower())
+            return true;
+    }
+    return false;
 }

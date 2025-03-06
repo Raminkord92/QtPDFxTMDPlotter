@@ -9,7 +9,7 @@ Dialog {
     id: cPDFDialog
     title: "PDF Plot Object"
     width: 450
-    height: 340
+    height: 380
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     // Dialog state properties
@@ -32,6 +32,7 @@ Dialog {
     property string plotType: plotTypeId.currentText
     property double selectedXValue: 0.0        // Value for "x"
     property double selectedMuValue: 0.0       // Value for "μ"
+    property double selectedKtValue: 0.0
     property double ktValue: 0.0       // Value for "kt"
     property double qMinValue: 0.0
     property double qMaxValue: 100.0
@@ -93,8 +94,11 @@ Dialog {
                     ButtonGroup {
                         id: pdfTypeBtnGroup
                         onCheckedButtonChanged: {
-                            if (checkedButton) console.log("Checked button text:", checkedButton.text)
-                            // TODO: Implement filtering or remove if not needed
+                            if (checkedButton)
+                            {
+                                pdfType = checkedButton.text
+                                console.log("Checked button text:", checkedButton.text)
+                            }
                         }
                     }
                     spacing: 10
@@ -111,6 +115,12 @@ Dialog {
                     ComboBox {
                         id: cpdfSetCombo
                         model: pdfModel
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         textRole: "pdfSetName"
                         onCurrentTextChanged: {
                             selectedPdfSet = currentText
@@ -131,6 +141,12 @@ Dialog {
                     ComboBox {
                         id: partonFlavorsId
                         model: partonFlavors
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         onCurrentIndexChanged: {
                             selectedPartonFlavorIndex = currentIndex
                             updateDisplayText()
@@ -149,23 +165,41 @@ Dialog {
                     Label { text: "Plot type:" }
                     ComboBox {
                         id: plotTypeId
-                        width: 200
-                        model: ["x", "μ"]
+                        model: ["x", "μ", "kₜ"]
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         onCurrentIndexChanged: {
                             selectedPlotTypeIndex = currentIndex
                             updateDisplayText()
                         }
+                    }
+                    Label {
+                        text: "";
+                    }
+                    Label {
+                        text: "";
                     }
                     // "x" Input Field
                     Label {
                         text: "x value:"
                         visible: (pdfType === "cPDF" && plotType === "μ") || (pdfType === "TMD" && plotType === "μ")
                     }
+
                     TextField {
                         id: xInput
                         visible: (pdfType === "cPDF" && plotType === "μ") || (pdfType === "TMD" && plotType === "μ")
                         placeholderText: "Enter x"
                         text: selectedXValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         validator: DoubleValidator { }
                         onEditingFinished: {
                             var num = parseFloat(text);
@@ -178,6 +212,8 @@ Dialog {
                         }
                     }
 
+
+
                     // "μ" Input Field
                     Label {
                         text: "μ value:"
@@ -189,6 +225,12 @@ Dialog {
                         placeholderText: "Enter μ"
                         validator: DoubleValidator { }
                         text: selectedMuValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         onEditingFinished: {
                             var num = parseFloat(text);
                             if (isNaN(num) || num < qMinValue || num > qMaxValue) {
@@ -208,9 +250,33 @@ Dialog {
                     TextField {
                         id: ktInput
                         visible: pdfType === "TMD"
-                        placeholderText: "Enter kt"
+                        placeholderText: "Enter kₜ"
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         validator: DoubleValidator { }
-                        onTextChanged: ktValue = parseFloat(text) || 0.0
+                        text: "1"
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num <= 0 ) {
+                                text = selectedMuValue;
+                            } else {
+                                selectedMuValue = num;
+                                // You can add code here to adjust xMaxField's validator if needed.
+                            }
+                        }
+                    }
+
+                    Label {
+                        text: "";
+                        visible: (pdfType === "cPDF")
+                    }
+                    Label {
+                        text: "";
+                        visible: (pdfType === "cPDF")
                     }
                     Label
                     {
@@ -224,6 +290,12 @@ Dialog {
                         id: xMinField
                         placeholderText: "xₘᵢₙ"
                         text: xMinValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
                         validator: DoubleValidator { }
                         onEditingFinished: {
@@ -248,6 +320,12 @@ Dialog {
                         placeholderText: "xₘₐₓ"
                         text: xMaxValue
                         visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 0) || (pdfType === "TMD" && plotTypeId.currentIndex === 0)
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         validator: DoubleValidator { }
                         onEditingFinished: {
                             var num = parseFloat(text);
@@ -270,6 +348,12 @@ Dialog {
                         visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
                         placeholderText: "μₘᵢₙ"
                         text: qMinValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         validator: DoubleValidator { bottom: 0 }
                         onEditingFinished: {
                             var num = parseFloat(text);
@@ -292,6 +376,68 @@ Dialog {
                         placeholderText: "μₘₐₓ"
                         visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
                         text: qMaxValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
+                        validator: DoubleValidator { }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num < Number(qMinField.text) || num > qMaxValue) {
+                                text = qMaxValue;
+                            } else {
+                                qMaxValue = num;
+                            }
+                        }
+                    }
+                    Label
+                    {
+                        text: "kₜₘᵢₙ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+
+                    }
+                    // qMin TextField with DoubleValidator
+                    TextField {
+                        id: ktMinField
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+                        placeholderText: "kₜₘᵢₙ"
+                        text: qMinValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
+                        validator: DoubleValidator { bottom: 0 }
+                        onEditingFinished: {
+                            var num = parseFloat(text);
+                            if (isNaN(num) || num < qMinValue || num > Number(qMaxField.text)) {
+                                text = qMinValue;
+                            } else {
+                                qMinValue = num;
+                            }
+                        }
+                    }
+                    Label
+                    {
+                        text: "kₜₘₐₓ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+
+                    }
+                    // qMax TextField with DoubleValidator
+                    TextField {
+                        id: ktMaxField
+                        placeholderText: "kₜₘₐₓ"
+                        visible: (pdfType === "cPDF" && plotTypeId.currentIndex === 1) || (pdfType === "TMD" && plotTypeId.currentIndex === 1)
+                        text: qMaxValue
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         validator: DoubleValidator { }
                         onEditingFinished: {
                             var num = parseFloat(text);
@@ -310,13 +456,19 @@ Dialog {
                 spacing: 10
 
                 GridLayout {
-                    columns: 2
+                    columns: 4
                     columnSpacing: 15
                     rowSpacing: 8
 
                     Label { text: "Plot color:" }
                     ColorPickerButton {
                         id: colorPickerId
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         onCurrentColorChanged: {
                             selectedColor = currentColor
                         }
@@ -325,7 +477,12 @@ Dialog {
                     Label { text: "Plot line style:" }
                     ComboBox {
                         id: lineStyleId
-                        width: 200
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                         model: ["Solid", "Dashed", "Dotted", "Dash Dot"]
                         onCurrentIndexChanged: {
                             selectedLineStyleIndex = currentIndex
@@ -362,6 +519,7 @@ Dialog {
             selectedTabIndex = objectRow.currentTabIndex
             selectedXValue = objectRow.currentXVal;
             selectedMuValue = objectRow.currentMuVal;
+            selectedKtValue = objectRow.currentKtVal;
             colorPickerId.currentColor = selectedColor
             lineStyleId.currentIndex = selectedLineStyleIndex
             plotTypeId.currentIndex = selectedPlotTypeIndex
@@ -409,7 +567,7 @@ Dialog {
             getXMinValue();
             getXMaxValue();
             selectedXValue = getRandomNumber(xMinValue, xMaxValue)
-            selectedMuValue = getRandomNumber(qMinValue, qMaxValue)
+            selectedKtValue = getRandomNumber(ktMinValue, ktMaxValue)
 
         }
     }
@@ -426,6 +584,7 @@ Dialog {
             objectRow.plotTypeIndex = selectedPlotTypeIndex
             objectRow.currentTabIndex = selectedTabIndex
             objectRow.currentMuVal = selectedMuValue;
+            objectRow.currentKtVal = selectedKtValue;
             objectRow.currentXVal = selectedXValue;
             objectRow.xMin = Number(xMinField.text);
             objectRow.xMax = Number(xMaxField.text);
@@ -479,6 +638,7 @@ Dialog {
             info.currentTabIndex = selectedTabIndex
             info.currentXVal = selectedXValue
             info.currentMuVal = selectedMuValue;
+            info.currentKtVal = selectedKtValue;
             info.xMin = Number(xMinField.text);
             info.xMax = Number(xMaxField.text);
             info.muMin = Number(qMinField.text);
@@ -579,6 +739,16 @@ Dialog {
         if (cpdfSetCombo.currentIndex < 0) return;
         var XMax = pdfModel.get(cpdfSetCombo.currentIndex).XMax;
         xMaxValue = Number(XMax);
+    }
+    function getKtMinValue() {
+        if (cpdfSetCombo.currentIndex < 0) return;
+        var KtMin = pdfModel.get(cpdfSetCombo.currentIndex).KtMin;
+        ktMinValue = Number(KtMin);
+    }
+    function getktMaxValue() {
+        if (cpdfSetCombo.currentIndex < 0) return;
+        var KtMax = pdfModel.get(cpdfSetCombo.currentIndex).KtMax;
+        KtMaxValue = Number(KtMax);
     }
     function getRandomNumber(min, max) {
             return Number((Math.random() * (max - min) + min).toFixed(6));

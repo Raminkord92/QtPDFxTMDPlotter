@@ -13,11 +13,7 @@
 // #include <PDFxTMDLib/Common/KeyValueStore.h>
 #include "PDFInfo.h"
 
-enum class PDFSetType
-{
-    cPDF,
-    TMD
-};
+
 
 enum class DownloadUrlType
 {

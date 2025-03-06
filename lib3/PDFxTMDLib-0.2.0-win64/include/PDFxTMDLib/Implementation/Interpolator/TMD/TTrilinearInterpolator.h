@@ -17,7 +17,7 @@ class TTrilinearInterpolator
     explicit TTrilinearInterpolator() = default;
     void initialize(const IReader<TDefaultAllFlavorReader> *reader);
     double interpolate(PartonFlavor flavor, double x, double kt, double mu) const;
-
+    const IReader<TDefaultAllFlavorReader> *getReader() const;
   private:
     const IReader<TDefaultAllFlavorReader> *m_reader;
     bool m_isInitialized = false;

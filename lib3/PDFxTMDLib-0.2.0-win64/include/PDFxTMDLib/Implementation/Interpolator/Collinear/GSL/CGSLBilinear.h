@@ -19,9 +19,12 @@ class CGSLBilinearInterpolator
     // Main interface method - hot path
     double interpolate(PartonFlavor flavor, double x, double q) const;
     void initialize(const IReader<CDefaultLHAPDFFileReader> *reader);
+    const IReader<CDefaultLHAPDFFileReader> *getReader() const;
 
   private:
-    mutable std::unordered_map<PartonFlavor, GSLInterp2D> gsl2dObj;
+    mutable std::vector<
+        std::pair<DefaultAllFlavorShape, std::unordered_map<PartonFlavor, GSLInterp2D>>>
+        gsl2dObjVecPair;
     const IReader<CDefaultLHAPDFFileReader> *m_reader;
     mutable bool m_isInitialized = false;
 };

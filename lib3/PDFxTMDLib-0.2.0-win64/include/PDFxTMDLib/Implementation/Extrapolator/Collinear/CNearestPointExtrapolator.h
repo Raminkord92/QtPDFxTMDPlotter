@@ -22,19 +22,22 @@ inline double _findClosestMatch(const std::vector<double> &cands, double target)
     return lower;
 }
 
-template <typename Reader, typename Interpolator>
+template <typename Interpolator>
 class CNearestPointExtrapolator
-    : public IcAdvancedPDFExtrapolator<CNearestPointExtrapolator<Reader, Interpolator>, Reader,
-                                       Interpolator>
+    : public IcAdvancedPDFExtrapolator<CNearestPointExtrapolator<Interpolator>, Interpolator>
 {
   public:
-    double extrapolate(const IReader<Reader> *reader, PartonFlavor flavor, double x,
-                       double mu) const
+    void setInterpolator(const Interpolator *interpolator)
+    {
+        m_interpolator = interpolator;
+    }
+    double extrapolate(PartonFlavor flavor, double x, double mu) const
     {
         double q2 = mu * mu;
         /// Find the closest valid x and Q2 points, either on- or
         /// off-grid, and use the current interpolator
         /// @todo raise error for x > 1 ?
+        const auto *reader = m_interpolator->getReader();
         auto xVals = reader->getValues(PhaseSpaceComponent::X);
         auto q2Vals = reader->getValues(PhaseSpaceComponent::Q2);
 
@@ -42,5 +45,8 @@ class CNearestPointExtrapolator
         const double closestQ2 = (isInRangeQ2(*reader, q2)) ? q2 : _findClosestMatch(q2Vals, q2);
         return this->m_interpolator->interpolate(flavor, closestX, closestQ2);
     }
+
+  private:
+    const Interpolator *m_interpolator = nullptr;
 };
 } // namespace PDFxTMD

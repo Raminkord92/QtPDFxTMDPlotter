@@ -75,11 +75,6 @@ class GenericPDF
         {
             throw FileLoadException("Unable to find, or download pdf set path!");
         }
-        if constexpr (std::is_base_of_v<IAdvancedExtrapolator<Extrapolator, Reader, Interpolator>,
-                                        Extrapolator>)
-        {
-            m_extrapolator->setInterpolator(m_interpolator);
-        }
     }
     void loadStandardInfo()
     {
@@ -115,7 +110,7 @@ class GenericPDF
         }
         if (!isInRange(m_reader, x, mu2))
         {
-            return m_extrapolator.extrapolate(&m_reader, flavor, x, mu2);
+            return m_extrapolator.extrapolate(flavor, x, mu2);
         }
         return m_interpolator.interpolate(flavor, x, mu2);
     }
@@ -128,20 +123,30 @@ class GenericPDF
         }
         if (!isInRange(m_reader, x, kt2, mu2))
         {
-            return m_extrapolator.extrapolate(&m_reader, flavor, x, kt2, mu2);
+            return m_extrapolator.extrapolate(flavor, x, kt2, mu2);
         }
         return m_interpolator.interpolate(flavor, x, kt2, mu2);
     }
 
-    void loadData() const
+void loadData() const
     {
         try
         {
             auto &reader = const_cast<Reader &>(m_reader);
             reader.read(m_pdfName, m_setNumber);
-
             auto &interpolator = const_cast<Interpolator &>(m_interpolator);
             interpolator.initialize(&reader);
+            // Update the extrapolator's interpolator pointer based on the tag type.
+            if constexpr (std::is_same_v<Tag, CollinearPDFTag>)
+            {
+                if constexpr (std::is_base_of_v<
+                                  IcAdvancedPDFExtrapolator<Extrapolator, Interpolator>,
+                                  Extrapolator>)
+                {
+                    auto &extrapolator = const_cast<Extrapolator &>(m_extrapolator);
+                    extrapolator.setInterpolator(&interpolator);
+                }
+            }
         }
         catch (const std::exception &e)
         {
@@ -149,6 +154,8 @@ class GenericPDF
             throw;
         }
         m_dataLoaded = true;
+        std::cout << "Reader address inside GenericPDF: " << &m_reader << std::endl;
+
     }
 
     std::string m_pdfName;

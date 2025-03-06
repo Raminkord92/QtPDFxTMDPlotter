@@ -6,11 +6,10 @@
 #include "Interface/IExtrapolator.h"
 namespace PDFxTMD
 {
-template <typename Reader>
-class TZeroExtrapolator : public ITMDExtrapolator<TZeroExtrapolator<Reader>, Reader>
+class TZeroExtrapolator : public ITMDExtrapolator<TZeroExtrapolator>
 {
   public:
-    double extrapolate(const IReader<Reader> *reader, PartonFlavor flavor, double x, double kt2,
+    double extrapolate(PartonFlavor flavor, double x, double kt2,
                        double mu2) const
     {
         return 0.0;

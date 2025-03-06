@@ -2,7 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
-import QtPDFxTMDPlotter
+import QtQuick.Dialogs
+import QtPDFxTMDPlotter 1.0
 
 Dialog {
     id: configDialog
@@ -12,21 +13,33 @@ Dialog {
     height: parent.height
     background: Rectangle {
         color: Material.color(Material.Grey, Material.Shade50)
-
     }
 
     Material.theme: Material.System
     Material.accent: Material.Blue
     Material.primary: Material.BlueGrey
 
-    // C++ model registered with QML.
     PDFInfoModel {
         id: pdfModel
     }
 
+    DownloadManager {
+        id: downloadManager
+        onProgressChanged: downloadProgress.value = progress
+        onDownloadFinished: function(success, errorMessage) {
+            statusText.text = success ? "Download and extraction completed: " + errorMessage : "Error: " + errorMessage
+            finishButton.enabled = success
+            pdfModel.fillPDFInfoModel();
+            wizardStack.currentIndex = 0;
+            pdfSetDownloadStatusText = "";
+        }
+        onIsDownloadingChanged: {
+            downloadButton.enabled = !isDownloading
+        }
+    }
+
     onOpened: {
         pdfModel.fillPDFInfoModel();
-        // Optional: set a default selection
         pdfComboBox.currentIndex = 0;
     }
 
@@ -34,38 +47,33 @@ Dialog {
         anchors.fill: parent
         spacing: 10
 
-        // Sidebar navigation.
         ColumnLayout {
             Layout.maximumWidth: 200
             Layout.fillHeight: true
             spacing: 5
 
             Button {
-                text: "PDFset"
+                text: "PDF set"
                 onClicked: wizardStack.currentIndex = 0
                 Material.elevation: wizardStack.currentIndex === 0 ? 4 : 0
-                Layout.fillWidth: parent
-
+                Layout.fillWidth: true
             }
-            Button {
-                text: "General"
-                onClicked: wizardStack.currentIndex = 4
-                Material.elevation: wizardStack.currentIndex === 4 ? 4 : 0
-                Layout.fillWidth: parent
-
-            }
-
+            // Button {
+            //     text: "General"
+            //     onClicked: wizardStack.currentIndex = 4
+            //     Material.elevation: wizardStack.currentIndex === 4 ? 4 : 0
+            //     Layout.fillWidth: true
+            // }
             Button {
                 text: "Close"
-                Layout.fillWidth: parent
+                Layout.fillWidth: true
                 Material.elevation: wizardStack.currentIndex === 4 ? 4 : 0
                 onClicked: configDialog.close()
             }
         }
 
-        // Main content area (wizard).
         ScrollView {
-            width: parent.width;
+            width: parent.width
             clip: true
             background: Rectangle {
                 color: Material.background
@@ -75,12 +83,11 @@ Dialog {
                 id: wizardStack
                 width: parent.width
                 anchors.centerIn: parent
-                currentIndex: 0  // Start on the PDFset page
+                currentIndex: 0
 
-                // Page 0: PDFset Overview & New PDFset Entry.
+                // Page 0: PDFset Overview & New PDFset Entry (unchanged)
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
                     spacing: 10
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -94,22 +101,18 @@ Dialog {
                         Layout.alignment: Qt.AlignHCenter
                     }
 
-                    // Use ColumnLayout without anchors.fill.
                     ColumnLayout {
                         spacing: 10
                         Layout.fillWidth: true
 
-
                         ComboBox {
                             id: pdfComboBox
                             model: pdfModel
-                            textRole: "pdfSetName"  // Use the combined display string
+                            textRole: "pdfSetName"
                             Layout.fillWidth: true
 
-                            // Enhanced delegate with full information
                             delegate: ItemDelegate {
                                 padding: 10
-
                                 contentItem: Column {
                                     spacing: 4
                                     Text {
@@ -118,14 +121,12 @@ Dialog {
                                         color: Material.primary
                                     }
                                 }
-
                                 background: Rectangle {
                                     color: highlighted ? Material.listHighlightColor : "transparent"
                                 }
                             }
                         }
 
-                        // Detailed information panel
                         GroupBox {
                             visible: pdfComboBox.currentIndex >= 0
                             Layout.fillWidth: true
@@ -139,16 +140,14 @@ Dialog {
                                 rowSpacing: 10
                                 anchors.fill: parent
 
-                                // Icon column
                                 Rectangle {
                                     Layout.preferredWidth: 80
                                     Layout.preferredHeight: 80
                                     Layout.alignment: Qt.AlignTop
                                     color: Material.primary
                                     radius: 8
-
                                     Text {
-                                        text: "PDF"
+                                        text: pdfSetType.text
                                         anchors.centerIn: parent
                                         color: "white"
                                         font.bold: true
@@ -156,7 +155,6 @@ Dialog {
                                     }
                                 }
 
-                                // Information column
                                 ColumnLayout {
                                     spacing: 8
                                     Layout.fillWidth: true
@@ -175,7 +173,7 @@ Dialog {
                                         Label { text: "μ Range:"; font.bold: true }
                                         Label {
                                             text: {
-                                                if(pdfComboBox.currentIndex < 0) return ""
+                                                if (pdfComboBox.currentIndex < 0) return ""
                                                 const QMin = pdfModel.get(pdfComboBox.currentIndex).QMin
                                                 const QMax = pdfModel.get(pdfComboBox.currentIndex).QMax
                                                 return `${QMin} GeV - ${QMax} GeV`
@@ -184,190 +182,264 @@ Dialog {
                                         Label { text: "x Range:"; font.bold: true }
                                         Label {
                                             text: {
-                                                if(pdfComboBox.currentIndex < 0) return ""
+                                                if (pdfComboBox.currentIndex < 0) return ""
                                                 const XMin = pdfModel.get(pdfComboBox.currentIndex).XMin
                                                 const XMax = pdfModel.get(pdfComboBox.currentIndex).XMax
                                                 return `${XMin} - ${XMax}`
                                             }
                                         }
+                                        Label {
+                                            text: "kₜ Range:";
+                                            font.bold: true;
+                                            visible: pdfComboBox.currentIndex >= 0 ?
+                                                         (pdfModel.get(pdfComboBox.currentIndex).PDFSetType === 0 ? false : true) : false
+                                        }
+                                        Label {
+                                            text: {
+                                                if (pdfComboBox.currentIndex < 0) return ""
+                                                const KtMin = pdfModel.get(pdfComboBox.currentIndex).KtMin
+                                                const KtMax = pdfModel.get(pdfComboBox.currentIndex).KtMax
+                                                return `${KtMin} - ${KtMax}`
+                                            }
+                                            visible: pdfComboBox.currentIndex >= 0 ?
+                                                         (pdfModel.get(pdfComboBox.currentIndex).PDFSetType === 0 ? false : true) : false
+                                        }
                                         Label { text: "Flavors:"; font.bold: true }
                                         Label {
                                             Layout.maximumWidth: 400
-                                            text: {
-                                                if(pdfComboBox.currentIndex < 0) return ""
-                                                return pdfModel.get(pdfComboBox.currentIndex).Flavors
-                                            }
+                                            text: pdfComboBox.currentIndex < 0 ? "" : pdfModel.get(pdfComboBox.currentIndex).Flavors
                                             wrapMode: Text.WordWrap
                                         }
                                         Label { text: "Format:"; font.bold: true }
                                         Label {
-                                            text: {
-                                                if(pdfComboBox.currentIndex < 0) return ""
-                                                return pdfModel.get(pdfComboBox.currentIndex).Format
-                                            }
+                                            text: pdfComboBox.currentIndex < 0 ? "" : pdfModel.get(pdfComboBox.currentIndex).Format
                                         }
-
                                         Label { text: "QCD Order:"; font.bold: true }
                                         Label {
-                                            text: {
-                                                if(pdfComboBox.currentIndex < 0) return ""
-                                                return pdfModel.get(pdfComboBox.currentIndex).OrderQCD
-                                            }
+                                            text: pdfComboBox.currentIndex < 0 ? "" : pdfModel.get(pdfComboBox.currentIndex).OrderQCD
                                         }
                                         Label { text: "Type:"; font.bold: true }
-                                        Label { text: pdfComboBox.currentIndex >= 0 ?
-                                                    (pdfModel.get(pdfComboBox.currentIndex).pdfSetName.includes("TMD") ? "TMD PDF" : "Standard PDF") : "" }
-
+                                        Label {
+                                            id: pdfSetType
+                                            text: pdfComboBox.currentIndex >= 0 ?
+                                                (pdfModel.get(pdfComboBox.currentIndex).PDFSetType === 0 ? "cPDF" : "TMD") : ""
+                                        }
                                     }
                                 }
                             }
                         }
                     }
 
-                    // TextField {
-                    //     id: newPdfName
-                    //     placeholderText: "Enter new PDFset name"
-                    //     Layout.fillWidth: true
-                    // }
-                    // Button {
-                    //     text: "Start Download Wizard"
-                    //     enabled: newPdfName.text.length > 0
-                    //     onClicked: wizardStack.currentIndex = 1
-                    // }
+                    TextField {
+                        id: newPdfName
+                        placeholderText: "Enter new PDF set name"
+                        Layout.fillWidth: true
+                    }
+                    Button {
+                        text: "Start Download Wizard"
+                        enabled: newPdfName.text.length > 0
+                        onClicked: {
+                            if (pdfModel.pdfSetAlreadyExists(newPdfName.text))
+                            {
+                                pdfSetDownloadStatusText.text = "This pdf set already exists";
+                                return;
+                            }
+                            pdfSetDownloadStatusText.text = "";
+                            wizardStack.currentIndex = 1
+                        }
+                    }
+                    Text {
+                        id: pdfSetDownloadStatusText
+                        text: ""
+                        color: Material.accent
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
                 }
 
-                // // Page 1: Step 1 - Download Location.
-                // ColumnLayout {
-                //     spacing: 10
-                //     Layout.fillWidth: true
-                //     Layout.fillHeight: true
+                // Page 1: Step 1 - Path Selection (UI-friendly)
+                ColumnLayout {
+                    spacing: 10
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-                //     Text {
-                //         text: "Step 1: Choose Download Location"
-                //         font.pointSize: 16
-                //         font.bold: true
-                //     }
-                //     TextField {
-                //         id: downloadLocationField
-                //         placeholderText: "Enter download location (e.g. /home/user/downloads)"
-                //         Layout.fillWidth: true
-                //     }
-                //     RowLayout {
-                //         Layout.fillWidth: true
-                //         spacing: 10
-                //         Button {
-                //             text: "Back"
-                //             onClicked: wizardStack.currentIndex = 0
-                //         }
-                //         Button {
-                //             text: "Next"
-                //             enabled: downloadLocationField.text.length > 0
-                //             onClicked: wizardStack.currentIndex = 2
-                //         }
-                //     }
-                // }
+                    Text {
+                        text: "Step 1: Select Extraction Path"
+                        font.pointSize: 16
+                        font.bold: true
+                    }
 
-                // // Page 2: Step 2 - Repository Selection.
-                // ColumnLayout {
-                //     spacing: 10
-                //     Layout.fillWidth: true
-                //     Layout.fillHeight: true
+                    Text {
+                        text: "Choose an existing path or add a new one:"
+                        font.bold: true
+                    }
 
-                //     Text {
-                //         text: "Step 2: Select Download Repository"
-                //         font.pointSize: 16
-                //         font.bold: true
-                //     }
-                //     RadioButton {
-                //         id: repoOption1
-                //         text: "Repository 1"
-                //         checked: true
-                //     }
-                //     RadioButton {
-                //         id: repoOption2
-                //         text: "Repository 2"
-                //     }
-                //     RadioButton {
-                //         id: customRepoOption
-                //         text: "Custom Repository"
-                //     }
-                //     TextField {
-                //         id: customRepoField
-                //         placeholderText: "Enter custom repository URL"
-                //         visible: customRepoOption.checked
-                //         Layout.fillWidth: true
-                //     }
-                //     RowLayout {
-                //         Layout.fillWidth: true
-                //         spacing: 10
-                //         Button {
-                //             text: "Back"
-                //             onClicked: wizardStack.currentIndex = 1
-                //         }
-                //         Button {
-                //             text: "Next"
-                //             onClicked: wizardStack.currentIndex = 3
-                //         }
-                //     }
-                // }
+                    ComboBox {
+                        id: pathComboBox
+                        model: downloadManager.availablePaths
+                        Layout.fillWidth: true
+                        currentIndex: 0 // Default to first path
+                    }
 
-                // // Page 3: Step 3 - Download Process.
-                // ColumnLayout {
-                //     spacing: 10
-                //     Layout.fillWidth: true
-                //     Layout.fillHeight: true
+                    Button {
+                        text: "Add New Path"
+                        Layout.fillWidth: true
+                        onClicked: folderDialog.open()
+                    }
 
-                //     Text {
-                //         text: "Step 3: Downloading PDFset"
-                //         font.pointSize: 16
-                //         font.bold: true
-                //     }
-                //     ProgressBar {
-                //         id: downloadProgress
-                //         value: 0.0
-                //         Layout.fillWidth: true
-                //     }
-                //     Button {
-                //         text: "Simulate Download"
-                //         onClicked: {
-                //             downloadProgress.value = 0.0;
-                //             downloadTimer.start();
-                //         }
-                //     }
-                //     Timer {
-                //         id: downloadTimer
-                //         interval: 100
-                //         repeat: true
-                //         running: false
-                //         onTriggered: {
-                //             if (downloadProgress.value < 1.0) {
-                //                 downloadProgress.value += 0.05;
-                //             } else {
-                //                 downloadTimer.stop();
-                //             }
-                //         }
-                //     }
-                //     RowLayout {
-                //         Layout.fillWidth: true
-                //         spacing: 10
-                //         Button {
-                //             text: "Back"
-                //             onClicked: wizardStack.currentIndex = 2
-                //         }
-                //         Button {
-                //             text: "Finish"
-                //             enabled: downloadProgress.value >= 1.0
-                //             onClicked: {
-                //                 newPdfName.text = "";
-                //                 downloadLocationField.text = "";
-                //                 downloadProgress.value = 0.0;
-                //                 wizardStack.currentIndex = 0;
-                //             }
-                //         }
-                //     }
-                // }
+                    FolderDialog {
+                        id: folderDialog
+                        title: "Select Extraction Directory"
+                        onAccepted: {
+                            console.log("selectedFolder" + selectedFolder)
+                            if (downloadManager.addPath(selectedFolder.toString().replace("file:///", ""))) {
+                                pathComboBox.currentIndex = downloadManager.availablePaths.length - 1
+                                pathStatusText.text = "Added and selected: " + pathComboBox.currentText
+                            } else {
+                                pathStatusText.text = "Error: Could not add path or path already exists"
+                            }
+                        }
+                        onRejected: {
+                            // pathStatusText.text = "Path selection cancelled"
+                        }
+                    }
 
-                // Page 4: General Settings (Placeholder).
+                    Text {
+                        id: pathStatusText
+                        text: ""
+                        color: Material.accent
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+                        Button {
+                            text: "Back"
+                            onClicked: wizardStack.currentIndex = 0
+                        }
+                        Button {
+                            text: "Next"
+                            onClicked: {
+                                extractLocationField.text = pathComboBox.currentText
+                                wizardStack.currentIndex = 2
+                            }
+                        }
+                    }
+                }
+
+                // Page 2: Step 2 - Repository Selection
+                ColumnLayout {
+                    spacing: 10
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Text {
+                        text: "Step 2: Select Download Repository"
+                        font.pointSize: 16
+                        font.bold: true
+                    }
+                    RadioButton {
+                        id: repoLHAPDF
+                        text: "LHAPDF Repo"
+                        checked: true
+                    }
+                    RadioButton {
+                        id: repoTMDLib
+                        text: "TMD Repo"
+                    }
+                    RadioButton {
+                        id: customRepoOption
+                        text: "Custom Repository"
+                    }
+                    TextField {
+                        id: customRepoField
+                        placeholderText: "Enter custom repository URL"
+                        visible: customRepoOption.checked
+                        Layout.fillWidth: true
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+                        Button {
+                            text: "Back"
+                            onClicked: wizardStack.currentIndex = 1
+                        }
+                        Button {
+                            text: "Next"
+                            enabled: !customRepoOption.checked || customRepoField.text.length > 0
+                            onClicked: wizardStack.currentIndex = 3
+                        }
+                    }
+                }
+
+                // Page 3: Step 3 - Download and Extract Process
+                ColumnLayout {
+                    spacing: 10
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Text {
+                        text: "Step 3: Downloading and Extracting PDF Set"
+                        font.pointSize: 16
+                        font.bold: true
+                    }
+                    TextField {
+                        id: extractLocationField
+                        visible: false // Hidden, stores selected path
+                    }
+                    ProgressBar {
+                        id: downloadProgress
+                        value: 0.0
+                        Layout.fillWidth: true
+                    }
+                    Text {
+                        id: statusText
+                        text: ""
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
+                    Button {
+                        id: downloadButton
+                        text: "Start Download"
+                        enabled: true
+                        onClicked: {
+                            downloadProgress.value = 0.0
+                            statusText.text = "Starting download..."
+                            const repoType = repoLHAPDF.checked ? 1 : (repoTMDLib.checked ? 2 : 3)
+                            downloadManager.startDownload(
+                                newPdfName.text,
+                                repoType,
+                                customRepoOption.checked ? customRepoField.text : "",
+                                extractLocationField.text
+                            )
+                        }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+                        Button {
+                            text: "Back"
+                            onClicked: wizardStack.currentIndex = 2
+                        }
+                        Button {
+                            id: finishButton
+                            text: "Finish"
+                            enabled: false
+                            onClicked: {
+                                newPdfName.text = ""
+                                extractLocationField.text = ""
+                                customRepoField.text = ""
+                                downloadProgress.value = 0.0
+                                statusText.text = ""
+                                wizardStack.currentIndex = 0
+                            }
+                        }
+                    }
+                }
+
+                // Page 4: General Settings
                 ColumnLayout {
                     spacing: 10
                     Layout.fillWidth: true
@@ -389,5 +461,4 @@ Dialog {
             }
         }
     }
-
 }

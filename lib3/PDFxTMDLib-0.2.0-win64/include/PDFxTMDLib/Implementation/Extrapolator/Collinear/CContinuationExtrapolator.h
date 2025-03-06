@@ -12,14 +12,18 @@
 namespace PDFxTMD
 {
 
-template <typename Reader, typename Interpolator>
+template <typename Interpolator>
 class CContinuationExtrapolator
-    : public IcAdvancedPDFExtrapolator<CContinuationExtrapolator<Reader, Interpolator>, Reader,
-                                       Interpolator>
+    : public IcAdvancedPDFExtrapolator<CContinuationExtrapolator<Interpolator>, Interpolator>
 {
   public:
-    double extrapolate(const IReader<Reader> *reader, PartonFlavor flavor, double x,
-                       double mu) const
+    void setInterpolator(const Interpolator *interpolator)
+    {
+        m_interpolator = interpolator;
+        std::cout << "Interpolator set in Extrapolator: " << interpolator << std::endl;
+
+    }
+    double extrapolate(PartonFlavor flavor, double x, double mu) const
     {
         using namespace std;
         double q2 = mu * mu;
@@ -27,7 +31,7 @@ class CContinuationExtrapolator
         // of the extrapolation used in the MSTW standalone code
         // (and LHAPDFv5 when using MSTW sets), G. Watt, October
         // 2014.
-
+         auto *reader = m_interpolator->getReader();
         const size_t nxknots =
             reader->getValues(PhaseSpaceComponent::X).size(); // total number of x knots (all
                                                               // subgrids)
@@ -35,47 +39,44 @@ class CContinuationExtrapolator
             reader->getValues(PhaseSpaceComponent::Q2).size(); // total number of q2 knots (all
                                                                // subgrids)
 
-        const double xMin = exp(reader->getValues(PhaseSpaceComponent::X).at(0));  // first x knot
-        const double xMin1 = exp(reader->getValues(PhaseSpaceComponent::X).at(1)); // second x knot
+        const double xMin = reader->getValues(PhaseSpaceComponent::X).at(0);  // first x knot
+        const double xMin1 = reader->getValues(PhaseSpaceComponent::X).at(1); // second x knot
         const double xMax =
-            exp(reader->getValues(PhaseSpaceComponent::X).at(nxknots - 1)); // last x knot
+            reader->getValues(PhaseSpaceComponent::X).at(nxknots - 1); // last x knot
 
-        const double q2Min = exp(reader->getValues(PhaseSpaceComponent::Q2).at(0)); // first q2 knot
+        const double q2Min = reader->getValues(PhaseSpaceComponent::Q2).at(0); // first q2 knot
         const double q2Max1 =
-            exp(reader->getValues(PhaseSpaceComponent::Q2).at(nq2knots - 2)); // second-last q2 knot
+            reader->getValues(PhaseSpaceComponent::Q2).at(nq2knots - 2); // second-last q2 knot
         const double q2Max =
-            exp(reader->getValues(PhaseSpaceComponent::Q2).at(nq2knots - 1)); // last q2 knot
+            reader->getValues(PhaseSpaceComponent::Q2).at(nq2knots - 1); // last q2 knot
 
         double fxMin, fxMin1, fq2Max, fq2Max1, fq2Min, fq2Min1, xpdf, anom;
 
         if (x < xMin && (q2 >= q2Min && q2 <= q2Max))
         {
             // Extrapolation in small x only.
-            fxMin = this->m_interpolator->interpolate(flavor, xMin, q2);   // PDF at (xMin,q2)
-            fxMin1 = this->m_interpolator->interpolate(flavor, xMin1, q2); // PDF at (xMin1,q2)
+            fxMin =  m_interpolator->interpolate(flavor, xMin, q2);   // PDF at (xMin,q2)
+            fxMin1 = m_interpolator->interpolate(flavor, xMin1, q2); // PDF at (xMin1,q2)
             xpdf = _extrapolateLinear(x, xMin, xMin1, fxMin,
                                       fxMin1); // PDF at (x,q2)
         }
         else if ((x >= xMin && x <= xMax) && q2 > q2Max)
         {
             // Extrapolation in large q2 only.
-            fq2Max = this->m_interpolator->interpolate(flavor, x, q2Max);   // PDF at (x,q2Max)
-            fq2Max1 = this->m_interpolator->interpolate(flavor, x, q2Max1); // PDF at (x,q2Max1)
+            fq2Max = m_interpolator->interpolate(flavor, x, q2Max);   // PDF at (x,q2Max)
+            fq2Max1 = m_interpolator->interpolate(flavor, x, q2Max1); // PDF at (x,q2Max1)
             xpdf = _extrapolateLinear(q2, q2Max, q2Max1, fq2Max,
                                       fq2Max1); // PDF at (x,q2)
         }
         else if (x < xMin && q2 > q2Max)
         {
             // Extrapolation in large q2 AND small x.
-            fq2Max = this->m_interpolator->interpolate(flavor, xMin, q2Max); // PDF at (xMin,q2Max)
-            fq2Max1 =
-                this->m_interpolator->interpolate(flavor, xMin, q2Max1); // PDF at (xMin,q2Max1)
+            fq2Max = m_interpolator->interpolate(flavor, xMin, q2Max); // PDF at (xMin,q2Max)
+            fq2Max1 = m_interpolator->interpolate(flavor, xMin, q2Max1); // PDF at (xMin,q2Max1)
             fxMin = _extrapolateLinear(q2, q2Max, q2Max1, fq2Max,
                                        fq2Max1); // PDF at (xMin,q2)
-            fq2Max =
-                this->m_interpolator->interpolate(flavor, xMin1, q2Max); // PDF at (xMin1,q2Max)
-            fq2Max1 =
-                this->m_interpolator->interpolate(flavor, xMin1, q2Max1); // PDF at (xMin1,q2Max1)
+            fq2Max = m_interpolator->interpolate(flavor, xMin1, q2Max); // PDF at (xMin1,q2Max)
+            fq2Max1 = m_interpolator->interpolate(flavor, xMin1, q2Max1); // PDF at (xMin1,q2Max1)
             fxMin1 = _extrapolateLinear(q2, q2Max, q2Max1, fq2Max,
                                         fq2Max1); // PDF at (xMin1,q2)
             xpdf = _extrapolateLinear(x, xMin, xMin1, fxMin,
@@ -89,16 +90,13 @@ class CContinuationExtrapolator
             {
                 // Extrapolation also in small x.
 
-                fxMin =
-                    this->m_interpolator->interpolate(flavor, xMin, q2Min); // PDF at (xMin,q2Min)
-                fxMin1 =
-                    this->m_interpolator->interpolate(flavor, xMin1, q2Min); // PDF at (xMin1,q2Min)
+                fxMin = m_interpolator->interpolate(flavor, xMin, q2Min); // PDF at (xMin,q2Min)
+                fxMin1 = m_interpolator->interpolate(flavor, xMin1, q2Min); // PDF at (xMin1,q2Min)
                 fq2Min = _extrapolateLinear(x, xMin, xMin1, fxMin,
                                             fxMin1); // PDF at (x,q2Min)
-                fxMin = this->m_interpolator->interpolate(flavor, xMin,
+                fxMin = m_interpolator->interpolate(flavor, xMin,
                                                           1.01 * q2Min); // PDF at (xMin,1.01*q2Min)
-                fxMin1 =
-                    this->m_interpolator->interpolate(flavor, xMin1,
+                fxMin1 = m_interpolator->interpolate(flavor, xMin1,
                                                       1.01 * q2Min); // PDF at (xMin1,1.01*q2Min)
                 fq2Min1 = _extrapolateLinear(x, xMin, xMin1, fxMin,
                                              fxMin1); // PDF at (x,1.01*q2Min)
@@ -107,8 +105,8 @@ class CContinuationExtrapolator
             {
                 // Usual interpolation in x.
 
-                fq2Min = this->m_interpolator->interpolate(flavor, x, q2Min); // PDF at (x,q2Min)
-                fq2Min1 = this->m_interpolator->interpolate(flavor, x,
+                fq2Min = m_interpolator->interpolate(flavor, x, q2Min); // PDF at (x,q2Min)
+                fq2Min1 = m_interpolator->interpolate(flavor, x,
                                                             1.01 * q2Min); // PDF at (x,1.01*q2Min)
             }
 
@@ -148,5 +146,8 @@ class CContinuationExtrapolator
 
         return xpdf;
     }
+
+  private:
+    const Interpolator* m_interpolator = nullptr;
 };
 } // namespace PDFxTMD

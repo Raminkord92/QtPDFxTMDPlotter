@@ -64,6 +64,7 @@ std::enable_if_t<std::is_same_v<T, YamlStandardPDFInfo> || std::is_same_v<T, Yam
                  std::pair<std::optional<YamlStandardTMDInfo>, ErrorType>>
 YamlStandardPDFInfoReader(const std::string &yamlInfoPath)
 {
+    ErrorType errTot = ErrorType::None;
     ConfigWrapper ConfigWrapper;
     YamlStandardTMDInfo output;
     if (!ConfigWrapper.loadFromFile(yamlInfoPath, ConfigWrapper::Format::YAML))
@@ -159,9 +160,11 @@ YamlStandardPDFInfoReader(const std::string &yamlInfoPath)
             std::cout << "[PDFxTMD][YamlInfoReader] Format is not "
                          "found in yaml config file"
                       << std::endl;
-            return {std::nullopt, errorTMDScheme};
+            errTot = errorTMDScheme;
+            output.TMDScheme = "";
         }
-        output.TMDScheme = *TMDScheme;
+        else
+            output.TMDScheme = *TMDScheme;
         //////KtMin
         auto [KtMin, errorKtMin] = ConfigWrapper.get<double>("KtMin");
         if (errorKtMin != ErrorType::None)
@@ -169,9 +172,11 @@ YamlStandardPDFInfoReader(const std::string &yamlInfoPath)
             std::cout << "[PDFxTMD][YamlInfoReader] KtMin is not "
                          "found in yaml config file"
                       << std::endl;
-            return {std::nullopt, errorKtMin};
+            errTot = errorKtMin;
+            output.KtMin = -1;
         }
-        output.KtMin = *KtMin;
+        else
+            output.KtMin = *KtMin;
         //////KtMax
         auto [KtMax, errorKtMax] = ConfigWrapper.get<double>("KtMax");
         if (errorKtMax != ErrorType::None)
@@ -179,12 +184,15 @@ YamlStandardPDFInfoReader(const std::string &yamlInfoPath)
             std::cout << "[PDFxTMD][YamlInfoReader] KtMax is not "
                          "found in yaml config file"
                       << std::endl;
-            return {std::nullopt, errorKtMax};
+            errTot = errorKtMax;
+            output.KtMax = -1;
         }
-        output.KtMax = *KtMax;
+        else
+            output.KtMax = *KtMax;
+
     }
 
-    return {output, ErrorType::None};
+    return {output, errTot};
 }
 std::pair<std::optional<YamlCouplingInfo>, ErrorType> YamlCouplingInfoReader(
     const std::string &yamlInfoPath);

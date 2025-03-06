@@ -96,9 +96,9 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
             for (double bin_ : bins_) {
                 xVals_.push_back(bin_);
                 if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
-                    yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal()));
+                    yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal() * pdfObjectInfo_->currentMuVal()));
                 } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-                    double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_);
+                    double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_ * bin_);
                     yVals_.push_back(pdfval_);
                 }
             }

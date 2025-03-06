@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/ICommand.h"
+#include <PDFxTMDLib/Common/ICommand.h>
 #include <archive.h>
 #include <archive_entry.h>
 #include <cstring>

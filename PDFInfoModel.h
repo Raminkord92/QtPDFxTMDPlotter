@@ -19,10 +19,13 @@ public:
         QMinRole,
         XMinRole,
         XMaxRole,
+        KtMinRole,
+        KtMaxRole,
         NumMembersRole,
         FlavorsRole,
         FormatRole,
-        OrderQCDRole
+        OrderQCDRole,
+        PDFSetType
     };
     Q_ENUM(PDFRoles)
 
@@ -39,6 +42,7 @@ public:
     Q_INVOKABLE void cLearModel();
     Q_INVOKABLE QVariantMap get(int index) const;
     Q_INVOKABLE int pdfCount() const;
+    Q_INVOKABLE bool pdfSetAlreadyExists(const QString& pdfSetName);
 private:
     QVector<PDFInfo> m_pdfList;
     PDFSetProvider m_pdfSetProvider;

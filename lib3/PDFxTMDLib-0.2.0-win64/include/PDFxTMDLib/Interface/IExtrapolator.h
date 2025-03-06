@@ -3,48 +3,45 @@
 #include "IReader.h"
 namespace PDFxTMD
 {
-template <typename Derived, typename Reader, typename... ExtrapolateArgs>
+template <typename Derived, typename... ExtrapolateArgs>
 class IExtrapolator : public CRTPBase<Derived>
 {
   public:
-    double extrapolate(const IReader<Reader> *reader, ExtrapolateArgs... args) const
+    double extrapolate(ExtrapolateArgs... args) const
     {
-        return this->derived().extrapolate(reader, args...);
+        return this->derived().extrapolate(args...);
     }
 };
 
-template <typename Derived, typename Reader, typename Interpolator, typename... ExtrapolateArgs>
-class IAdvancedExtrapolator : public IExtrapolator<Derived, Reader, ExtrapolateArgs...>
+template <typename Derived, typename Interpolator, typename... ExtrapolateArgs>
+class IAdvancedExtrapolator : public IExtrapolator<Derived, ExtrapolateArgs...>
 {
   public:
     void setInterpolator(const Interpolator *interpolator)
     {
-        m_interpolator = interpolator;
+        this->derived().setInterpolator(interpolator);
     }
-
-  protected:
-    const Interpolator *m_interpolator{nullptr};
 };
 
-template <typename Derived, typename Reader>
-class IcPDFExtrapolator : public IExtrapolator<Derived, Reader, PartonFlavor, X_T, MU_T>
+template <typename Derived>
+class IcPDFExtrapolator : public IExtrapolator<Derived, PartonFlavor, X_T, MU_T>
 {
 };
 
-template <typename Derived, typename Reader, typename Interpolator>
+template <typename Derived, typename Interpolator>
 class IcAdvancedPDFExtrapolator
-    : public IAdvancedExtrapolator<Derived, Reader, Interpolator, PartonFlavor, X_T, MU_T>
+    : public IAdvancedExtrapolator< Interpolator, PartonFlavor, X_T, MU_T>
 {
 };
 
-template <typename Derived, typename Reader>
-class ITMDExtrapolator : public IExtrapolator<Derived, Reader, PartonFlavor, X_T, KT_T, MU_T>
+template <typename Derived>
+class ITMDExtrapolator : public IExtrapolator<Derived, PartonFlavor, X_T, KT_T, MU_T>
 {
 };
 
-template <typename Derived, typename Reader, typename Interpolator>
+template <typename Derived, typename Interpolator>
 class IcAdvancedTMDExtrapolator
-    : public IAdvancedExtrapolator<Derived, Reader, Interpolator, PartonFlavor, X_T, KT_T, MU_T>
+    : public IAdvancedExtrapolator<Derived, Interpolator, PartonFlavor, X_T, KT_T, MU_T>
 {
 };
 

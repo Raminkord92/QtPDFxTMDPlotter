@@ -10,12 +10,13 @@ class CDefaultLHAPDFFileReader : public IReader<CDefaultLHAPDFFileReader>
 {
   public:
     void read(const std::string &pdfName, int setNumber);
-    DefaultAllFlavorShape getData() const;
+    std::vector<DefaultAllFlavorShape> getData() const;
     std::vector<double> getValues(PhaseSpaceComponent comp) const;
     std::pair<double, double> getBoundaryValues(PhaseSpaceComponent comp) const;
 
   private:
-    DefaultAllFlavorShape m_pdfShape;
+    std::vector<DefaultAllFlavorShape> m_pdfShape;
+    std::vector<double> m_mu2CompTotal;
     int m_blockNumber = 0;
     int m_blockLine = 0;
 

@@ -1,5 +1,4 @@
-#pragma once
-#include <PDFxTMDLib/Common/ICommand.h>
+#include "Common/ICommand.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -12,8 +11,7 @@ class PDFSetDownloadHandler
 {
   public:
     PDFSetDownloadHandler();
-    //filling context means the user want to handle downloading automatically
-    bool Start(const std::string &pdfName, StandardTypeMap* context = nullptr);
+    bool Start(const std::string &pdfName);
 
   private:
     std::vector<std::shared_ptr<ICommand>> m_commands;
