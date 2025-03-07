@@ -17,8 +17,8 @@ Dialog {
     property string currentPDFSetName: ""       // Name of the currently selected PDF set
     property var leftSidRef                     // Reference to parent or container
     property PDFObjectInfo objectRow            // Data for the PDF object being edited/created
-    property var swipeViewMainDlg               // Reference to swipe view in main dialog
     property var partonFlavors: []              // Array of parton flavors for the selected PDF set
+    property int currentTabUniqueId_: 0
 
     // User selection properties
     property string selectedPdfSet: ""          // Selected PDF set name
@@ -547,7 +547,7 @@ Dialog {
             selectedLineStyleIndex = PDFDataProvider.Solid
             selectedPartonFlavorIndex = 0
             selectedPlotTypeIndex = PDFDataProvider.Mu2
-            selectedTabIndex = swipeViewMainDlg ? swipeViewMainDlg.currentIndex : 0
+            selectedTabIndex = currentTabUniqueId_
 
             pdfSetCombox.currentIndex = 0
             getPartonFlavors()

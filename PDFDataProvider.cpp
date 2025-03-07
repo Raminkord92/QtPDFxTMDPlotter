@@ -25,52 +25,19 @@ PDFDataProvider::~PDFDataProvider() {
     }
 }
 
-// // Retrieve PDF data for a given tab index within xMin and xMax range
-// QList<PDFObjectInfo*> PDFDataProvider::getPDFData(TabIndex tabIndex, double xMin, double xMax) {
-//     QList<PDFObjectInfo*> result;
-//     if (m_pdfObjectInfos.contains(tabIndex)) {
-//         GenericCPDFFactory cPDFFfactory;
-//         auto bins_ = Utils::BinGeneratorInLogSpace(xMin, xMax, 100);
-//         QList<PDFObjectInfo*> pdfObjectInfos = m_pdfObjectInfos[tabIndex];
-//         for (auto pdfObjectInfo_ : pdfObjectInfos) {
-//             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
-//             auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
-//             QVector<double> xVals_;
-//             xVals_.reserve(bins_.size());
-//             QVector<double> yVals_;
-//             yVals_.reserve(bins_.size());
-//             for (double bin_ : bins_) {
-//                 xVals_.push_back(bin_);
-//                 PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
-//                 if (flavor_ == static_cast<PartonFlavor>(-1)) {
-//                     break;
-//                 }
-//                 if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
-//                     yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal()));
-//                 } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-//                     qDebug() << "[RAMIN] pdfObjectInfo_->currentXVal() " << pdfObjectInfo_->currentXVal();
-//                     double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_);
-//                     yVals_.push_back(pdfval_);
-//                 }
-//             }
-//             pdfObjectInfo_->setXVals(xVals_);
-//             pdfObjectInfo_->setYVals(yVals_);
-//             result.append(pdfObjectInfo_);
-//         }
-//     }
-//     return result;
-// }
+
 
 QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
 {
     QList<PDFObjectInfo*> result;
-    QVector<double> xVals_, yVals_;
 
     if (m_pdfObjectInfos.contains(tabIndex)) {
         int plotType = getPlotTypeOfTab(tabIndex);
 
-        for (auto pdfObjectInfo_ : m_pdfObjectInfos[tabIndex])
+        foreach (auto pdfObjectInfo_,  m_pdfObjectInfos[tabIndex])
         {
+            QVector<double> xVals_, yVals_;
+
             PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
             if (flavor_ == static_cast<PartonFlavor>(-1)) {
                 break;
@@ -114,6 +81,8 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
                 }
                 pdfObjectInfo_->setXVals(xVals_);
                 pdfObjectInfo_->setYVals(yVals_);
+                qDebug() << "[RAMINkord] " << pdfObjectInfo_->xVals().length();
+
                 result.append(pdfObjectInfo_);
             }
             else if (selectedPDFType == "TMD")
@@ -195,6 +164,7 @@ void PDFDataProvider::setPDFData(TabIndex tabIndex, PDFObjectInfo *info) {
     }
 
     m_pdfObjectInfos[tabIndex].append(info);
+    qDebug() << "[RAMIN] pdfdat " << m_pdfObjectInfos[tabIndex].size() <<" tabIndex " << tabIndex;
     emit pdfDataChanged(tabIndex);
 }
 

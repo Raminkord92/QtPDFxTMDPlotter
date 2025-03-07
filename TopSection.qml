@@ -12,12 +12,12 @@ Rectangle {
     border.color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
     border.width: 1
     property var leftSidRef : null
-    property var swipeViewMain: null
+    property int currentTabUniqueId: 0
 
     property PDFDialog pdfDialog: PDFDialog {
         id: pdfDialog
         leftSidRef : topSection.leftSidRef
-        swipeViewMainDlg: swipeViewMain
+        currentTabUniqueId_: currentTabUniqueId
     }
 
     Row {

@@ -231,6 +231,8 @@ ApplicationWindow {
             color: Material.background
 
             SplitView {
+                id: splitViewId
+                property int uniqueId: getRandomNumber(1, 100)
                 anchors.fill: parent
                 handle: Rectangle {
                     implicitWidth: 4
@@ -252,7 +254,7 @@ ApplicationWindow {
                         color: Qt.rgba(Material.foreground.r, Material.foreground.g, Material.foreground.b, 0.1)
                         width: 1
                     }
-                    TopSection { leftSidRef: leftSide; swipeViewMain: swipeView }
+                    TopSection { leftSidRef: leftSide; currentTabUniqueId: splitViewId.uniqueId }
                 }
 
                 Rectangle {
@@ -264,7 +266,8 @@ ApplicationWindow {
                     PlotArea {
                         anchors.fill: parent
                         anchors.margins: 0
-                        swipeViewMain: swipeView
+                        // plotTabIndex: swipeView.currentIndex
+                        plotTabIndex: splitViewId.uniqueId // Static assignment, no binding
                     }
                 }
 
@@ -284,6 +287,8 @@ ApplicationWindow {
         if (swipeView.currentIndex >= tabModel.count)
             swipeView.currentIndex = tabModel.count - 1
     }
-
+    function getRandomNumber(min, max) {
+        return Number((Math.random() * (max - min) + min).toFixed(6))
+    }
     Component.onCompleted: console.log("Application initialized")
 }

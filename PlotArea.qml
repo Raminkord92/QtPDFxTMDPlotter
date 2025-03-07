@@ -17,10 +17,18 @@ Item {
     property var xAxisLogRef: xAxisLog
     property var yAxisLinearRef: yAxisLinear
     property var yAxisLogRef: yAxisLog
-    property var swipeViewMain: null
+    property int plotTabIndex: 0
     property var m_data
     property bool isXAxisLog: false
     property bool isYAxisLog: false
+    Component.onCompleted:
+    {
+        console.log("rrrrrrrrrrrrrrrrrr plotTabIndex " + plotTabIndex)
+    }
+    onPlotTabIndexChanged:
+    {
+        console.log("sssssssssssssssss now changed ", plotTabIndex)
+    }
 
     SplitView {
         anchors.fill: parent
@@ -350,6 +358,7 @@ Item {
                             spacing: 10
 
                             Button {
+                                visible: false
                                 text: "Export to PDF"
                                 onClicked: pdfDialog.open()
                             }
@@ -376,6 +385,7 @@ Item {
     FileDialog {
         id: pdfDialog
         title: "Export to PDF"
+        visible: false
         fileMode: FileDialog.SaveFile
         nameFilters: ["PDF files (*.pdf)"]
         defaultSuffix: "pdf"
@@ -430,8 +440,8 @@ Item {
     Connections {
         target: PDFDataProvider
         function onPdfDataChanged(tabIndex) {
-            console.log("received signal")
-            if (tabIndex === swipeViewMain.currentIndex) {
+            console.log("received signal tabIndex " + tabIndex + " swipeViewMain.currentIndex " + plotTabIndex)
+            if (tabIndex === plotTabIndex) {
                 m_data = PDFDataProvider.getPDFData(tabIndex)
                 updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
             }
@@ -439,10 +449,12 @@ Item {
     }
 
     function updatePlot(infos, xAxisType, yAxisType) {
+        console.log("[RAMIN] updatePlot + " + seriesList.length)
         for (var i = 0; i < seriesList.length; i++) {
             chartView.removeSeries(seriesList[i])
         }
         seriesList = []
+        console.log("updte plot series before for loop " + infos.length);
 
         for (var j = 0; j < infos.length; j++) {
             var info = infos[j]
@@ -464,8 +476,8 @@ Item {
 
             updateSeries(series, info)
             seriesList.push(series)
+            console.log("updte plot series " + j + " series.color " + series.color + " info.lineStyleIndex" + info.lineStyleIndex);
         }
-
         var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
         for (var k = 0; k < infos.length; k++) {
             var xVals = infos[k].xVals
@@ -531,10 +543,12 @@ Item {
             console.log("Error: xVals and yVals have different lengths for " + info.displayText)
             return
         }
-
+        console.log("start.... xVals size " + xVals.length + " ---" +yVals.length )
         for (var i = 0; i < xVals.length; i++) {
             series.append(xVals[i], yVals[i])
+            console.log("xval " + xVals[i] + " yVals " + yVals[i])
         }
+        console.log("end....")
     }
 
     function switchAxis() {
