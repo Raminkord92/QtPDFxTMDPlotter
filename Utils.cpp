@@ -115,5 +115,14 @@ int ConvertStringToFlavor(const QString &flavor)
     return -1;
 }
 
+QString ConvertPDFSetTypeToString(PDFSetType pdfSetType)
+{
+    if (pdfSetType == PDFSetType::CPDF)
+        return "cPDF";
+    else if (pdfSetType == PDFSetType::TMD)
+        return "TMD";
+    return "Unkown";
+}
+
 }
 

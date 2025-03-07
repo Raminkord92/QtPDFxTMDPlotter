@@ -10,6 +10,7 @@
 #pragma comment(lib, "PDFxTMDLibStatic.lib")
 
 using TabIndex = int;
+#define MIN_PDF_VAL 2e-12
 
 class PDFObjectInfo : public QObject {
     Q_OBJECT
@@ -25,10 +26,15 @@ class PDFObjectInfo : public QObject {
     Q_PROPERTY(int currentTabIndex READ currentTabIndex WRITE setCurrentTabIndex NOTIFY currentTabIndexChanged)
     Q_PROPERTY(double currentXVal READ currentXVal WRITE setCurrentXVal NOTIFY currentXValChanged)
     Q_PROPERTY(double currentMuVal READ currentMuVal WRITE setCurrentMuVal NOTIFY currentMuValChanged)
+    Q_PROPERTY(double currentKtVal READ currentKtVal WRITE setCurrentKtVal NOTIFY currentKtValChanged)
     Q_PROPERTY(double xMin READ xMin WRITE setXMin NOTIFY currentXMinChanged)
     Q_PROPERTY(double xMax READ xMax WRITE setXMax NOTIFY currentXMaxChanged)
     Q_PROPERTY(double muMin READ muMin WRITE setMuMin NOTIFY currentMuMinChanged)
     Q_PROPERTY(double muMax READ muMax WRITE setMuMax NOTIFY currentMuMaxChanged)
+    Q_PROPERTY(double ktMin READ ktMin WRITE setKtMin NOTIFY currentKtMinChanged)
+    Q_PROPERTY(double ktMax READ ktMax WRITE setKtMax NOTIFY currentKtMaxChanged)
+    Q_PROPERTY(QString selectePDFType READ selectePDFType WRITE setSelectePDFType NOTIFY selectedPDFSetChanged)
+
 public:
     explicit PDFObjectInfo(QObject *parent = nullptr);
 
@@ -40,15 +46,19 @@ public:
     int partonFlavorIndex() const { return m_partonFlavorIndex; }
     QStringList partonFlavors() const { return m_partonFlavors; }
     int plotTypeIndex() const { return m_plotTypeIndex; }
+    QString selectePDFType() const{return m_selectedPDFType;}
     QVector<double> xVals() const { return m_xVals; }
     QVector<double> yVals() const { return m_yVals; }
     int currentTabIndex() const { return m_currentTabIndex; }
     double currentXVal() const {return m_currentXVal;}
     double currentMuVal() const {return m_currentMuVal;}
+    double currentKtVal() const {return m_currentKtVal;}
     double muMin() const {return m_muMin;}
     double muMax() const {return m_muMax;}
     double xMin() const {return m_xMin;}
     double xMax() const {return m_xMax;}
+    double ktMin() const {return m_ktMin;}
+    double ktMax() const {return m_ktMax;}
     PDFxTMD::PartonFlavor FindPartonFlavor();
 
     // Setters
@@ -64,10 +74,15 @@ public:
     void setCurrentTabIndex(int value);
     void setCurrentXVal(double xVal);
     void setCurrentMuVal(double muVal);
+    void setCurrentKtVal(double ktVal);
+    void setSelectePDFType(const QString& selectedPDFType);
+
     void setXMin(double xMin);
     void setXMax(double xMax);
     void setMuMin(double muMin);
     void setMuMax(double muMax);
+    void setKtMin(double ktMin);
+    void setKtMax(double ktMax);
 signals:
     void pdfSetChanged();
     void displayTextChanged();
@@ -81,10 +96,14 @@ signals:
     void currentTabIndexChanged();
     void currentXValChanged();
     void currentMuValChanged();
+    void currentKtValChanged();
     void currentXMinChanged();
     void currentXMaxChanged();
     void currentMuMinChanged();
     void currentMuMaxChanged();
+    void currentKtMinChanged();
+    void currentKtMaxChanged();
+    void selectedPDFSetChanged();
 private:
     QString m_pdfSet;
     QString m_displayText;
@@ -93,15 +112,19 @@ private:
     int m_partonFlavorIndex = 0;
     QStringList m_partonFlavors;
     int m_plotTypeIndex = 0;
+    QString m_selectedPDFType;
     QVector<double> m_xVals;
     QVector<double> m_yVals;
     int m_currentTabIndex = 0;
     double m_currentXVal = 0;
     double m_currentMuVal = 0;
+    double m_currentKtVal = 0;
     double m_muMin = 0;
     double m_muMax = 0;
     double m_xMin = 0.1;
     double m_xMax = 0.1;
+    double m_ktMin = 0.;
+    double m_ktMax = 0.;
 };
 
 class PDFDataProvider : public QObject {
@@ -129,6 +152,7 @@ public:
     // Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex, double xMin, double xMax);
     Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex);
     Q_INVOKABLE int getPlotTypeOfTab(TabIndex tabIndex);
+    Q_INVOKABLE QString getPDFTypeOfTab(TabIndex tabIndex);
     Q_INVOKABLE void setPDFData(TabIndex tabIndex, PDFObjectInfo *info);
 
     // New methods

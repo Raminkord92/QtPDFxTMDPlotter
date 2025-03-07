@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include <QDebug>
 #include <QQmlEngine>
+#include <limits>
 
 using namespace PDFxTMD;
 
@@ -67,7 +68,6 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
 
     if (m_pdfObjectInfos.contains(tabIndex)) {
         int plotType = getPlotTypeOfTab(tabIndex);
-        GenericCPDFFactory cPDFFfactory;
 
         for (auto pdfObjectInfo_ : m_pdfObjectInfos[tabIndex])
         {
@@ -88,23 +88,83 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
                 xMax_ = pdfObjectInfo_->muMax();
                 qDebug() << "plotType mu2 " << xMin_<< "--" << xMax_;
             }
+            else if (plotType == PlotTypeIndex::Kt2)
+            {
+                xMin_ = pdfObjectInfo_->ktMin();
+                xMax_ = pdfObjectInfo_->ktMax();
+                qDebug() << "plotType kt2 " << xMin_<< "--" << xMax_;
+            }
             auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 100);
             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
-            auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
-            xVals_.reserve(bins_.size());
-            yVals_.reserve(bins_.size());
-            for (double bin_ : bins_) {
-                xVals_.push_back(bin_);
-                if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
-                    yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal() * pdfObjectInfo_->currentMuVal()));
-                } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-                    double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_ * bin_);
-                    yVals_.push_back(pdfval_);
+            QString selectedPDFType = getPDFTypeOfTab(tabIndex);
+            if (selectedPDFType == "cPDF")
+            {
+                GenericCPDFFactory cPDFFfactory;
+                auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
+                xVals_.reserve(bins_.size());
+                yVals_.reserve(bins_.size());
+                foreach (double bin_, bins_) {
+                    xVals_.push_back(bin_);
+                    if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
+                        yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal() * pdfObjectInfo_->currentMuVal()));
+                    } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
+                        double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_ * bin_);
+                        yVals_.push_back(pdfval_);
+                    }
                 }
+                pdfObjectInfo_->setXVals(xVals_);
+                pdfObjectInfo_->setYVals(yVals_);
+                result.append(pdfObjectInfo_);
             }
-            pdfObjectInfo_->setXVals(xVals_);
-            pdfObjectInfo_->setYVals(yVals_);
-            result.append(pdfObjectInfo_);
+            else if (selectedPDFType == "TMD")
+            {
+                auto tmdFactory = GenericTMDFactory();
+                auto tmd_ = tmdFactory.mkTMD(pdfSetName, 0);
+                xVals_.reserve(bins_.size());
+                yVals_.reserve(bins_.size());
+                double kt_;
+                double mu_;
+                foreach (double bin_ , bins_) {
+                    xVals_.push_back(bin_);
+                    if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
+                        mu_ = pdfObjectInfo_->currentMuVal();
+                        kt_ = pdfObjectInfo_->currentKtVal();
+                        double pdfval_ = tmd_.tmd(flavor_, bin_, kt_ * kt_,  mu_ * mu_ );
+                        if (pdfval_ <= 0)
+                            pdfval_ = MIN_PDF_VAL;
+                        yVals_.push_back(pdfval_);
+                    }
+                    else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2)
+                    {
+                        kt_ = pdfObjectInfo_->currentKtVal();
+                        mu_ = bin_;
+                        double pdfval_ = tmd_.tmd(flavor_, pdfObjectInfo_->currentXVal(), kt_ * kt_ , mu_ * mu_);
+                        if (pdfval_ <= 0)
+                            pdfval_ = MIN_PDF_VAL;
+                        yVals_.push_back(pdfval_);
+                    }
+                    else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Kt2) {
+                        mu_ = pdfObjectInfo_->currentMuVal();
+                        kt_ = bin_;
+                        double pdfval_ = tmd_.tmd(flavor_, pdfObjectInfo_->currentXVal(), kt_ * kt_,  mu_ * mu_);
+
+                        if (pdfval_ <= 0)
+                            pdfval_ = MIN_PDF_VAL;
+                        yVals_.push_back(pdfval_);
+                    }
+                    else
+                    {
+                        std::runtime_error("Unkown plot type index selected!");
+                    }
+                }
+                pdfObjectInfo_->setXVals(xVals_);
+                pdfObjectInfo_->setYVals(yVals_);
+                result.append(pdfObjectInfo_);
+            }
+            else
+            {
+                std::runtime_error("Unkown pdf type is selected!");
+            }
         }
     }
     return result;
@@ -118,11 +178,22 @@ int PDFDataProvider::getPlotTypeOfTab(TabIndex tabIndex)
     return -1;
 }
 
+QString PDFDataProvider::getPDFTypeOfTab(TabIndex tabIndex)
+{
+    if (m_pdfObjectInfos.contains(tabIndex)) {
+        QString result = m_pdfObjectInfos[tabIndex].size() > 0 ? m_pdfObjectInfos[tabIndex][0]->selectePDFType() : "";
+        qDebug() << "result " << result;
+        return result;
+    }
+    return "";
+}
+
 // Set PDF data for a specific tab index
 void PDFDataProvider::setPDFData(TabIndex tabIndex, PDFObjectInfo *info) {
     if (!info) {
         return;
     }
+
     m_pdfObjectInfos[tabIndex].append(info);
     emit pdfDataChanged(tabIndex);
 }
@@ -256,6 +327,23 @@ void PDFObjectInfo::setCurrentMuVal(double muVal)
     }
 }
 
+void PDFObjectInfo::setCurrentKtVal(double ktVal)
+{
+    if (m_currentKtVal != ktVal)
+    {
+        m_currentKtVal = ktVal;
+        emit currentKtValChanged();
+    }
+}
+
+void PDFObjectInfo::setSelectePDFType(const QString &selectedPDFType)
+{
+    if (m_selectedPDFType != selectedPDFType) {
+        m_selectedPDFType = selectedPDFType;
+        emit selectedPDFSetChanged();
+    }
+}
+
 void PDFObjectInfo::setXMin(double xMin)
 {
     m_xMin = xMin;
@@ -278,4 +366,16 @@ void PDFObjectInfo::setMuMax(double muMax)
 {
     m_muMax = muMax;
     emit currentMuMaxChanged();
+}
+
+void PDFObjectInfo::setKtMin(double ktMin)
+{
+    m_ktMin = ktMin;
+    emit currentKtMinChanged();
+}
+
+void PDFObjectInfo::setKtMax(double ktMax)
+{
+    m_ktMax = ktMax;
+    emit currentKtMaxChanged();
 }

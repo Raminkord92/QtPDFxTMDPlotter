@@ -34,17 +34,19 @@ public:
 signals:
 
 public:
-     int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QHash<int, QByteArray> roleNames() const;
-    // Q_INVOKABLE  void setPDFList(const QVariantList &list);
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
     Q_INVOKABLE void fillPDFInfoModel();
+    Q_INVOKABLE void filterByPDFType(const QString &pdfType); // New method to filter by type
     Q_INVOKABLE void cLearModel();
     Q_INVOKABLE QVariantMap get(int index) const;
     Q_INVOKABLE int pdfCount() const;
     Q_INVOKABLE bool pdfSetAlreadyExists(const QString& pdfSetName);
+
 private:
-    QVector<PDFInfo> m_pdfList;
+    QVector<PDFInfo> m_pdfList;           // All PDF sets
+    QVector<PDFInfo> m_filteredPdfList;   // Filtered PDF sets based on type
     PDFSetProvider m_pdfSetProvider;
 };
 

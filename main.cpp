@@ -7,6 +7,9 @@
 #include <QIcon>
 #include "PDFDataProvider.h"
 #include "DownloadManager.h"
+#include <QQmlContext>
+#include "PlotExporter.h"
+#include "FileWriter.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +24,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("plotModel", &plotModel);
     qmlRegisterType<DownloadManager>("QtPDFxTMDPlotter", 1, 0, "DownloadManager");
     qmlRegisterType<PDFInfoModel>("QtPDFxTMDPlotter", 1, 0, "PDFInfoModel");
+    PlotExporter *plotExporter = new PlotExporter();
+    FileWriter *fileWriter = new FileWriter();
+    engine.rootContext()->setContextProperty("plotExporter", plotExporter);
+    engine.rootContext()->setContextProperty("fileWriter", fileWriter);
     PDFDataProvider::registerTypes();
     QObject::connect(
         &engine,

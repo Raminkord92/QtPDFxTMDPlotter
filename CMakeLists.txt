@@ -13,6 +13,7 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2 Charts network )
 find_package(GSL REQUIRED)
 find_package(LibArchive REQUIRED)
 find_package(CURL REQUIRED)
+ find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appQtPDFxTMDPlotter
@@ -48,6 +49,8 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         QML_FILES
         QML_FILES
         SOURCES DownloadManager.h DownloadManager.cpp
+        SOURCES PlotExporter.h PlotExporter.cpp
+        SOURCES FileWriter.h FileWriter.cpp
 )
 
 set_target_properties(appQtPDFxTMDPlotter PROPERTIES
@@ -81,6 +84,7 @@ target_link_libraries(appQtPDFxTMDPlotter PRIVATE
     Qt6::Quick
     Qt6::Charts
     Qt6::QuickControls2
+    Qt6::PrintSupport
     GSL::gsl
     GSL::gslcblas
     ${CURL_LIBRARIES}

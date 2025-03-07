@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtCharts
 import QtQuick.Layouts
+import QtQuick.Dialogs // Added for FileDialog
 import QtPDFxTMDPlotter 1.0
 
 Item {
@@ -11,14 +12,16 @@ Item {
     height: parent.height
     property bool expandedAxisType: false
     property bool expandedAxisRange: false
+    property bool expandedExport: false
     property var xAxisLinearRef: xAxisLinear
     property var xAxisLogRef: xAxisLog
     property var yAxisLinearRef: yAxisLinear
     property var yAxisLogRef: yAxisLog
     property var swipeViewMain: null
     property var m_data
-    property bool isXAxisLog: false;
-    property bool isYAxisLog: false;
+    property bool isXAxisLog: false
+    property bool isYAxisLog: false
+
     SplitView {
         anchors.fill: parent
         orientation: Qt.Vertical
@@ -104,12 +107,12 @@ Item {
                 width: parent.width
                 spacing: 10
                 Layout.alignment: Qt.AlignHCenter
+
                 // Collapsible Section: Axis Types
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 10
                     Layout.alignment: Qt.AlignHCenter
-
 
                     Rectangle {
                         id: axisTypesHeader
@@ -127,9 +130,8 @@ Item {
                                 font.bold: true
                                 Layout.fillWidth: true
                             }
-                            // FontAwesome arrow icon. Adjust the Unicode character as needed.
                             Text {
-                                text: "\uf107"   // Unicode for a downward arrow in FontAwesome
+                                text: "\uf107"
                                 font.family: fontAwesome.name
                                 font.pixelSize: 16
                                 rotation: expandedAxisType ? 180 : 0
@@ -161,17 +163,17 @@ Item {
                                 checked: true
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      isXAxisLog = false;
-                                                      switchAxis()
-                                                  }
+                                    isXAxisLog = false
+                                    switchAxis()
+                                }
                             }
                             RadioButton {
                                 text: "Logarithmic"
                                 ButtonGroup.group: xAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      isXAxisLog = true;
-                                                      switchAxis()
-                                                  }
+                                    isXAxisLog = true
+                                    switchAxis()
+                                }
                             }
 
                             Label { text: "Y Axis" }
@@ -181,46 +183,24 @@ Item {
                                 checked: true
                                 ButtonGroup.group: yAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      isYAxisLog = false;
-                                                      switchAxis()
-                                                  }
+                                    isYAxisLog = false
+                                    switchAxis()
+                                }
                             }
                             RadioButton {
                                 text: "Logarithmic"
                                 ButtonGroup.group: yAxisGroup
                                 onCheckedChanged: if (checked) {
-                                                      isYAxisLog = true;
-                                                      switchAxis()
-                                                  }
+                                    isYAxisLog = true
+                                    switchAxis()
+                                }
                             }
 
-                            Label
-                            {
-                                text: "Axis titles"
-                            }
-                            TextField
-                            {
-                                id: xAxisTitle
-                                placeholderText: "x axis title"
-                                text: "x"
-                            }
-                            TextField
-                            {
-                                id: yAxisTitle
-                                placeholderText: "y axis title"
-                                text: "Y"
-                            }
-                            Label
-                            {
-                                text: "Plot title"
-                            }
-                            TextField
-                            {
-                                id: plotTitle
-                                placeholderText: "plot title"
-                                text: "PDF plot"
-
-                            }
+                            Label { text: "Axis titles" }
+                            TextField { id: xAxisTitle; placeholderText: "x axis title"; text: "x" }
+                            TextField { id: yAxisTitle; placeholderText: "y axis title"; text: "Y" }
+                            Label { text: "Plot title" }
+                            TextField { id: plotTitle; placeholderText: "plot title"; text: "PDF plot" }
                         }
                     }
                 }
@@ -247,9 +227,8 @@ Item {
                                 font.bold: true
                                 Layout.fillWidth: true
                             }
-                            // FontAwesome arrow icon. Adjust the Unicode character as needed.
                             Text {
-                                text: "\uf107"   // Unicode for a downward arrow in FontAwesome
+                                text: "\uf107"
                                 font.family: fontAwesome.name
                                 font.pixelSize: 16
                                 rotation: expandedAxisRange ? 180 : 0
@@ -269,7 +248,6 @@ Item {
                         Layout.fillWidth: true
                         visible: expandedAxisRange
                         Layout.alignment: Qt.AlignHCenter
-                        // Add a Behavior for smooth opacity transition
                         opacity: expandedAxisRange ? 1 : 0
                         GridLayout {
                             columns: 4
@@ -278,59 +256,114 @@ Item {
                             Layout.alignment: Qt.AlignHCenter
 
                             Label { text: "X Min:" }
-                            TextField
-                            {
+                            TextField {
                                 id: xMinField
                                 placeholderText: "X Min"
-                                validator: DoubleValidator { }
-                                onEditingFinished: {
-
-                                }
+                                validator: DoubleValidator {}
+                                onEditingFinished: {}
                             }
 
                             Label { text: "X Max:" }
-                            TextField
-                            {
+                            TextField {
                                 id: xMaxField
                                 placeholderText: "X Max"
-                                validator: DoubleValidator { }
+                                validator: DoubleValidator {}
                                 onEditingFinished: {
-                                    var num = parseFloat(text);
+                                    var num = parseFloat(text)
                                     if (isNaN(num) || num < Number(xMinField.text)) {
-                                        text = xMax;
+                                        text = xMax
                                     } else {
-                                        xMax = num;
+                                        xMax = num
                                     }
                                 }
                             }
 
                             Label { text: "Y Min:" }
-                            TextField
-                            {
+                            TextField {
                                 id: yMinField
                                 placeholderText: "Y Min"
-                                validator: DoubleValidator { }
-                                onEditingFinished: {
-
-                                }
+                                validator: DoubleValidator {}
+                                onEditingFinished: {}
                             }
 
                             Label { text: "Y Max:" }
-                            TextField
-                            {
+                            TextField {
                                 id: yMaxField
                                 placeholderText: "Y Max"
-                                validator: DoubleValidator { }
+                                validator: DoubleValidator {}
                                 onEditingFinished: {
-                                    var num = parseFloat(text);
+                                    var num = parseFloat(text)
                                     if (isNaN(num) || num < Number(yMinField.text)) {
-                                        console.log(" num " + num + " " +Number(yMinField.text) )
-                                        text = yMax;
+                                        text = yMax
                                     } else {
-                                        yMax = num;
-                                        console.log(" yMax " + yMax + " " + num )
+                                        yMax = num
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+
+                // Collapsible Section: Export
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+                    Layout.alignment: Qt.AlignHCenter
+
+                    Rectangle {
+                        id: exportHeader
+                        Layout.fillWidth: true
+                        height: 30
+                        color: Material.accentColor
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 8
+                            spacing: 10
+
+                            Label {
+                                text: "Export"
+                                font.bold: true
+                                Layout.fillWidth: true
+                            }
+                            Text {
+                                text: "\uf107"
+                                font.family: fontAwesome.name
+                                font.pixelSize: 16
+                                rotation: expandedExport ? 180 : 0
+                                Behavior on rotation {
+                                    NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+                                }
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: expandedExport = !expandedExport
+                        }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        visible: expandedExport
+
+                        RowLayout {
+                            spacing: 10
+
+                            Button {
+                                text: "Export to PDF"
+                                onClicked: pdfDialog.open()
+                            }
+                            Button {
+                                text: "Export to PNG"
+                                onClicked: pngDialog.open()
+                            }
+                            Button {
+                                text: "Export to JPG"
+                                onClicked: jpgDialog.open()
+                            }
+                            Button {
+                                text: "Export to CSV"
+                                onClicked: csvDialog.open()
                             }
                         }
                     }
@@ -339,121 +372,172 @@ Item {
         }
     }
 
-    // List to keep track of created series
-       property var seriesList: []
+    // File Dialogs for Export
+    FileDialog {
+        id: pdfDialog
+        title: "Export to PDF"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["PDF files (*.pdf)"]
+        defaultSuffix: "pdf"
+        onAccepted: {
+            chartView.grabToImage(function(result) {
+                plotExporter.exportToPDF(result.image, selectedFile.toString().replace("file:///", ""))
+                    })
+        }
+    }
 
-       // Connect to PDFDataProvider
-       Connections {
-           target: PDFDataProvider
-           function onPdfDataChanged(tabIndex) {
-               console.log("received signal")
+    FileDialog {
+        id: pngDialog
+        title: "Export to PNG"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["PNG files (*.png)"]
+        defaultSuffix: "png"
+        onAccepted: {
 
-               if (tabIndex === swipeViewMain.currentIndex) {
-                   m_data = PDFDataProvider.getPDFData(tabIndex)
-                   updatePlot(m_data, xAxisLinear, yAxisLinear)
-               }
-           }
-       }
+            console.log("selectedFile.toLocalFile() " + selectedFile.toString().replace("file:///", ""))
+            saveChart(selectedFile.toString().replace("file:///", ""));
+        }
+    }
 
+    FileDialog {
+        id: jpgDialog
+        title: "Export to JPG"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["JPG files (*.jpg)"]
+        defaultSuffix: "jpg"
+        onAccepted: {
+            saveChart(selectedFile.toString().replace("file:///", ""));
 
-       // Function to update the plot with a vector of PDFObjectInfo
-       function updatePlot(infos, xAxisType, yAxisType) {
-           // Clear existing series
-           for (var i = 0; i < seriesList.length; i++) {
-               chartView.removeSeries(seriesList[i])
-           }
-           seriesList = []
+        }
+    }
 
-           // Create new series for each PDFObjectInfo
-           for (var j = 0; j < infos.length; j++) {
-               var info = infos[j]
-               var series = chartView.createSeries(
-                   ChartView.SeriesTypeLine,           // Series type
-                   info.displayText || "PDF Data " + j, // Name
-                   xAxisType,                        // X-axis (default)
-                   yAxisType                         // Y-axis (default)
-               )
+    FileDialog {
+        id: csvDialog
+        title: "Export to CSV"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["CSV files (*.csv)"]
+        defaultSuffix: "csv"
+        onAccepted: {
+            console.log("path to saved csv " + selectedFile.toString().replace("file:///", ""))
+            exportToCSV(selectedFile.toString().replace("file:///", ""))
+        }
 
-               // Set series properties
-               series.color = info.color
-               switch (info.lineStyleIndex) {
-                   case PDFDataProvider.Solid: series.style = Qt.SolidLine; break
-                   case PDFDataProvider.Dashed: series.style = Qt.DashLine; break
-                   case PDFDataProvider.Dotted: series.style = Qt.DotLine; break
-                   case PDFDataProvider.DashDot: series.style = Qt.DashDotLine; break
-                   default: series.style = Qt.SolidLine
-               }
+    }
 
-               // Update series data
-               updateSeries(series, info)
-               seriesList.push(series)
-           }
+    // Existing code for seriesList, Connections, updatePlot, etc.
+    property var seriesList: []
 
-           // Adjust axis ranges
-           var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
-           for (var k = 0; k < infos.length; k++) {
-               var xVals = infos[k].xVals
-               var yVals = infos[k].yVals
-               if (xVals.length > 0) {
-                   xMin = Math.min(xMin, Math.min(...xVals))
-                   xMax = Math.max(xMax, Math.max(...xVals))
-                   yMin = Math.min(yMin, Math.min(...yVals))
-                   yMax = Math.max(yMax, Math.max(...yVals))
-               }
-           }
+    Connections {
+        target: PDFDataProvider
+        function onPdfDataChanged(tabIndex) {
+            console.log("received signal")
+            if (tabIndex === swipeViewMain.currentIndex) {
+                m_data = PDFDataProvider.getPDFData(tabIndex)
+                updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
+            }
+        }
+    }
 
-           if (xMin !== Infinity) {
-               if (xAxisGroup.checkedButton.text === "Linear") {
-                   xMinField.text = formatNumber(xMin)
-                   xMaxField.text = formatNumber(xMax)
-                   // xAxisLinear.min = xMin
-                   // xAxisLinear.max = xMax
-               } else {
-                   xMinField.text =  formatNumber( Math.max(1e-7, xMin))
-                   xMaxField.text = formatNumber( xMax)
-                   // xAxisLog.min = Math.max(1, xMin)
-                   // xAxisLog.max = xMax
-               }
-               if (yAxisGroup.checkedButton.text === "Linear") {
-                   yMinField.text = formatNumber(yMin)
-                   yMaxField.text = formatNumber(yMax)
-                   // yAxisLinear.min = yMin
-                   // yAxisLinear.max = yMax
-               } else {
-                   yMinField.text = formatNumber(Math.max(1e-7, yMin))
-                   yMaxField.text =  formatNumber(yMax)
-                   // yAxisLog.min = Math.max(1, yMin)
-                   // yAxisLog.max = yMax
-               }
-           }
-       }
-       function formatNumber(value) {
-           var num = Number(value);
+    function updatePlot(infos, xAxisType, yAxisType) {
+        for (var i = 0; i < seriesList.length; i++) {
+            chartView.removeSeries(seriesList[i])
+        }
+        seriesList = []
 
-           if (Math.abs(num) < 1e-4 || Math.abs(num) >= 1e6) {
-               return num.toExponential(4); // Scientific notation
-           } else {
-               return num.toFixed(4); // Fixed decimal places
-           }
-       }
-       // Function to update an individual series
-       function updateSeries(series, info) {
-           series.clear()
-           var xVals = info.xVals
-           var yVals = info.yVals
+        for (var j = 0; j < infos.length; j++) {
+            var info = infos[j]
+            var series = chartView.createSeries(
+                ChartView.SeriesTypeLine,
+                info.displayText || "PDF Data " + j,
+                xAxisType,
+                yAxisType
+            )
 
-           if (xVals.length !== yVals.length) {
-               console.log("Error: xVals and yVals have different lengths for " + info.displayText)
-               return
-           }
+            series.color = info.color
+            switch (info.lineStyleIndex) {
+                case PDFDataProvider.Solid: series.style = Qt.SolidLine; break
+                case PDFDataProvider.Dashed: series.style = Qt.DashLine; break
+                case PDFDataProvider.Dotted: series.style = Qt.DotLine; break
+                case PDFDataProvider.DashDot: series.style = Qt.DashDotLine; break
+                default: series.style = Qt.SolidLine
+            }
 
-           for (var i = 0; i < xVals.length; i++) {
-               series.append(xVals[i], yVals[i])
-           }
-       }
+            updateSeries(series, info)
+            seriesList.push(series)
+        }
 
-    // Helper Functions
-    function switchAxis(scaleType) {
+        var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
+        for (var k = 0; k < infos.length; k++) {
+            var xVals = infos[k].xVals
+            var yVals = infos[k].yVals
+            if (xVals.length > 0) {
+                xMin = Math.min(xMin, Math.min(...xVals))
+                xMax = Math.max(xMax, Math.max(...xVals))
+                yMin = Math.min(yMin, Math.min(...yVals))
+                yMax = Math.max(yMax, Math.max(...yVals))
+            }
+        }
+
+        if (xMin !== Infinity) {
+            if (xAxisGroup.checkedButton.text === "Linear") {
+                xMinField.text = formatNumber(xMin)
+                xMaxField.text = formatNumber(xMax)
+            } else {
+                xMinField.text = formatNumber(Math.max(1e-7, xMin))
+                xMaxField.text = formatNumber(xMax)
+            }
+            if (yAxisGroup.checkedButton.text === "Linear") {
+                yMinField.text = formatNumber(yMin)
+                yMaxField.text = formatNumber(yMax)
+            } else {
+                yMinField.text = formatNumber(Math.max(1e-7, yMin))
+                yMaxField.text = formatNumber(yMax)
+            }
+        }
+    }
+
+    function formatNumber(value) {
+        var num = Number(value)
+        if (Math.abs(num) < 1e-4 || Math.abs(num) >= 1e6) {
+            return num.toExponential(4)
+        } else {
+            return num.toFixed(4)
+        }
+    }
+    function saveChart(filename){
+        chartView.grabToImage(function(result) {
+            result.saveToFile(filename);
+        },  Qt.size(1800, 1200));
+    }
+    function exportToCSV(fileName) {
+        var csvContent = "X,Y\n";
+        for (var i = 0; i < m_data.length; i++) {
+            var series = m_data[i];
+            var seriesName = series.displayText || ("Series " + i);
+            for (var j = 0; j < series.xVals.length; j++) {
+                csvContent += series.xVals[j] + "," + series.yVals[j] + "\n";
+            }
+        }
+        // Placeholder: Implement file writing via a C++ function (e.g., saveTextFile)
+            console.log("saving...");
+        fileWriter.writeToFile(fileName, csvContent)
+    }
+    function updateSeries(series, info) {
+        series.clear()
+        var xVals = info.xVals
+        var yVals = info.yVals
+
+        if (xVals.length !== yVals.length) {
+            console.log("Error: xVals and yVals have different lengths for " + info.displayText)
+            return
+        }
+
+        for (var i = 0; i < xVals.length; i++) {
+            series.append(xVals[i], yVals[i])
+        }
+    }
+
+    function switchAxis() {
         xAxisLinear.visible = !isXAxisLog
         yAxisLinear.visible = !isYAxisLog
         xAxisLog.visible = isXAxisLog
@@ -461,4 +545,3 @@ Item {
         updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
     }
 }
-
