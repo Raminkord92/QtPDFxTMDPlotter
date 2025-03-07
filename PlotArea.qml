@@ -21,6 +21,11 @@ Item {
     property var m_data
     property bool isXAxisLog: false
     property bool isYAxisLog: false
+    Component.onDestruction:
+    {
+        PDFDataProvider.deleteTab(plotTabIndex)
+    }
+
     Component.onCompleted:
     {
         console.log("rrrrrrrrrrrrrrrrrr plotTabIndex " + plotTabIndex)
@@ -543,12 +548,9 @@ Item {
             console.log("Error: xVals and yVals have different lengths for " + info.displayText)
             return
         }
-        console.log("start.... xVals size " + xVals.length + " ---" +yVals.length )
         for (var i = 0; i < xVals.length; i++) {
             series.append(xVals[i], yVals[i])
-            console.log("xval " + xVals[i] + " yVals " + yVals[i])
         }
-        console.log("end....")
     }
 
     function switchAxis() {

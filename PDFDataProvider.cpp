@@ -61,7 +61,7 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
                 xMax_ = pdfObjectInfo_->ktMax();
                 qDebug() << "plotType kt2 " << xMin_<< "--" << xMax_;
             }
-            auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 100);
+            auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 200);
             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
             QString selectedPDFType = getPDFTypeOfTab(tabIndex);
             if (selectedPDFType == "cPDF")
@@ -176,6 +176,15 @@ PDFObjectInfo* PDFDataProvider::createPDFObjectInfo() {
 // Notify that data has changed for a tab index
 void PDFDataProvider::notifyDataChanged(TabIndex tabIndex) {
     emit pdfDataChanged(tabIndex);
+}
+
+void PDFDataProvider::deleteTab(TabIndex tabIndex)
+{
+    if (m_pdfObjectInfos.contains(tabIndex))
+    {
+        qDeleteAll(m_pdfObjectInfos[tabIndex]);
+        qDebug() << "tabIndex " << tabIndex << " deleted";
+    }
 }
 
 // Singleton instance accessor

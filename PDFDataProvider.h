@@ -158,7 +158,7 @@ public:
     // New methods
     Q_INVOKABLE PDFObjectInfo* createPDFObjectInfo();
     Q_INVOKABLE void notifyDataChanged(TabIndex tabIndex);
-
+    Q_INVOKABLE void deleteTab(TabIndex tabIndex);
     static PDFDataProvider* instance();
     static QObject* provider(QQmlEngine *engine, QJSEngine *scriptEngine);
 
