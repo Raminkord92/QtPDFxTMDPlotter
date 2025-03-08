@@ -696,7 +696,7 @@ Dialog {
     // Update the display text based on current selections
     function updateDisplayText() {
         if (plotTypeId.currentIndex === 0) {
-            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}, μ=${selectedMuValue}`
+            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}- μ=${selectedMuValue}`
         if (pdfType == "TMD")
         {
             selectedDisplayText += `kₜ=${selectedKtValue}`

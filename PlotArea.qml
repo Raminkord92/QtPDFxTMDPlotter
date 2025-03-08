@@ -26,15 +26,6 @@ Item {
         PDFDataProvider.deleteTab(plotTabIndex)
     }
 
-    Component.onCompleted:
-    {
-        console.log("rrrrrrrrrrrrrrrrrr plotTabIndex " + plotTabIndex)
-    }
-    onPlotTabIndexChanged:
-    {
-        console.log("sssssssssssssssss now changed ", plotTabIndex)
-    }
-
     SplitView {
         anchors.fill: parent
         orientation: Qt.Vertical
@@ -527,15 +518,40 @@ Item {
         },  Qt.size(1800, 1200));
     }
     function exportToCSV(fileName) {
-        var csvContent = "X,Y\n";
+        var maxPoints = 0;
         for (var i = 0; i < m_data.length; i++) {
             var series = m_data[i];
-            var seriesName = series.displayText || ("Series " + i);
-            for (var j = 0; j < series.xVals.length; j++) {
-                csvContent += series.xVals[j] + "," + series.yVals[j] + "\n";
+            if (series.xVals.length > maxPoints) {
+                maxPoints = series.xVals.length;
             }
         }
-        // Placeholder: Implement file writing via a C++ function (e.g., saveTextFile)
+
+        var csvContent = "";
+        var header = "";
+        for (var i = 0; i < m_data.length; i++) {
+            if (i > 0) {
+                header += ",";
+            }
+            header += "displayText" + i + ",X" + i + ",Y" + i;
+        }
+        csvContent += header + "\n";
+
+        for (var j = 0; j < maxPoints; j++) {
+            var row = "";
+            for (var i = 0; i < m_data.length; i++) {
+                if (i > 0) {
+                    row += ",";
+                }
+                var series = m_data[i];
+                var seriesName = series.displayText || ("Series " + i);
+                if (j < series.xVals.length) {
+                    row += '"' + seriesName + '",' + series.xVals[j] + ',' + series.yVals[j];
+                } else {
+                    row += '"' + seriesName + '",,';
+                }
+            }
+            csvContent += row + "\n";
+        }
             console.log("saving...");
         fileWriter.writeToFile(fileName, csvContent)
     }
