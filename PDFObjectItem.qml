@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls.Material 2.15
 import QtPDFxTMDPlotter 1.0
+import QtQuick.Controls 2.15
 
 Rectangle {
     id: root
@@ -10,6 +11,7 @@ Rectangle {
     color: pdfObjectInfo ? pdfObjectInfo.color : "lightgreen"
     anchors.centerIn: parent
     property PDFObjectInfo pdfObjectInfo
+    property int currentTabUniqueId__: -1
 
     Text {
         id: textElement
@@ -29,6 +31,7 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.ArrowCursor
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         drag.target: dragMode === "move" ? root : undefined
         drag.maximumX: root.parent ? root.parent.width - root.width : 0
         drag.maximumY: root.parent ? root.parent.height - root.height : 0
@@ -38,6 +41,12 @@ Rectangle {
         property string dragMode: "move"
         property point pressPos: Qt.point(0, 0)
         property rect initialRect: Qt.rect(0, 0, 0, 0)
+
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.RightButton) {
+                contextMenu.popup(mouse.x, mouse.y)
+            }
+        }
 
         onPressed: (mouse) => {
             var edgeThreshold = 10;
@@ -197,6 +206,40 @@ Rectangle {
             else if (isTop || isBottom) cursorShape = Qt.SizeVerCursor;
             else cursorShape = Qt.ArrowCursor;
         }
+    }
+
+    Menu {
+        id: contextMenu
+
+        MenuItem {
+            text: "Edit"
+            onTriggered: {
+                if (pdfObjectInfo) {
+                    dialogComponent.createObject(root, {
+                        "objectRow": pdfObjectInfo,
+                        "isEditMode": true,
+                        "swipeViewMainDlg": root.parent,
+                        "leftSidRef": root.parent
+                    }).open();
+                }
+            }
+        }
+
+        MenuItem {
+            text: "Delete"
+            onTriggered: {
+                console.log("currentTabUniqueId__ " + currentTabUniqueId__)
+                PDFDataProvider.deletePDFObjectInfoInTab(currentTabUniqueId__, pdfObjectInfo.id)
+                root.destroy()
+            }
+        }
+        background: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 60
+                color: "#ffffff"
+                border.color: "#aaaaaa"
+                radius: 4
+            }
     }
 
     Rectangle {

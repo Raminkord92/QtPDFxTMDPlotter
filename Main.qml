@@ -126,6 +126,13 @@ ApplicationWindow {
                                 font.pixelSize: 12
                                 onTriggered: editDialog.open()
                             }
+                            background: Rectangle {
+                                    implicitWidth: 90
+                                    implicitHeight: 50
+                                    color: "#ffffff"
+                                    border.color: "#aaaaaa"
+                                    radius: 4
+                                }
                         }
 
                         // Edit Dialog for renaming the tab

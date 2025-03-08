@@ -628,6 +628,7 @@ Dialog {
 
         var info = PDFDataProvider.createPDFObjectInfo()
         if (info) {
+            info.id = getRandomNumber(1, 1000);
             info.pdfSet = selectedPdfSet
             info.displayText = selectedDisplayText
             info.color = selectedColor
@@ -653,6 +654,7 @@ Dialog {
             if (component.status === Component.Ready) {
                 var newObject = component.createObject(leftSidRef, {
                     "pdfObjectInfo": info,
+                    "currentTabUniqueId__": currentTabUniqueId_,
                     "x": 0,
                     "y": 0
                 })

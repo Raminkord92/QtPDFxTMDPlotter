@@ -34,7 +34,7 @@ class PDFObjectInfo : public QObject {
     Q_PROPERTY(double ktMin READ ktMin WRITE setKtMin NOTIFY currentKtMinChanged)
     Q_PROPERTY(double ktMax READ ktMax WRITE setKtMax NOTIFY currentKtMaxChanged)
     Q_PROPERTY(QString selectePDFType READ selectePDFType WRITE setSelectePDFType NOTIFY selectedPDFSetChanged)
-
+    Q_PROPERTY(int  id READ id WRITE setId)
 public:
     explicit PDFObjectInfo(QObject *parent = nullptr);
 
@@ -59,6 +59,7 @@ public:
     double xMax() const {return m_xMax;}
     double ktMin() const {return m_ktMin;}
     double ktMax() const {return m_ktMax;}
+    int id() const {return m_id;}
     PDFxTMD::PartonFlavor FindPartonFlavor();
 
     // Setters
@@ -83,6 +84,7 @@ public:
     void setMuMax(double muMax);
     void setKtMin(double ktMin);
     void setKtMax(double ktMax);
+    void setId(int id);
 signals:
     void pdfSetChanged();
     void displayTextChanged();
@@ -125,6 +127,7 @@ private:
     double m_xMax = 0.1;
     double m_ktMin = 0.;
     double m_ktMax = 0.;
+    int m_id = 0;
 };
 
 class PDFDataProvider : public QObject {
@@ -159,6 +162,7 @@ public:
     Q_INVOKABLE PDFObjectInfo* createPDFObjectInfo();
     Q_INVOKABLE void notifyDataChanged(TabIndex tabIndex);
     Q_INVOKABLE void deleteTab(TabIndex tabIndex);
+    Q_INVOKABLE void deletePDFObjectInfoInTab(TabIndex tabIndex, int objectId);
     static PDFDataProvider* instance();
     static QObject* provider(QQmlEngine *engine, QJSEngine *scriptEngine);
 

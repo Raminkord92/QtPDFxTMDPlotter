@@ -187,6 +187,22 @@ void PDFDataProvider::deleteTab(TabIndex tabIndex)
     }
 }
 
+void PDFDataProvider::deletePDFObjectInfoInTab(TabIndex tabIndex, int objectId)
+{
+    if (m_pdfObjectInfos.contains(tabIndex))
+    {
+        for (int i = 0; i < m_pdfObjectInfos[tabIndex].size(); i++)
+        {
+            if (m_pdfObjectInfos[tabIndex][i]->id() == objectId)
+            {
+                m_pdfObjectInfos[tabIndex].removeAt(i);
+                emit pdfDataChanged(tabIndex);
+                break;
+            }
+        }
+    }
+}
+
 // Singleton instance accessor
 PDFDataProvider* PDFDataProvider::instance() {
     if (!s_instance) {
@@ -357,4 +373,9 @@ void PDFObjectInfo::setKtMax(double ktMax)
 {
     m_ktMax = ktMax;
     emit currentKtMaxChanged();
+}
+
+void PDFObjectInfo::setId(int id)
+{
+    m_id = id;
 }
