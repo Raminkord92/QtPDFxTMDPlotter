@@ -10,8 +10,9 @@ Dialog {
     title: "PDF Plot Object"
     width: 450
     height: 380
-    standardButtons: Dialog.Ok | Dialog.Cancel
-
+    // standardButtons: Dialog.Ok | Dialog.Cancel
+    focus: true
+    modal: true
     // Dialog state properties
     property bool isEditMode: false             // True if editing an existing object
     property string currentPDFSetName: ""       // Name of the currently selected PDF set
@@ -45,8 +46,10 @@ Dialog {
     property bool isDragging: false
 
     onOpened: {
+        forceActiveFocus()
         initializeUI()
     }
+
 
     background: Rectangle {
         color: Material.dialogColor
@@ -480,7 +483,34 @@ Dialog {
                 }
             }
         }
+        //ok-cancel buttons
+        RowLayout {
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            spacing: 10
+
+            Button {
+                id: cancelButton
+                text: "Cancel"
+                Layout.preferredWidth: 100
+                Layout.preferredHeight: 40
+                onClicked: {
+                    cPDFDialog.reject() // Closes the dialog without saving
+                }
+            }
+
+            Button {
+                id: okButton
+                text: "OK"
+                Layout.preferredWidth: 100
+                Layout.preferredHeight: 40
+
+                onClicked: {
+                    cPDFDialog.accept() // Triggers onAccepted and closes the dialog
+                }
+            }
+        }
     }
+
 
     onAccepted: {
         updateDisplayText()

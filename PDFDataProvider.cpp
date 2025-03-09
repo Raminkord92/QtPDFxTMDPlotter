@@ -36,6 +36,14 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
 
         foreach (auto pdfObjectInfo_,  m_pdfObjectInfos[tabIndex])
         {
+            if (pdfObjectInfo_->yVals().size() != 0)
+            {
+                qDebug() << "similarr not changed";
+                result.append(pdfObjectInfo_);
+                continue;
+            }
+            qDebug() << "similarr  changed";
+
             QVector<double> xVals_, yVals_;
 
             PartonFlavor flavor_ = pdfObjectInfo_->FindPartonFlavor();
@@ -66,16 +74,17 @@ QList<PDFObjectInfo *> PDFDataProvider::getPDFData(TabIndex tabIndex)
             QString selectedPDFType = getPDFTypeOfTab(tabIndex);
             if (selectedPDFType == "cPDF")
             {
-                GenericCPDFFactory cPDFFfactory;
-                auto cPDF_ = cPDFFfactory.mkCPDF(pdfSetName, 0);
+                auto& pdfContainerInstance = GenericPDFContainer::getInstance();
+                pdfContainerInstance.AddToContainer(pdfSetName, PDFSetType::CPDF);
+                auto cPDF_ =  pdfContainerInstance.GetcPDFFromContainer(pdfSetName);
                 xVals_.reserve(bins_.size());
                 yVals_.reserve(bins_.size());
                 foreach (double bin_, bins_) {
                     xVals_.push_back(bin_);
                     if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::X) {
-                        yVals_.push_back(cPDF_.pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal() * pdfObjectInfo_->currentMuVal()));
+                        yVals_.push_back(cPDF_->pdf(flavor_, bin_, pdfObjectInfo_->currentMuVal() * pdfObjectInfo_->currentMuVal()));
                     } else if (pdfObjectInfo_->plotTypeIndex() == PlotTypeIndex::Mu2) {
-                        double pdfval_ = cPDF_.pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_ * bin_);
+                        double pdfval_ = cPDF_->pdf(flavor_, pdfObjectInfo_->currentXVal(), bin_ * bin_);
                         yVals_.push_back(pdfval_);
                     }
                 }
@@ -219,163 +228,3 @@ QObject* PDFDataProvider::provider(QQmlEngine *engine, QJSEngine *scriptEngine) 
     return provider;
 }
 
-// --- PDFObjectInfo Implementations ---
-
-// Constructor
-PDFObjectInfo::PDFObjectInfo(QObject *parent) : QObject(parent) {}
-
-// Find the parton flavor based on the current index
-PartonFlavor PDFObjectInfo::FindPartonFlavor() {
-    if (m_partonFlavorIndex < 0 || m_partonFlavorIndex >= m_partonFlavors.size()) {
-        return static_cast<PartonFlavor>(-1); // Invalid flavor
-    }
-    QString partonFlavor_ = m_partonFlavors.at(m_partonFlavorIndex);
-    return static_cast<PartonFlavor>(Utils::ConvertStringToFlavor(partonFlavor_));
-}
-
-// Setter functions with signal emissions
-void PDFObjectInfo::setPdfSet(const QString &value) {
-    if (m_pdfSet != value) {
-        m_pdfSet = value;
-        emit pdfSetChanged();
-    }
-}
-
-void PDFObjectInfo::setDisplayText(const QString &value) {
-    if (m_displayText != value) {
-        m_displayText = value;
-        emit displayTextChanged();
-    }
-}
-
-void PDFObjectInfo::setColor(const QColor &value) {
-    if (m_color != value) {
-        m_color = value;
-        emit colorChanged();
-    }
-}
-
-void PDFObjectInfo::setLineStyleIndex(int value) {
-    if (m_lineStyleIndex != value) {
-        m_lineStyleIndex = value;
-        emit lineStyleIndexChanged();
-    }
-}
-
-void PDFObjectInfo::setPartonFlavorIndex(int value) {
-    if (m_partonFlavorIndex != value) {
-        m_partonFlavorIndex = value;
-        emit partonFlavorIndexChanged();
-    }
-}
-
-void PDFObjectInfo::setPartonFlavors(const QStringList &value) {
-    if (m_partonFlavors != value) {
-        m_partonFlavors = value;
-        emit partonFlavorsChanged();
-    }
-}
-
-void PDFObjectInfo::setPlotTypeIndex(int value) {
-    if (m_plotTypeIndex != value) {
-        m_plotTypeIndex = value;
-        emit plotTypeIndexChanged();
-    }
-}
-
-void PDFObjectInfo::setXVals(const QVector<double> &value) {
-    if (m_xVals != value) {
-        m_xVals = value;
-        emit xValsChanged();
-    }
-}
-
-void PDFObjectInfo::setYVals(const QVector<double> &value) {
-    if (m_yVals != value) {
-        m_yVals = value;
-        emit yValsChanged();
-    }
-}
-
-void PDFObjectInfo::setCurrentTabIndex(int value) {
-    if (m_currentTabIndex != value) {
-        m_currentTabIndex = value;
-        emit currentTabIndexChanged();
-    }
-}
-
-void PDFObjectInfo::setCurrentXVal(double xVal)
-{
-    if (m_currentXVal != xVal)
-    {
-        m_currentXVal = xVal;
-        emit currentXValChanged();
-    }
-}
-
-void PDFObjectInfo::setCurrentMuVal(double muVal)
-{
-    if (m_currentMuVal != muVal)
-    {
-        m_currentMuVal = muVal;
-        emit currentMuValChanged();
-    }
-}
-
-void PDFObjectInfo::setCurrentKtVal(double ktVal)
-{
-    if (m_currentKtVal != ktVal)
-    {
-        m_currentKtVal = ktVal;
-        emit currentKtValChanged();
-    }
-}
-
-void PDFObjectInfo::setSelectePDFType(const QString &selectedPDFType)
-{
-    if (m_selectedPDFType != selectedPDFType) {
-        m_selectedPDFType = selectedPDFType;
-        emit selectedPDFSetChanged();
-    }
-}
-
-void PDFObjectInfo::setXMin(double xMin)
-{
-    m_xMin = xMin;
-    emit currentXMinChanged();
-}
-
-void PDFObjectInfo::setXMax(double xMax)
-{
-    m_xMax = xMax;
-    emit currentXMaxChanged();
-}
-
-void PDFObjectInfo::setMuMin(double muMin)
-{
-    m_muMin = muMin;
-    emit currentMuMinChanged();
-}
-
-void PDFObjectInfo::setMuMax(double muMax)
-{
-    m_muMax = muMax;
-    emit currentMuMaxChanged();
-}
-
-void PDFObjectInfo::setKtMin(double ktMin)
-{
-    m_ktMin = ktMin;
-    emit currentKtMinChanged();
-}
-
-void PDFObjectInfo::setKtMax(double ktMax)
-{
-    m_ktMax = ktMax;
-    emit currentKtMaxChanged();
-}
-
-void PDFObjectInfo::setId(int id)
-{
-    m_id = id;
-}

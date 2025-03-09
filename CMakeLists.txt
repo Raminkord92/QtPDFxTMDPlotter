@@ -51,6 +51,8 @@ qt_add_qml_module(appQtPDFxTMDPlotter
         SOURCES DownloadManager.h DownloadManager.cpp
         SOURCES PlotExporter.h PlotExporter.cpp
         SOURCES FileWriter.h FileWriter.cpp
+        SOURCES GenericPDFContainer.h GenericPDFContainer.cpp
+        SOURCES PDFInfo.cpp
 )
 
 set_target_properties(appQtPDFxTMDPlotter PROPERTIES

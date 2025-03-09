@@ -13,6 +13,6 @@
         <file>fonts/otfs/Font Awesome 6 Free-Solid-900.otf</file>
     </qresource>
     <qresource prefix="/images">
-        <file>images/PDFxTMD.png</file>
+        <file>images/PDFxTMD.jpg</file>
     </qresource>
 </RCC>

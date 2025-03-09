@@ -156,13 +156,10 @@ ApplicationWindow {
                                 width: parent.width
                                 text: model.title
                                 focus: true
-                                color: Material.foreground
-                                selectedTextColor: Material.accent
                                 placeholderText: "Enter new title..."
-                                Material.accent: Material.Blue
-                                Material.foreground: Material.primaryTextColor
                                 font.pixelSize: 14
                             }
+
                         }
 
                         // When the TabButton is clicked, update the SwipeView's current index

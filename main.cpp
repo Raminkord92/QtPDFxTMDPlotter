@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    app.setWindowIcon(QIcon(":/images/images/PDFxTMD.png"));
+    app.setWindowIcon(QIcon(":/images/images/PDFxTMD.jpg"));
 
     // Instantiate models
     PlotModel plotModel;

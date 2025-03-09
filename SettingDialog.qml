@@ -221,8 +221,18 @@ Dialog {
                                         Label { text: "Type:"; font.bold: true }
                                         Label {
                                             id: pdfSetType
-                                            text: pdfComboBox.currentIndex >= 0 ?
-                                                (pdfModel.get(pdfComboBox.currentIndex).PDFSetType === 0 ? "cPDF" : "TMD") : ""
+                                            text:{
+                                                if (pdfComboBox.currentIndex >= 0 )
+                                                {
+                                                    console.log("pdfModel.get(pdfComboBox.currentIndex).PDFSetType" + pdfModel.get(pdfComboBox.currentIndex).PDFSetType)
+                                                    if (pdfModel.get(pdfComboBox.currentIndex).PDFSetType === "cPDF" )
+                                                    {
+                                                        return "cPDF";
+                                                    }
+                                                    return "TMD";
+                                                }
+
+                                            }
                                         }
                                     }
                                 }
