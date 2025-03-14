@@ -120,7 +120,8 @@ Dialog {
                     rowSpacing: 7
 
                     Label { text: "PDF set:" }
-                    ComboBox {
+
+                    ScrollableComboBox {
                         id: pdfSetCombox
                         model: pdfModel
                         width: 100
@@ -150,7 +151,7 @@ Dialog {
                     }
 
                     Label { text: "Parton Flavor:" }
-                    ComboBox {
+                    ScrollableComboBox {
                         id: partonFlavorsId
                         model: partonFlavors
                         width: 100
@@ -165,6 +166,16 @@ Dialog {
                         }
                     }
                 }
+                Label {
+                    text: "You should use config section of the program in the top right section of main page to download new PDF set!"
+                    Layout.preferredWidth: parent.width - 20
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    color: "red"
+                    visible: pdfSetCombox.count === 0
+                }
             }
 
             // Plot Appearance Tab
@@ -175,7 +186,7 @@ Dialog {
                     columnSpacing: 7
                     rowSpacing: 7
                     Label { text: "Plot type:" }
-                    ComboBox {
+                    ScrollableComboBox {
                         id: plotTypeId
                         model: pdfType === "cPDF" ? ["x", "μ"] : ["x", "μ", "kₜ"]
                         width: 100
@@ -467,7 +478,7 @@ Dialog {
                     }
 
                     Label { text: "Plot line style:" }
-                    ComboBox {
+                    ScrollableComboBox {
                         id: lineStyleId
                         width: 100
                         Layout.preferredWidth: 100
@@ -479,6 +490,18 @@ Dialog {
                         onCurrentIndexChanged: {
                             selectedLineStyleIndex = currentIndex
                         }
+                    }
+                    Label { text: "legend title:" }
+                    TextField {
+                        id: legendTitle
+                        placeholderText: "legend title"
+                        text: selectedDisplayText
+                        width: 100
+                        Layout.preferredWidth: 100
+                        Layout.maximumWidth: 100
+                        height: 50
+                        Layout.preferredHeight: 50
+                        Layout.maximumHeight: 50
                     }
                 }
             }
@@ -634,13 +657,10 @@ Dialog {
         standardButtons: Dialog.Ok
 
         Label {
+            id: warningLblId
             text: "The selected plot or PDF type does not match the tab’s plot type."
         }
 
-        background: Rectangle {
-            color: Material.dialogColor
-            radius: 8
-        }
     }
 
     function createNewObject() {
@@ -654,6 +674,13 @@ Dialog {
         if (currentTabPlotType !== -1 && ( currentTabPlotType !== selectedPlotTypeIndex || currentPDFTabType !== pdfType)) {
             warningDialog.open()
             return
+        }
+        console.log("[RAMIN] selectedDisplayText " + selectedDisplayText)
+        if (selectedDisplayText == "")
+        {
+            warningLblId.text = "Legend cannot be empty!";
+            warningDialog.open()
+            return;
         }
 
         var info = PDFDataProvider.createPDFObjectInfo()
@@ -725,21 +752,7 @@ Dialog {
 
     // Update the display text based on current selections
     function updateDisplayText() {
-        if (plotTypeId.currentIndex === 0) {
-            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}- μ=${selectedMuValue}`
-        if (pdfType == "TMD")
-        {
-            selectedDisplayText += `kₜ=${selectedKtValue}`
-        }
-        } else if (plotTypeId.currentIndex === 1) {
-            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}, x=${selectedXValue}`
-            if (pdfType == "TMD")
-            {
-                selectedDisplayText += `kₜ=${selectedKtValue}`
-            }
-        }else if (plotTypeId.currentIndex === 2) {
-            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})\nplot type: ${plotTypeId.currentText}, x=${selectedXValue}, μ=${selectedMuValue}`
-        }
+            selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})`
     }
 
     // Generate a random material color as a color object

@@ -6,8 +6,8 @@
 #include <QStringList>
 #include <QQmlApplicationEngine>
 #include <QVector>
-#include <PDFxTMDLib/Common/PartonUtils.h>
-#include <PDFxTMDLib/Common/EnvUtils.h>
+#include "PDFxTMD/Common/PartonUtils.h"
+#include "PDFxTMD/Common/EnvUtils.h"
 // #include <PDFxTMDLib/MissingPDFSetHandler/PDFSetDownloadHandler.h>
 // #include <PDFxTMDLib/MissingPDFSetHandler/RepoSelectionCommand.h>
 // #include <PDFxTMDLib/Common/KeyValueStore.h>

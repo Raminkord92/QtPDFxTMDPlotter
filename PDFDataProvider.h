@@ -2,7 +2,7 @@
 #define PDFDATAPROVIDER_H
 
 
-#include <PDFxTMDLib/Common/PartonUtils.h>
+#include <PDFxTMD/Common/PartonUtils.h>
 #include "PDFInfo.h"
 #include "GenericPDFContainer.h"
 
@@ -31,7 +31,7 @@ public:
     ~PDFDataProvider();
 
     // Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex, double xMin, double xMax);
-    Q_INVOKABLE QList<PDFObjectInfo*> getPDFData(TabIndex tabIndex);
+    Q_INVOKABLE void getPDFData(TabIndex tabIndex); // Now void, triggers async work
     Q_INVOKABLE int getPlotTypeOfTab(TabIndex tabIndex);
     Q_INVOKABLE QString getPDFTypeOfTab(TabIndex tabIndex);
     Q_INVOKABLE void setPDFData(TabIndex tabIndex, PDFObjectInfo *info);
@@ -51,7 +51,9 @@ public:
 
 signals:
     void pdfDataChanged(TabIndex tabIndex);
-
+    void pdfDataReady(TabIndex tabIndex, const QList<PDFObjectInfo*> &data);
+private:
+    QList<PDFObjectInfo*> computePDFData(TabIndex tabIndex);
 private:
     QHash<TabIndex, QList<PDFObjectInfo*>> m_pdfObjectInfos;
     static PDFDataProvider* s_instance;

@@ -1,11 +1,12 @@
 #include "DownloadManager.h"
-#include <PDFxTMDLib/MissingPDFSetHandler/ArchiveExtractorCommand.h>
-#include <PDFxTMDLib/Common/PartonUtils.h>
-#include <PDFxTMDLib/Common/EnvUtils.h>
+#include "PDFxTMD/Common/PartonUtils.h"
+#include "PDFxTMD/Common/EnvUtils.h"
 #include <QDir>
 #include <QUrl>
 #include <QFileInfo>
 #include <QProcessEnvironment>
+#include "PDFxTMD/MissingPDFSetHandler/ArchiveExtractorCommand.h"
+
 namespace PDFxTMD {
 std::pair<bool, std::string> extract_archive(const std::string &archive_path, const std::string &output_dir);
 }

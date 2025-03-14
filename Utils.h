@@ -2,7 +2,7 @@
 #define UTILS_H
 #include <QString>
 #include <vector>
-#include <PDFxTMDLib/Common/PartonUtils.h>
+#include "PDFxTMD/Common/PartonUtils.h"
 #include <QVector>
 #include "PDFInfo.h"
 

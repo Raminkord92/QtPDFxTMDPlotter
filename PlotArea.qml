@@ -21,8 +21,9 @@ Item {
     property var m_data
     property bool isXAxisLog: false
     property bool isYAxisLog: false
-    Component.onDestruction:
-    {
+    signal busyIndicatorIsActivated(bool isActivated)
+
+    Component.onDestruction: {
         PDFDataProvider.deleteTab(plotTabIndex)
     }
 
@@ -59,6 +60,12 @@ Item {
                 bottom: 10
                 left: 10
                 right: 10
+            }
+
+            BusyIndicator {
+                id: loadingIndicator
+                running: false
+                anchors.centerIn: parent
             }
 
             ValuesAxis {
@@ -388,7 +395,7 @@ Item {
         onAccepted: {
             chartView.grabToImage(function(result) {
                 plotExporter.exportToPDF(result.image, selectedFile.toString().replace("file:///", ""))
-                    })
+            })
         }
     }
 
@@ -399,9 +406,8 @@ Item {
         nameFilters: ["PNG files (*.png)"]
         defaultSuffix: "png"
         onAccepted: {
-
             console.log("selectedFile.toLocalFile() " + selectedFile.toString().replace("file:///", ""))
-            saveChart(selectedFile.toString().replace("file:///", ""));
+            saveChart(selectedFile.toString().replace("file:///", ""))
         }
     }
 
@@ -412,8 +418,7 @@ Item {
         nameFilters: ["JPG files (*.jpg)"]
         defaultSuffix: "jpg"
         onAccepted: {
-            saveChart(selectedFile.toString().replace("file:///", ""));
-
+            saveChart(selectedFile.toString().replace("file:///", ""))
         }
     }
 
@@ -427,19 +432,30 @@ Item {
             console.log("path to saved csv " + selectedFile.toString().replace("file:///", ""))
             exportToCSV(selectedFile.toString().replace("file:///", ""))
         }
-
     }
 
-    // Existing code for seriesList, Connections, updatePlot, etc.
-    property var seriesList: []
 
+
+    // Series list and data handling
+    property var seriesList: []
     Connections {
         target: PDFDataProvider
         function onPdfDataChanged(tabIndex) {
             console.log("received signal tabIndex " + tabIndex + " swipeViewMain.currentIndex " + plotTabIndex)
             if (tabIndex === plotTabIndex) {
-                m_data = PDFDataProvider.getPDFData(tabIndex)
+                loadingIndicator.running = true
+                root.busyIndicatorIsActivated(true);
+                PDFDataProvider.getPDFData(tabIndex) // Async call
+            }
+        }
+
+        function onPdfDataReady(tabIndex, data) {
+            console.log("received pdfDataReady for tabIndex " + tabIndex)
+            if (tabIndex === plotTabIndex) {
+                m_data = data
                 updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
+                loadingIndicator.running = false
+                root.busyIndicatorIsActivated(false);
             }
         }
     }
@@ -450,7 +466,7 @@ Item {
             chartView.removeSeries(seriesList[i])
         }
         seriesList = []
-        console.log("updte plot series before for loop " + infos.length);
+        console.log("update plot series before for loop " + infos.length)
 
         for (var j = 0; j < infos.length; j++) {
             var info = infos[j]
@@ -472,7 +488,7 @@ Item {
 
             updateSeries(series, info)
             seriesList.push(series)
-            console.log("updte plot series " + j + " series.color " + series.color + " info.lineStyleIndex" + info.lineStyleIndex);
+            console.log("update plot series " + j + " series.color " + series.color + " info.lineStyleIndex" + info.lineStyleIndex)
         }
         var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
         for (var k = 0; k < infos.length; k++) {
@@ -512,49 +528,52 @@ Item {
             return num.toFixed(4)
         }
     }
-    function saveChart(filename){
+
+    function saveChart(filename) {
         chartView.grabToImage(function(result) {
-            result.saveToFile(filename);
-        },  Qt.size(1800, 1200));
+            result.saveToFile(filename)
+        }, Qt.size(1800, 1200))
     }
+
     function exportToCSV(fileName) {
-        var maxPoints = 0;
+        var maxPoints = 0
         for (var i = 0; i < m_data.length; i++) {
-            var series = m_data[i];
+            var series = m_data[i]
             if (series.xVals.length > maxPoints) {
-                maxPoints = series.xVals.length;
+                maxPoints = series.xVals.length
             }
         }
 
-        var csvContent = "";
-        var header = "";
+        var csvContent = ""
+        var header = ""
         for (var i = 0; i < m_data.length; i++) {
             if (i > 0) {
-                header += ",";
+                header += ","
             }
-            header += "displayText" + i + ",X" + i + ",Y" + i;
+            header += "displayText" + i + ",X" + i + ",Y" + i
         }
-        csvContent += header + "\n";
+        csvContent += header + "\n"
 
         for (var j = 0; j < maxPoints; j++) {
-            var row = "";
+            var row = ""
             for (var i = 0; i < m_data.length; i++) {
                 if (i > 0) {
-                    row += ",";
+                    row += ","
                 }
-                var series = m_data[i];
-                var seriesName = series.displayText || ("Series " + i);
+                var series = m_data[i]
+                var seriesName = series.displayText || ("Series " + i)
                 if (j < series.xVals.length) {
-                    row += '"' + seriesName + '",' + series.xVals[j] + ',' + series.yVals[j];
+                    row += '"' + seriesName + '",' + series.xVals[j] + ',' + series.yVals[j]
                 } else {
-                    row += '"' + seriesName + '",,';
+                    row += '"' + seriesName + '",,'
                 }
             }
-            csvContent += row + "\n";
+            csvContent += row + "\n"
         }
-            console.log("saving...");
+        console.log("saving...")
         fileWriter.writeToFile(fileName, csvContent)
     }
+
     function updateSeries(series, info) {
         series.clear()
         var xVals = info.xVals

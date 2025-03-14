@@ -55,21 +55,20 @@ Dialog {
             Button {
                 text: "PDF set"
                 onClicked: wizardStack.currentIndex = 0
-                Material.elevation: wizardStack.currentIndex === 0 ? 4 : 0
                 Layout.fillWidth: true
             }
-            // Button {
-            //     text: "General"
-            //     onClicked: wizardStack.currentIndex = 4
-            //     Material.elevation: wizardStack.currentIndex === 4 ? 4 : 0
-            //     Layout.fillWidth: true
-            // }
+
+            Button {
+                text: "About"
+                onClicked: wizardStack.currentIndex = 4
+                Layout.fillWidth: true
+            }
             Button {
                 text: "Close"
                 Layout.fillWidth: true
-                Material.elevation: wizardStack.currentIndex === 4 ? 4 : 0
                 onClicked: configDialog.close()
             }
+
         }
 
         ScrollView {
@@ -105,26 +104,11 @@ Dialog {
                         spacing: 10
                         Layout.fillWidth: true
 
-                        ComboBox {
+                        ScrollableComboBox {
                             id: pdfComboBox
                             model: pdfModel
                             textRole: "pdfSetName"
                             Layout.fillWidth: true
-
-                            delegate: ItemDelegate {
-                                padding: 10
-                                contentItem: Column {
-                                    spacing: 4
-                                    Text {
-                                        text: model.pdfSetName
-                                        font.bold: true
-                                        color: Material.primary
-                                    }
-                                }
-                                background: Rectangle {
-                                    color: highlighted ? Material.listHighlightColor : "transparent"
-                                }
-                            }
                         }
 
                         GroupBox {
@@ -245,6 +229,29 @@ Dialog {
                         placeholderText: "Enter new PDF set name"
                         Layout.fillWidth: true
                     }
+                    ColumnLayout {
+                        Layout.fillWidth: true
+
+                        Text {
+                            id: lblPDFSetDesc
+                            Layout.fillWidth: true
+                            text: "Enter cPDF set name from <a href='https://www.lhapdf.org/pdfsets.html'>https://www.lhapdf.org/pdfsets.html</a>, and TMD set name from <a href='https://tmdlib.hepforge.org/TMDsets.txt'>https://tmdlib.hepforge.org/TMDsets.txt</a>"
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
+                            onLinkActivated: function(link) {
+                                Qt.openUrlExternally(link)
+                            }
+
+                            linkColor: Material.color(Material.Blue)
+
+                            MouseArea {
+                                anchors.fill: parent
+                                acceptedButtons: Qt.NoButton
+                                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            }
+                        }
+                    }
+
                     Button {
                         text: "Start Download Wizard"
                         enabled: newPdfName.text.length > 0
@@ -284,13 +291,12 @@ Dialog {
                         font.bold: true
                     }
 
-                    ComboBox {
+                    ScrollableComboBox {
                         id: pathComboBox
                         model: downloadManager.availablePaths
                         Layout.fillWidth: true
-                        currentIndex: 0 // Default to first path
+                        currentIndex: 0
                     }
-
                     Button {
                         text: "Add New Path"
                         Layout.fillWidth: true
@@ -449,23 +455,52 @@ Dialog {
                     }
                 }
 
-                // Page 4: General Settings
+                // Page 4: About Section
                 ColumnLayout {
-                    spacing: 10
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    spacing: 20
+                    width: parent.width
 
-                    Text {
-                        text: "General Settings"
-                        font.pointSize: 16
-                        font.bold: true
-                    }
                     Label {
-                        text: "Other options related to PDFxTMD library can go here..."
+                        text: "About QtPDFxTMDPlotter"
+                        font.bold: true
+                        font.pixelSize: 18
+                        Layout.alignment: Qt.AlignHCenter
                     }
-                    Button {
-                        text: "Back"
-                        onClicked: wizardStack.currentIndex = 0
+
+                    Label {
+                        text: "Version 1.0.0"  // Replace with your actual version
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Rectangle {
+                        height: 1
+                        color: "lightgray"
+                        Layout.fillWidth: true
+                        Layout.margins: 10
+                    }
+
+                    Label {
+                        text: "This application allows you to create plots of PDF and TMD functions."
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Label {
+                        text: "<b>GitHub:</b> <a href='https://github.com/yourusername/QtPDFxTMDPlotter'>github.com/yourusername/QtPDFxTMDPlotter</a>"
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Label {
+                        text: "<b>Contact:</b> <a href='mailto:your.email@example.com'>your.email@example.com</a>"
+                        onLinkActivated: Qt.openUrlExternally(link)
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }

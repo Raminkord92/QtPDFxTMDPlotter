@@ -42,6 +42,7 @@ ApplicationWindow {
 
         // Header row with TabBar and buttons
         RowLayout {
+            id: topRowId
             spacing: 10
             Layout.fillWidth: true
 
@@ -172,6 +173,7 @@ ApplicationWindow {
 
             // Add Tab Button
             Button {
+                id: plusButtonId
                 text: "\uf067"
                 font.family: fontAwesome.name
                 font.pixelSize: 14
@@ -272,6 +274,12 @@ ApplicationWindow {
                         anchors.margins: 0
                         // plotTabIndex: swipeView.currentIndex
                         plotTabIndex: splitViewId.uniqueId // Static assignment, no binding
+                        onBusyIndicatorIsActivated:
+                        {
+                            leftSide.enabled = !isActivated;
+                            topRowId.enabled = !isActivated;
+
+                        }
                     }
                 }
 
