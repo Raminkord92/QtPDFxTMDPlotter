@@ -42,7 +42,6 @@ Button {
         title: "Select New Color"
         onAccepted: {
             root.currentColor = colorDialog.selectedColor
-            console.log("New color selected:", colorDialog.selectedColor)
         }
     }
 }

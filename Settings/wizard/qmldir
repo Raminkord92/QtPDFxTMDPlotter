@@ -1,0 +1,4 @@
+module QtPDFxTMDPlotter.Settings.wizard
+DownloadProcessPage 1.0 DownloadProcessPage.qml
+PathSelectionPage 1.0 PathSelectionPage.qml
+RepositorySelectionPage 1.0 RepositorySelectionPage.qml

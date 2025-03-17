@@ -1,15 +1,81 @@
 #include "DownloadManager.h"
-#include "PDFxTMD/Common/PartonUtils.h"
-#include "PDFxTMD/Common/EnvUtils.h"
+#include <PDFxTMDLib/Common/PartonUtils.h>
+#include <PDFxTMDLib/Common/EnvUtils.h>
+#include <PDFxTMDLib/Common/FileUtils.h>
 #include <QDir>
 #include <QUrl>
 #include <QFileInfo>
 #include <QProcessEnvironment>
-#include "PDFxTMD/MissingPDFSetHandler/ArchiveExtractorCommand.h"
+#include <archive.h>
+#include <archive_entry.h>
 
-namespace PDFxTMD {
-std::pair<bool, std::string> extract_archive(const std::string &archive_path, const std::string &output_dir);
+
+std::pair<bool, std::string> extract_archive(const std::string &archive_path,
+                                             const std::string &output_dir)
+{
+    using namespace std::string_literals;
+    struct archive *a;
+    struct archive_entry *entry;
+    int flags;
+    int r;
+
+    // Set extraction flags
+    flags =
+        ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM | ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS;
+
+    // Create a new archive reader
+    a = archive_read_new();
+    archive_read_support_format_all(a);
+    archive_read_support_filter_all(a);
+
+    // Open the archive file
+    if ((r = archive_read_open_filename(a, archive_path.c_str(), 10240)))
+    {
+        archive_read_free(a);
+        return {false, "Error opening archive: "s + archive_error_string(a)};
+    }
+
+    // Iterate over each entry in the archive
+    while (true)
+    {
+        r = archive_read_next_header(a, &entry);
+        if (r == ARCHIVE_EOF)
+            break;
+        if (r < ARCHIVE_OK)
+            qWarning() << "Error reading header: " << archive_error_string(a);
+        if (r < ARCHIVE_WARN)
+        {
+            archive_read_free(a);
+            return {false, "Error reading header: "s + archive_error_string(a)};
+        }
+
+        // Construct the full output path
+        std::string full_output_path = output_dir + "/" + archive_entry_pathname(entry);
+
+        // Ensure the directory exists
+        std::string dir_path = full_output_path.substr(0, full_output_path.find_last_of('/'));
+        PDFxTMD::FileUtils::CreateDirs(dir_path);
+        // Set the output path
+        archive_entry_set_pathname(entry, full_output_path.c_str());
+
+        // Extract the entry
+        r = archive_read_extract(a, entry, flags);
+        if (r < ARCHIVE_OK)
+            qWarning() << "Error extracting file: " << archive_error_string(a);
+        if (r < ARCHIVE_WARN)
+        {
+            archive_read_free(a);
+            return {false, "Error extracting file: "s + archive_error_string(a)};
+        }
+    }
+
+    // Clean up
+    archive_read_close(a);
+    archive_read_free(a);
+
+    return {true, ""};
 }
+
 DownloadManager::DownloadManager(QObject *parent)
     : QObject(parent),
     m_networkManager(new QNetworkAccessManager(this)),
@@ -76,8 +142,8 @@ bool DownloadManager::addPath(const QString &newPath)
         }
         else
         {
-            std::cerr << "Failed to add new path to environment variable "
-                      << ENV_PATH_VARIABLE << std::endl;
+            qWarning() << "Failed to add new path to environment variable "
+                       << ENV_PATH_VARIABLE;
         }
         return true;
     }
@@ -213,7 +279,7 @@ void DownloadManager::onError(QNetworkReply::NetworkError error)
 
 bool DownloadManager::extractAndCleanup(const QString &archivePath, const QString &outputDir)
 {
-    auto result = PDFxTMD::extract_archive(archivePath.toStdString(), outputDir.toStdString());
+    auto result = extract_archive(archivePath.toStdString(), outputDir.toStdString());
     if (!result.first) {
         emit downloadFinished(false, QString::fromStdString(result.second));
         return false;

@@ -3,9 +3,7 @@
   "name": "qtpdftmdplotter",
   "version-string": "0.1",
   "dependencies": [
-    "gsl",
-    "libarchive",
-    "curl"
+    "libarchive"
   ]
 }
 

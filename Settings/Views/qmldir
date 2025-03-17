@@ -1,0 +1,3 @@
+module QtPDFxTMDPlotter.Settings.Views
+AboutView 1.0 AboutView.qml
+PDFInfoView 1.0 PDFInfoView.qml

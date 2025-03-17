@@ -1,5 +1,5 @@
 #include "pdfdataprovider.h"
-#include "PDFxTMD/Factory.h"
+#include <PDFxTMDLib/Factory.h>
 #include "Utils.h"
 #include <QDebug>
 #include <QQmlEngine>
@@ -52,11 +52,9 @@ QList<PDFObjectInfo*> PDFDataProvider::computePDFData(TabIndex tabIndex) {
 
         foreach (auto pdfObjectInfo_, m_pdfObjectInfos[tabIndex]) {
             if (pdfObjectInfo_->yVals().size() != 0) {
-                qDebug() << "similar not changed";
                 result.append(pdfObjectInfo_);
                 continue;
             }
-            qDebug() << "similar changed";
 
             QVector<double> xVals_, yVals_;
 
@@ -72,11 +70,9 @@ QList<PDFObjectInfo*> PDFDataProvider::computePDFData(TabIndex tabIndex) {
             } else if (plotType == PlotTypeIndex::Mu2) {
                 xMin_ = pdfObjectInfo_->muMin();
                 xMax_ = pdfObjectInfo_->muMax();
-                qDebug() << "plotType mu2 " << xMin_ << "--" << xMax_;
             } else if (plotType == PlotTypeIndex::Kt2) {
                 xMin_ = pdfObjectInfo_->ktMin();
                 xMax_ = pdfObjectInfo_->ktMax();
-                qDebug() << "plotType kt2 " << xMin_ << "--" << xMax_;
             }
             auto bins_ = Utils::BinGeneratorInLogSpace(xMin_, xMax_, 200);
             std::string pdfSetName = pdfObjectInfo_->pdfSet().toStdString();
@@ -98,7 +94,6 @@ QList<PDFObjectInfo*> PDFDataProvider::computePDFData(TabIndex tabIndex) {
                 }
                 pdfObjectInfo_->setXVals(xVals_);
                 pdfObjectInfo_->setYVals(yVals_);
-                qDebug() << "[RAMINkord] " << pdfObjectInfo_->xVals().length();
 
                 result.append(pdfObjectInfo_);
             } else if (selectedPDFType == "TMD") {
@@ -159,7 +154,6 @@ int PDFDataProvider::getPlotTypeOfTab(TabIndex tabIndex) {
 QString PDFDataProvider::getPDFTypeOfTab(TabIndex tabIndex) {
     if (m_pdfObjectInfos.contains(tabIndex)) {
         QString result = m_pdfObjectInfos[tabIndex].size() > 0 ? m_pdfObjectInfos[tabIndex][0]->selectePDFType() : "";
-        qDebug() << "result " << result;
         return result;
     }
     return "";
@@ -170,7 +164,6 @@ void PDFDataProvider::setPDFData(TabIndex tabIndex, PDFObjectInfo *info) {
         return;
     }
     m_pdfObjectInfos[tabIndex].append(info);
-    qDebug() << "[RAMIN] pdfdat " << m_pdfObjectInfos[tabIndex].size() << " tabIndex " << tabIndex;
     emit pdfDataChanged(tabIndex);
 }
 
@@ -185,7 +178,6 @@ void PDFDataProvider::notifyDataChanged(TabIndex tabIndex) {
 void PDFDataProvider::deleteTab(TabIndex tabIndex) {
     if (m_pdfObjectInfos.contains(tabIndex)) {
         qDeleteAll(m_pdfObjectInfos[tabIndex]);
-        qDebug() << "tabIndex " << tabIndex << " deleted";
     }
 }
 

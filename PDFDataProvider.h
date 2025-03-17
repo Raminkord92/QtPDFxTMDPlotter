@@ -2,11 +2,11 @@
 #define PDFDATAPROVIDER_H
 
 
-#include <PDFxTMD/Common/PartonUtils.h>
+#include <PDFxTMDLib/Common/PartonUtils.h>
 #include "PDFInfo.h"
 #include "GenericPDFContainer.h"
 
-#pragma comment(lib, "PDFxTMDLibStatic.lib")
+
 
 class PDFDataProvider : public QObject {
     Q_OBJECT

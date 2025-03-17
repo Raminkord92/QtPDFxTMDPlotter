@@ -128,7 +128,8 @@ compile_commands.json
 *_qmlcache.qrc
 build\*
 build/*
-
+install/*
+install\*
 # Qt unit tests
 target_wrapper.*
 

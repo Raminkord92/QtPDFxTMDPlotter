@@ -228,7 +228,6 @@ Rectangle {
         MenuItem {
             text: "Delete"
             onTriggered: {
-                console.log("currentTabUniqueId__ " + currentTabUniqueId__)
                 PDFDataProvider.deletePDFObjectInfoInTab(currentTabUniqueId__, pdfObjectInfo.id)
                 root.destroy()
             }
@@ -269,7 +268,6 @@ Rectangle {
 
     Component.onCompleted: {
         if (pdfObjectInfo) {
-            console.log("Current tab index:", pdfObjectInfo.currentTabIndex);
         }
         if (parent) {
             parent.widthChanged.connect(function() {

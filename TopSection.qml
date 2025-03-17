@@ -38,6 +38,5 @@ Rectangle {
         }
     }
     Component.onCompleted: {
-        console.log("main loaded")
     }
 }

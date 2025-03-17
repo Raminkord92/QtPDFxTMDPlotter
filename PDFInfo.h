@@ -1,7 +1,7 @@
 #ifndef PDFINFO_H
 #define PDFINFO_H
-#include "PDFxTMD/Common/PartonUtils.h"
-#include "PDFxTMD/Common/YamlInfoReader.h"
+#include <PDFxTMDLib/Common/PartonUtils.h>
+#include <PDFxTMDLib/Common/YamlInfoReader.h>
 #include <QString>
 #include <QObject>
 #include <QHash>

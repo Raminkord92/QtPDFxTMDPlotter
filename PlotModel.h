@@ -24,7 +24,6 @@ public:
     qreal maxX() const;
     qreal minY() const;
     qreal maxY() const;
-    Q_INVOKABLE void testCallObject();
     void setLogarithmicX(bool value);
     void setLogarithmicY(bool value);
     void setMinX(qreal value);
@@ -49,9 +48,6 @@ private:
     qreal m_maxY = 10.0;
 };
 
-inline void PlotModel::testCallObject()
-{
-    qDebug() <<  "[RAMIN] testCallObject";
-}
+
 
 #endif // PLOTMODEL_H

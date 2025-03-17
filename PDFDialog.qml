@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import QtPDFxTMDPlotter 1.0
 import QtQuick.Dialogs
+import "GeneralComponents"
 
 Dialog {
     id: cPDFDialog
@@ -175,6 +176,16 @@ Dialog {
                     wrapMode: Text.WordWrap
                     color: "red"
                     visible: pdfSetCombox.count === 0
+                }
+                Label {
+                    text: "Currently only 'allflavorUpdf' format and 'PB TMD' TMDScheme is supported!"
+                    Layout.preferredWidth: parent.width - 20
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    color: "red"
+                    visible: pdfType === "TMD"
                 }
             }
 
@@ -502,6 +513,10 @@ Dialog {
                         height: 50
                         Layout.preferredHeight: 50
                         Layout.maximumHeight: 50
+                        onEditingFinished:
+                        {
+                            selectedDisplayText = text;
+                        }
                     }
                 }
             }
@@ -536,7 +551,6 @@ Dialog {
 
 
     onAccepted: {
-        updateDisplayText()
         if (isEditMode) {
             updateExistingObject()
         } else {
@@ -546,21 +560,19 @@ Dialog {
 
     // Initialize the dialog UI based on edit or create mode
     function initializeUI() {
-        console.log("Dialog opened, isEditMode:", isEditMode)
         pdfModel.fillPDFInfoModel() // Load all PDF sets
         pdfModel.filterByPDFType(pdfType) // Apply initial filter based on pdfType
-        console.log("pdfModel count after fill:", pdfModel.pdfCount())
 
         if (isEditMode && objectRow) {
             pdfTypeBtnGroupLayout.enabled = false
             selectedPdfSet = objectRow.pdfSet
             selectedDisplayText = objectRow.displayText
+
             selectedColor = objectRow.color
             selectedLineStyleIndex = objectRow.lineStyleIndex
             selectedPartonFlavorIndex = objectRow.partonFlavorIndex
             partonFlavors = objectRow.partonFlavors || []
             selectedPlotTypeIndex = objectRow.plotTypeIndex
-            console.log("[RAMIN] objectRow.selectePDFType", objectRow.selectePDFType)
             if (objectRow.selectePDFType == "cPDF")
             {
                 cPDFRD.checked = true;
@@ -606,11 +618,11 @@ Dialog {
             getPartonFlavors()
             colorPickerId.currentColor = selectedColor
             lineStyleId.currentIndex = 0
-            partonFlavorsId.currentIndex = 0
+            partonFlavorsId.currentIndex = Math.floor(Math.random() * partonFlavors.length);
             plotTypeId.currentIndex = PDFDataProvider.Mu2
+            updateDisplayText()
         }
         currentPDFSetName = pdfSetCombox.currentText
-        updateDisplayText()
         if (!isEditMode) {
             getQMinValue()
             getQMaxValue()
@@ -620,7 +632,6 @@ Dialog {
             getKtMaxValue()
             selectedXValue = getRandomNumber(xMinValue, xMaxValue)
             selectedKtValue = getRandomNumber(ktMinValue, ktMaxValue)
-            console.log("selectedKtValue " + selectedKtValue + " ktMinValue " + ktMinValue + " ktMaxValue " + ktMaxValue)
             selectedMuValue = getRandomNumber(qMinValue, qMaxValue)
         }
     }
@@ -670,12 +681,10 @@ Dialog {
         }
         var currentTabPlotType = PDFDataProvider.getPlotTypeOfTab(selectedTabIndex)
         var currentPDFTabType = PDFDataProvider.getPDFTypeOfTab(selectedTabIndex)
-        console.log("currentPDFTabType " + currentPDFTabType + " pdfType " + pdfType);
         if (currentTabPlotType !== -1 && ( currentTabPlotType !== selectedPlotTypeIndex || currentPDFTabType !== pdfType)) {
             warningDialog.open()
             return
         }
-        console.log("[RAMIN] selectedDisplayText " + selectedDisplayText)
         if (selectedDisplayText == "")
         {
             warningLblId.text = "Legend cannot be empty!";
@@ -697,7 +706,6 @@ Dialog {
             info.currentTabIndex = selectedTabIndex
             info.currentXVal = selectedXValue
             info.currentMuVal = selectedMuValue
-            console.log( "Ramin selectedKtValue" + selectedKtValue);
             info.currentKtVal = selectedKtValue
             info.xMin = Number(xMinField.text)
             info.xMax = Number(xMaxField.text)
@@ -741,18 +749,17 @@ Dialog {
         var flavors = pdfModel.get(pdfSetCombox.currentIndex).Flavors
         if (flavors) {
             partonFlavors = flavors.split(", ")
-            console.log("Parton flavors updated:", partonFlavors)
         } else {
             partonFlavors = []
             console.warn("No flavors for index:", pdfSetCombox.currentIndex)
         }
         partonFlavorsId.model = partonFlavors
-        partonFlavorsId.currentIndex = 0 // Reset to first item
     }
 
     // Update the display text based on current selections
     function updateDisplayText() {
             selectedDisplayText = `${pdfSetCombox.currentText}-(${partonFlavorsId.currentText})`
+
     }
 
     // Generate a random material color as a color object

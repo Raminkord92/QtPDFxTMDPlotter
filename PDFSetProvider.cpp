@@ -31,12 +31,15 @@ QVector<PDFInfo> PDFSetProvider::getPDFSets() const
             if (pdfStandardInfo.first != std::nullopt)
             {
                 PDFInfo pdfInfo_ = PDFInfo(*pdfStandardInfo.first);
-                qDebug() << "[RAMIN] ktmin" << pdfInfo_.KtMin;
                 pdfInfo_.pdfSetName = PDFSetName;
                 //because we expect to obtain tmdinfo from yaml info file, then if there is no error, it means it is tmd else it is cPDF
                 if (pdfStandardInfo.second == ErrorType::None)
                 {
                     pdfInfo_.pdfSetType = PDFSetType::TMD;
+                    if (pdfInfo_.Format != "allflavorUpdf" || pdfInfo_.TMDScheme != "PB TMD")
+                    {
+                        qDebug() << "[PDFxTMD] Currently only 'allflavorUpdf' format and 'PB TMD' is supported!";
+                    }
                 }
                 else
                 {

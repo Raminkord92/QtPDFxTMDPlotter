@@ -406,7 +406,6 @@ Item {
         nameFilters: ["PNG files (*.png)"]
         defaultSuffix: "png"
         onAccepted: {
-            console.log("selectedFile.toLocalFile() " + selectedFile.toString().replace("file:///", ""))
             saveChart(selectedFile.toString().replace("file:///", ""))
         }
     }
@@ -429,7 +428,6 @@ Item {
         nameFilters: ["CSV files (*.csv)"]
         defaultSuffix: "csv"
         onAccepted: {
-            console.log("path to saved csv " + selectedFile.toString().replace("file:///", ""))
             exportToCSV(selectedFile.toString().replace("file:///", ""))
         }
     }
@@ -441,7 +439,6 @@ Item {
     Connections {
         target: PDFDataProvider
         function onPdfDataChanged(tabIndex) {
-            console.log("received signal tabIndex " + tabIndex + " swipeViewMain.currentIndex " + plotTabIndex)
             if (tabIndex === plotTabIndex) {
                 loadingIndicator.running = true
                 root.busyIndicatorIsActivated(true);
@@ -450,7 +447,6 @@ Item {
         }
 
         function onPdfDataReady(tabIndex, data) {
-            console.log("received pdfDataReady for tabIndex " + tabIndex)
             if (tabIndex === plotTabIndex) {
                 m_data = data
                 updatePlot(m_data, isXAxisLog ? xAxisLog : xAxisLinear, isYAxisLog ? yAxisLog : yAxisLinear)
@@ -461,12 +457,10 @@ Item {
     }
 
     function updatePlot(infos, xAxisType, yAxisType) {
-        console.log("[RAMIN] updatePlot + " + seriesList.length)
         for (var i = 0; i < seriesList.length; i++) {
             chartView.removeSeries(seriesList[i])
         }
         seriesList = []
-        console.log("update plot series before for loop " + infos.length)
 
         for (var j = 0; j < infos.length; j++) {
             var info = infos[j]
@@ -488,7 +482,6 @@ Item {
 
             updateSeries(series, info)
             seriesList.push(series)
-            console.log("update plot series " + j + " series.color " + series.color + " info.lineStyleIndex" + info.lineStyleIndex)
         }
         var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity
         for (var k = 0; k < infos.length; k++) {
@@ -570,7 +563,6 @@ Item {
             }
             csvContent += row + "\n"
         }
-        console.log("saving...")
         fileWriter.writeToFile(fileName, csvContent)
     }
 
@@ -580,7 +572,6 @@ Item {
         var yVals = info.yVals
 
         if (xVals.length !== yVals.length) {
-            console.log("Error: xVals and yVals have different lengths for " + info.displayText)
             return
         }
         for (var i = 0; i < xVals.length; i++) {

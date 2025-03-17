@@ -4,7 +4,7 @@
 #include <map>
 #include <QString>
 #include <QMap>
-#include "PDFxTMD/Factory.h"
+#include <PDFxTMDLib/Factory.h>
 #include <memory>
 #include "PDFInfo.h"
 #include <variant>
