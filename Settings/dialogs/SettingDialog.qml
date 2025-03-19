@@ -98,7 +98,6 @@ Dialog {
 
                 DownloadProcessPage {
                     downloadManager: configDialog.downloadManager
-                    pdfModel: configDialog.pdfModel
                     pdfSetName: pdfInfoView.newPdfName
                     extractPath: pathSelectionId.selectedPath;
                     repositoryType: repoSelectionId.selectedRepoType

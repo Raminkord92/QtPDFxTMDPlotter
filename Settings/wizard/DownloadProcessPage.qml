@@ -9,7 +9,6 @@ ColumnLayout {
     height: parent.height
     
     property var downloadManager
-    property var pdfModel
     property string pdfSetName: ""
     property string extractPath: ""
     property int repositoryType: 1 // Default to LHAPDF
@@ -28,7 +27,7 @@ ColumnLayout {
                 "Download and extraction completed: " + errorMessage : 
                 "Error: " + errorMessage;
             finishButton.enabled = success;
-            pdfModel.fillPDFInfoModel();
+            setupComplete();
         });
         
         downloadManager.onIsDownloadingChanged.connect(function() {
@@ -82,7 +81,6 @@ ColumnLayout {
             id: finishButton
             text: "Finish"
             enabled: false
-            onClicked: setupComplete()
         }
     }
 } 

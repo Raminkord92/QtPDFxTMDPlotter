@@ -27,7 +27,7 @@ public slots:
     Q_INVOKABLE bool addPath(const QString &newPath);
 
 signals:
-    void progressChanged();
+    void progressChanged(double progress);
     void isDownloadingChanged();
     void downloadFinished(bool success, const QString &errorMessage);
     void availablePathsChanged();

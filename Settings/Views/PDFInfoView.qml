@@ -19,6 +19,7 @@ ColumnLayout {
     function resetFields() {
         newPdfName.text = ""
         pdfSetDownloadStatusText.text = ""
+        pdfModel.fillPDFInfoModel();
     }
 
     Text {

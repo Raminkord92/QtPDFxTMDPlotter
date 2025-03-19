@@ -216,7 +216,7 @@ void DownloadManager::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal
 {
     if (bytesTotal > 0) {
         m_progress = static_cast<double>(bytesReceived) / bytesTotal;
-        emit progressChanged();
+        emit progressChanged(m_progress);
     }
 }
 
@@ -228,7 +228,7 @@ void DownloadManager::onDownloadFinished()
         m_tempFile->write(m_reply->readAll());
         m_tempFile->close();
         m_progress = 1.0;
-        emit progressChanged();
+        emit progressChanged(100);
 
         if (extractAndCleanup(m_tempFile->fileName(), m_extractPath)) {
             m_isDownloading = false;
@@ -261,7 +261,7 @@ void DownloadManager::onError(QNetworkReply::NetworkError error)
         emit downloadFinished(false, m_reply->errorString());
         m_isDownloading = false;
         m_progress = 0.0;
-        emit progressChanged();
+        emit progressChanged(0);
         emit isDownloadingChanged();
         if (m_tempFile) {
             m_tempFile->remove();
