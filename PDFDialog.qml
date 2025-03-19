@@ -691,6 +691,12 @@ Dialog {
             warningDialog.open()
             return;
         }
+        if (selectedPdfSet == "")
+        {
+            warningLblId.text = "Use config section to download a PDF set first!";
+            warningDialog.open()
+            return;
+        }
 
         var info = PDFDataProvider.createPDFObjectInfo()
         if (info) {

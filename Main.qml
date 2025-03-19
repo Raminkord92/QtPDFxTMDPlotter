@@ -13,7 +13,7 @@ ApplicationWindow {
     minimumHeight: 400
     title: "PDF & TMD Plotter"
     // Theme configuration
-    Material.theme: Material.System
+    Material.theme: Material.Light
     Material.primary: Material.BlueGrey
     Material.accent: Material.Blue
     Material.background: Material.color(Material.Grey, Material.Shade50)
@@ -108,12 +108,12 @@ ApplicationWindow {
                             id: contextMenu
                             topPadding: 4
                             bottomPadding: 4
-                            Material.theme: Material.System
+                            Material.theme: Material.Light
                             Material.primary: Material.BlueGrey
                             Material.accent: Material.Blue
 
                             delegate: MenuItem {
-                                Material.theme: Material.System
+                                Material.theme: Material.Light
                                 Material.foreground: enabled ? Material.primaryTextColor : Material.hintTextColor
                                 implicitWidth: 50
                                 implicitHeight: 13
@@ -143,7 +143,7 @@ ApplicationWindow {
                             title: "Edit Tab Title"
                             width: 300
                             modal: true
-                            Material.theme: Material.System
+                            Material.theme: Material.Light
                             Material.primary: Material.BlueGrey
                             Material.accent: Material.Blue
                             standardButtons: Dialog.Cancel | Dialog.Ok
@@ -295,6 +295,8 @@ ApplicationWindow {
     }
 
     function removeTab(index) {
+        if (tabModel.count === 1)
+            return;
         tabModel.remove(index)
         if (swipeView.currentIndex >= tabModel.count)
             swipeView.currentIndex = tabModel.count - 1

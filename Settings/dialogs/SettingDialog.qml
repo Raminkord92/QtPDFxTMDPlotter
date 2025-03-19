@@ -17,7 +17,7 @@ Dialog {
         color: Material.color(Material.Grey, Material.Shade50)
     }
 
-    Material.theme: Material.System
+    Material.theme: Material.Light
     Material.accent: Material.Blue
     Material.primary: Material.BlueGrey
 
