@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
     pdfxtmd_lib
     GIT_REPOSITORY https://github.com/Raminkord92/PDFxTMD.git
-    GIT_TAG a9ec20b239214d83a8a44f0f6cfd9bdca6d5583a
+    GIT_TAG f310a62351e5a3fd1b90ee21844eb0a18e315e85
     EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(pdfxtmd_lib)
@@ -134,9 +134,9 @@ if(WIN32)
 
   set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/app.ico")  # Icon for installer
   set(CPACK_NSIS_INSTALLED_ICON_NAME "appQtPDFxTMDPlotter.exe")  # Icon for uninstaller
-  set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Raminkord92/PDFxTMD")  # Optional: About URL
+  set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Raminkord92/QtPDFxTMDPlotter")  # Optional: About URL
   set(CPACK_NSIS_CONTACT "raminkord92l@gmail.com")  # Optional: Contact info
-  set(CPACK_NSIS_HELP_LINK "https://github.com/Raminkord92/PDFxTMD/wiki")  # Optional: Help URL
+  set(CPACK_NSIS_HELP_LINK "https://github.com/Raminkord92/QtPDFxTMDPlotter/wiki")  # Optional: Help URL
 endif()
 
 include(CPack)
