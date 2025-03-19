@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
     pdfxtmd_lib
     GIT_REPOSITORY https://github.com/Raminkord92/PDFxTMD.git
-    GIT_TAG 09300063e71f636d7a07624e6e05fc7667940f5e
+    GIT_TAG a9ec20b239214d83a8a44f0f6cfd9bdca6d5583a
     EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(pdfxtmd_lib)
@@ -119,7 +119,7 @@ set(CPACK_PACKAGE_VENDOR "Ramin Kord")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Plotting app for cPDFs and TMDs distribution using PDFxTMDLib")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "QtPDFxTMDPlotter")
-set(CPACK_PACKAGE_FILE_NAME "QtPDFxTMDPlotter-${PROJECT_VERSION}-Win64")
+set(CPACK_PACKAGE_FILE_NAME "QtPDFxTMDPlotter-${PROJECT_VERSION}")
 
 if(WIN32)
   set(CPACK_GENERATOR "NSIS;ZIP")

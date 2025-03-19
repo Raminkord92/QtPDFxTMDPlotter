@@ -1,6 +1,5 @@
 #include "DownloadManager.h"
 #include <PDFxTMDLib/Common/PartonUtils.h>
-#include <PDFxTMDLib/Common/EnvUtils.h>
 #include <PDFxTMDLib/Common/FileUtils.h>
 #include <QDir>
 #include <QUrl>
@@ -84,7 +83,7 @@ DownloadManager::DownloadManager(QObject *parent)
     m_progress(0.0),
     m_isDownloading(false)
 {
-    auto pathEnvs =  PDFxTMD::GetEnviormentalVariablePaths();
+    auto pathEnvs =  PDFxTMD::GetPDFxTMDPathsAsVector();
     for (const auto& path : pathEnvs) {
         m_availablePaths.append(QString::fromStdString(path));
         emit availablePathsChanged();
@@ -126,15 +125,8 @@ bool DownloadManager::addPath(const QString &newPath)
     }
     if (checkPathRequirements(newPath)) {
         // Update PATH environment (session-only)
-        if (PDFxTMD::EnvUtils::AddPathToEnvironment(newPath.toStdString()))
+        if (PDFxTMD::AddPathToEnvironment(newPath.toStdString()))
         {
-#if defined(__linux__)
-            const char *currentPaths = getenv(ENV_PATH_VARIABLE);
-               std::string updatedPaths = currentPaths ? std::string(currentPaths) + ":" + *pathStr : *pathStr;
-            setenv(ENV_PATH_VARIABLE, updatedPaths.c_str(), 1);
-#elif defined(_WIN32)
-
-#endif
             m_availablePaths.append(newPath);
             emit availablePathsChanged();
 
@@ -142,8 +134,7 @@ bool DownloadManager::addPath(const QString &newPath)
         }
         else
         {
-            qWarning() << "Failed to add new path to environment variable "
-                       << ENV_PATH_VARIABLE;
+            qWarning() << "Failed to add new path to environment variable ";
         }
         return true;
     }
@@ -231,6 +222,8 @@ void DownloadManager::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal
 
 void DownloadManager::onDownloadFinished()
 {
+    if (!m_reply)
+        return;
     if (m_reply->error() == QNetworkReply::NoError) {
         m_tempFile->write(m_reply->readAll());
         m_tempFile->close();
@@ -263,18 +256,22 @@ void DownloadManager::onDownloadFinished()
 
 void DownloadManager::onError(QNetworkReply::NetworkError error)
 {
-    emit downloadFinished(false, m_reply->errorString());
-    m_isDownloading = false;
-    m_progress = 0.0;
-    emit progressChanged();
-    emit isDownloadingChanged();
-    if (m_tempFile) {
-        m_tempFile->remove();
-        delete m_tempFile;
-        m_tempFile = nullptr;
+    if (m_reply && m_reply->isOpen())
+    {
+        emit downloadFinished(false, m_reply->errorString());
+        m_isDownloading = false;
+        m_progress = 0.0;
+        emit progressChanged();
+        emit isDownloadingChanged();
+        if (m_tempFile) {
+            m_tempFile->remove();
+            delete m_tempFile;
+            m_tempFile = nullptr;
+        }
+        m_reply->deleteLater();
+        m_reply = nullptr;
     }
-    m_reply->deleteLater();
-    m_reply = nullptr;
+
 }
 
 bool DownloadManager::extractAndCleanup(const QString &archivePath, const QString &outputDir)

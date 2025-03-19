@@ -60,7 +60,7 @@ QStringList PDFSetProvider::getPDFSetEnvPaths()
 
 void PDFSetProvider::CalcEnvPaths()
 {
-    auto envPaths = PDFxTMD::GetEnviormentalVariablePaths();
+    auto envPaths = PDFxTMD::GetPDFxTMDPathsAsVector();
 
     for(auto&& envPath : envPaths)
     {

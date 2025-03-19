@@ -1,4 +1,4 @@
-#include "pdfdataprovider.h"
+#include "PDFDataProvider.h"
 #include <PDFxTMDLib/Factory.h>
 #include "Utils.h"
 #include <QDebug>

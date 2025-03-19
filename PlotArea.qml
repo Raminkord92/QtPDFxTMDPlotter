@@ -394,7 +394,15 @@ Item {
         defaultSuffix: "pdf"
         onAccepted: {
             chartView.grabToImage(function(result) {
-                plotExporter.exportToPDF(result.image, selectedFile.toString().replace("file:///", ""))
+                var selectedPath = "";
+                if (Qt.platform.os === "windows") {
+                    selectedPath = selectedFile.toString().replace("file:///", "")
+                }
+                else
+                {
+                    selectedPath = selectedFile.toString().replace("file://", "")
+                }
+                plotExporter.exportToPDF(result.image, selectedPath)
             })
         }
     }
@@ -406,7 +414,15 @@ Item {
         nameFilters: ["PNG files (*.png)"]
         defaultSuffix: "png"
         onAccepted: {
-            saveChart(selectedFile.toString().replace("file:///", ""))
+            var selectedPath = "";
+            if (Qt.platform.os === "windows") {
+                selectedPath = selectedFile.toString().replace("file:///", "")
+            }
+            else
+            {
+                selectedPath = selectedFile.toString().replace("file://", "")
+            }
+            saveChart(selectedPath)
         }
     }
 
@@ -417,7 +433,16 @@ Item {
         nameFilters: ["JPG files (*.jpg)"]
         defaultSuffix: "jpg"
         onAccepted: {
-            saveChart(selectedFile.toString().replace("file:///", ""))
+            var selectedPath = "";
+            if (Qt.platform.os === "windows") {
+                selectedPath = selectedFile.toString().replace("file:///", "")
+            }
+            else
+            {
+                selectedPath = selectedFile.toString().replace("file://", "")
+            }
+
+            saveChart(selectedPath)
         }
     }
 
@@ -428,7 +453,15 @@ Item {
         nameFilters: ["CSV files (*.csv)"]
         defaultSuffix: "csv"
         onAccepted: {
-            exportToCSV(selectedFile.toString().replace("file:///", ""))
+            var selectedPath = "";
+            if (Qt.platform.os === "win") {
+                selectedPath = selectedFile.toString().replace("file:///", "")
+            }
+            else
+            {
+                selectedPath = selectedFile.toString().replace("file://", "")
+            }
+            exportToCSV(selectedPath)
         }
     }
 

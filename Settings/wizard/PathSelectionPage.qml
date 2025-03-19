@@ -44,7 +44,15 @@ ColumnLayout {
         id: folderDialog
         title: "Select Extraction Directory"
         onAccepted: {
-            if (downloadManager.addPath(selectedFolder.toString().replace("file:///", ""))) {
+            var selectedPath = "";
+            if (Qt.platform.os === "windows") {
+                selectedPath = selectedFolder.toString().replace("file:///", "")
+            }
+            else
+            {
+                selectedPath = selectedFolder.toString().replace("file://", "")
+            }
+            if (downloadManager.addPath(selectedPath)) {
                 pathComboBox.currentIndex = downloadManager.availablePaths.length - 1
                 pathStatusText.text = "Added and selected: " + pathComboBox.currentText
             } else {
@@ -72,7 +80,6 @@ ColumnLayout {
             text: "Next"
             onClicked:
             {
-                console.log("[RAMIN] next...")
                 navigateNext()
             }
         }
