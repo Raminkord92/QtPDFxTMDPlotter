@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(QtPDFxTMDPlotter VERSION 0.1 LANGUAGES CXX)
+project(QtPDFxTMDPlotter VERSION 0.1.1 LANGUAGES CXX)
 
 set(CMAKE_AUTORCC ON)  # Enable automatic resource compilation
 set(CMAKE_AUTOMOC ON)  # Enable automatic MOC (meta-object compiler) for Qt
