@@ -3,7 +3,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material 2.15
 import QtPDFxTMDPlotter 1.0
-
 ApplicationWindow {
     id: root
     visible: true

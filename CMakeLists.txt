@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(QtPDFxTMDPlotter VERSION 0.1.1 LANGUAGES CXX)
+project(QtPDFxTMDPlotter VERSION 0.1.2 LANGUAGES CXX)
 
 set(CMAKE_AUTORCC ON)  # Enable automatic resource compilation
 set(CMAKE_AUTOMOC ON)  # Enable automatic MOC (meta-object compiler) for Qt
@@ -33,7 +33,7 @@ set_source_files_properties(GlobalContext.qml PROPERTIES QT_QML_SINGLETON_TYPE T
 
 qt_add_qml_module(appQtPDFxTMDPlotter
     URI QtPDFxTMDPlotter
-    VERSION 0.1.2
+    VERSION 1.0
     QML_FILES
         Main.qml
         PlotArea.qml
