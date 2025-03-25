@@ -38,7 +38,7 @@ QVariant PDFInfoModel::data(const QModelIndex &index, int role) const
     else if (role == FormatRole)
         return QString::fromStdString(info.Format);
     else if (role == FlavorsRole)
-        return Utils::CovertFlavorsVecToStr(info.Flvors);
+        return Utils::CovertFlavorsVecToStr(info.Flavors);
     else if (role == OrderQCDRole)
         return Utils::ConvertOrderQCDToString(info.orderQCD);
     return QVariant();

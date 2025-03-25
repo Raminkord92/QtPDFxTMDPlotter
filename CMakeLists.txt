@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
     pdfxtmd_lib
     GIT_REPOSITORY https://github.com/Raminkord92/PDFxTMD.git
-    GIT_TAG f310a62351e5a3fd1b90ee21844eb0a18e315e85
+    GIT_TAG 30a399c30f7cc2d4d820e0ffc87c3c59112f0947
     EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(pdfxtmd_lib)
