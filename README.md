@@ -39,7 +39,7 @@ Here are some screenshots showing the main features of the application:
 1. Make sure you have Qt and CMake installed
 2. Clone the repository:
    ```
-   git clone https://github.com/yourusername/QtPDFxTMDPlotter.git
+   git clone https://github.com/Raminkord92/QtPDFxTMDPlotter.git
    cd QtPDFxTMDPlotter
    ```
 3. Configure and build with CMake:
