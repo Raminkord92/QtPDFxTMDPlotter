@@ -33,7 +33,7 @@ set_source_files_properties(GlobalContext.qml PROPERTIES QT_QML_SINGLETON_TYPE T
 
 qt_add_qml_module(appQtPDFxTMDPlotter
     URI QtPDFxTMDPlotter
-    VERSION 1.0
+    VERSION 0.1.2
     QML_FILES
         Main.qml
         PlotArea.qml
