@@ -7,15 +7,15 @@ A Qt-based application for plotting and visualizing PDF (Parton Distribution Fun
 Here are some screenshots showing the main features of the application:
 
 ### Main Plot Interface
-![Main Plot Interface](screenshots/main_plot.png)
+![Main Plot Interface](screenshots/main_plot.PNG)
 *Interactive visualization of different PDF sets with customizable plots*
 
 ### Settings Dialog
-![Settings Dialog](screenshots/settings_dialog.png)
+![Settings Dialog](screenshots/settings_dialog.PNG)
 *Configure and download PDF and TMD sets from LHAPDF and TMDLIB repositories*
 
 ### PDF Configuration
-![PDF Configuration](screenshots/pdf_config.png)
+![PDF Configuration](screenshots/pdf_config.PNG)
 *Detailed configuration options for each PDF plot object*
 
 ## Features
