@@ -454,7 +454,7 @@ Item {
         defaultSuffix: "csv"
         onAccepted: {
             var selectedPath = "";
-            if (Qt.platform.os === "win") {
+            if (Qt.platform.os === "windows") {
                 selectedPath = selectedFile.toString().replace("file:///", "")
             }
             else

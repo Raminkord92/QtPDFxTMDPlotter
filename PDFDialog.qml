@@ -84,9 +84,18 @@ Dialog {
         TabBar {
             id: tabBar
             width: parent.width
-            TabButton { text: "PDF Settings" }
-            TabButton { text: "Plot kinematics" }
-            TabButton { text: "Plot Appearance" }
+            TabButton {
+                text: "PDF Settings"
+                width: 120
+            }
+            TabButton {
+                text: "Plot kinematics"
+                width: 120
+            }
+            TabButton {
+                text: "Plot Appearance"
+                width: 120
+            }
         }
 
         StackLayout {
@@ -125,9 +134,9 @@ Dialog {
                     ScrollableComboBox {
                         id: pdfSetCombox
                         model: pdfModel
-                        width: 100
-                        Layout.preferredWidth: 100
-                        Layout.maximumWidth: 100
+                        width: 130
+                        Layout.preferredWidth: 130
+                        Layout.maximumWidth: 130
                         height: 50
                         Layout.preferredHeight: 50
                         Layout.maximumHeight: 50
@@ -155,9 +164,9 @@ Dialog {
                     ScrollableComboBox {
                         id: partonFlavorsId
                         model: partonFlavors
-                        width: 100
-                        Layout.preferredWidth: 100
-                        Layout.maximumWidth: 100
+                        width: 130
+                        Layout.preferredWidth: 130
+                        Layout.maximumWidth: 130
                         height: 50
                         Layout.preferredHeight: 50
                         Layout.maximumHeight: 50
